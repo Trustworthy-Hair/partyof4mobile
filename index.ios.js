@@ -12,44 +12,64 @@ var {
   StyleSheet,
   Text,
   View,
+  TabBarIOS
 } = React;
 
 var partyof4mobile = React.createClass({
+  getInitialState() {
+    return {
+      selectedTab: 'map'
+    }
+  },
   render: function() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <TabBarIOS>
+        <TabBarIOS.Item
+          title="Map"
+          icon={ require('image!map') }
+          selected={ this.state.selectedTab === 'map' }>
+          <View>
+            <Text>Map Screen</Text>
+          </View>
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="Search"
+          icon={ require('image!search') }
+          selected={ this.state.selectedTab === 'search' }>
+          <View>
+            <Text>Search Screen</Text>
+          </View>
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="List"
+          icon={ require('image!list') }
+          selected={ this.state.selectedTab === 'list' }>
+          <View>
+            <Text>List of Events</Text>
+          </View>
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="New"
+          icon={ require('image!new') }
+          selected={ this.state.selectedTab === 'new' }>
+          <View>
+            <Text>New Event</Text>
+          </View>
+        </TabBarIOS.Item>
+        <TabBarIOS.Item
+          title="Menu"
+          icon={ require('image!menu') }
+          selected={ this.state.selectedTab === 'menu' }>
+          <View>
+            <Text>Hamburger!</Text>
+          </View>
+        </TabBarIOS.Item>
+      </TabBarIOS>
     );
   }
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
 });
 
 AppRegistry.registerComponent('partyof4mobile', () => partyof4mobile);
