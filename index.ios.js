@@ -4,31 +4,26 @@
  */
 'use strict';
 
-var MapboxGLMap = require('react-native-mapbox-gl');
-var mapRef = 'mapRef';
-
 var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
   Text,
   View,
-  TabBarIOS
+  TabBarIOS,
+  StatusBarIOS
 } = React;
 
+var MapTab = require('./tabs/map');
+
 var partyof4mobile = React.createClass({
-  mixins: [MapboxGLMap.Mixin],
   getInitialState() {
     return {
-      selectedTab: 'map',
-      center: {
-       latitude: 37.7833,
-       longitude: -122.4167
-      },
-      zoom: 13,
+      selectedTab: 'map'
     };
   },
   changeTab(tabName) {
+    StatusBarIOS.setStyle(tabName === 'map' ? 1 : 0);
     this.setState({
       selectedTab: tabName
     });
@@ -41,21 +36,7 @@ var partyof4mobile = React.createClass({
           icon={ require('image!map') }
           onPress={ () => this.changeTab('map') }
           selected={ this.state.selectedTab === 'map' }>
-          <View style={ styles.container }>
-            <MapboxGLMap
-              style={styles.map}
-              direction={0}
-              rotateEnabled={true}
-              scrollEnabled={true}
-              zoomEnabled={true}
-              showsUserLocation={true}
-              ref={mapRef}
-              accessToken={'pk.eyJ1Ijoid3JybnduZyIsImEiOiJkNWQ1YWQzMmYyN2FlMjBkMTc3YzFmNzBkZjIzNTMyNCJ9.l1-x0zBzkUC-NBYwf_yaFg'}
-              styleURL={'asset://styles/mapbox-streets-v7.json'}
-              centerCoordinate={this.state.center}
-              userLocationVisible={true}
-              zoomLevel={this.state.zoom}/>
-          </View>
+          <MapTab />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title="Search"
@@ -99,16 +80,6 @@ var partyof4mobile = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1
-  },
-  map: {
-    flex: 5
-  },
-  text: {
-    padding: 2
-  }
 });
 
 AppRegistry.registerComponent('partyof4mobile', () => partyof4mobile);
