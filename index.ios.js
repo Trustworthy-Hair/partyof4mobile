@@ -4,6 +4,12 @@
  */
 'use strict';
 
+var MapTab = require('./tabs/map');
+var SearchTab = require('./tabs/search');
+var ListTab = require('./tabs/list');
+var NewTab = require('./tabs/new');
+var MenuTab = require('./tabs/menu');
+
 var React = require('react-native');
 var {
   AppRegistry,
@@ -13,12 +19,6 @@ var {
   TabBarIOS,
   StatusBarIOS
 } = React;
-
-var MapTab = require('./tabs/map');
-var SearchTab = require('./tabs/search');
-var ListTab = require('./tabs/list');
-var NewTab = require('./tabs/new');
-var MenuTab = require('./tabs/menu');
 
 var partyof4mobile = React.createClass({
   getInitialState() {
