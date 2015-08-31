@@ -1,0 +1,70 @@
+{
+  "name": "Subway",
+  "location": "940 Market St, San Francisco, CA 94102",
+  "hours": {
+    "open": "0800",
+    "close": "2100"
+  },
+  "tags": ["sandwiches", "fastFood"],
+  "priceCategory": 1
+},
+{
+  "name": "Tempest",
+  "location": "431 Natoma St, San Francisco, CA 94103",
+  "hours": {
+    "open": "1200",
+    "close": "0200"
+  },
+  "tags": ["bar", "pub"],
+  "priceCategory": 1
+},
+{
+  "name": "Little Delhi",
+  "location": "83 Eddy St, San Francisco, CA 94102",
+  "hours": {
+    "open": "1130",
+    "close": "2300"
+  },
+  "tags": ["indian"],
+  "priceCategory": 1
+},
+{
+  "name": "Show Dogs",
+  "location": "1020 Market St, San Francisco, CA 94102",
+  "hours": {
+    "open": "0900",
+    "close": "2100"
+  },
+  "tags": ["american", "beer"],
+  "priceCategory": 2
+},
+{
+  "name": "Garlic and Lemons",
+  "location": "133 Harvard Ave, Allston, MA 02134",
+  "hours": {
+    "open": "1100",
+    "close": "2200"
+  },
+  "tags": ["mediterranean"],
+  "priceCategory": 1
+},
+{
+  "name": "Punjab Kabab House",
+  "location": "101 Eddy St, San Francisco, CA 94102",
+  "hours": {
+    "open": "1130",
+    "close": "2300"
+  },
+  "tags": ["indian", "pakistani"],
+  "priceCategory": 2
+},
+{
+  "name": "Farallon",
+  "location": "450 Post St, San Francisco, CA 94102",
+  "hours": {
+    "open": "1630",
+    "close": "2200"
+  },
+  "tags": ["seafood"],
+  "priceCategory": 4
+}
