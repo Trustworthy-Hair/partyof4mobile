@@ -1,4 +1,5 @@
-{
+[{
+  "locationId": 1,
   "name": "Subway",
   "location": "940 Market St, San Francisco, CA 94102",
   "hours": {
@@ -9,6 +10,7 @@
   "priceCategory": 1
 },
 {
+  "locationId": 2,
   "name": "Tempest",
   "location": "431 Natoma St, San Francisco, CA 94103",
   "hours": {
@@ -19,6 +21,7 @@
   "priceCategory": 1
 },
 {
+  "locationId": 3,
   "name": "Little Delhi",
   "location": "83 Eddy St, San Francisco, CA 94102",
   "hours": {
@@ -29,6 +32,7 @@
   "priceCategory": 1
 },
 {
+  "locationId": 4,
   "name": "Show Dogs",
   "location": "1020 Market St, San Francisco, CA 94102",
   "hours": {
@@ -39,6 +43,7 @@
   "priceCategory": 2
 },
 {
+  "locationId": 5,
   "name": "Garlic and Lemons",
   "location": "133 Harvard Ave, Allston, MA 02134",
   "hours": {
@@ -49,6 +54,7 @@
   "priceCategory": 1
 },
 {
+  "locationId": 6,
   "name": "Punjab Kabab House",
   "location": "101 Eddy St, San Francisco, CA 94102",
   "hours": {
@@ -59,6 +65,7 @@
   "priceCategory": 2
 },
 {
+  "locationId": 7,
   "name": "Farallon",
   "location": "450 Post St, San Francisco, CA 94102",
   "hours": {
@@ -67,4 +74,4 @@
   },
   "tags": ["seafood"],
   "priceCategory": 4
-}
+}]
