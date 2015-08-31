@@ -1,6 +1,8 @@
 'use strict';
 
 var config = require('./../config/config.js');
+var MapboxGLMap = require('react-native-mapbox-gl');
+var Header = require('../header');
 
 var React = require('react-native');
 var {
@@ -9,7 +11,6 @@ var {
   View
 } = React;
 
-var MapboxGLMap = require('react-native-mapbox-gl');
 var mapRef = 'mapRef';
 
 var mapTab = React.createClass({
@@ -26,9 +27,7 @@ var mapTab = React.createClass({
   render: function() {
     return (
       <View style={ styles.container }>
-        <View style={ styles.header }>
-          <Text>{config.app_name}</Text>
-        </View>
+        <Header />
         <MapboxGLMap
           style={styles.map}
           direction={0}
@@ -51,10 +50,6 @@ var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1
-  },
-  header: {
-    height: 40,
-    backgroundColor: '#ff0000'
   },
   map: {
     flex: 5
