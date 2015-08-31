@@ -1,5 +1,7 @@
 'use strict';
 
+var config = require('./../config/config.js');
+
 var React = require('react-native');
 var {
   StyleSheet,
@@ -25,6 +27,7 @@ var mapTab = React.createClass({
     return (
       <View style={ styles.container }>
         <View style={ styles.header }>
+          <Text>{config.app_name}</Text>
         </View>
         <MapboxGLMap
           style={styles.map}
@@ -34,7 +37,7 @@ var mapTab = React.createClass({
           zoomEnabled={true}
           showsUserLocation={true}
           ref={mapRef}
-          accessToken={'api token'}
+          accessToken={config.mapbox_key}
           styleURL={'asset://styles/mapbox-streets-v7.json'}
           centerCoordinate={this.state.center}
           userLocationVisible={true}
