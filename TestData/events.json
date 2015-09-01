@@ -1,0 +1,38 @@
+[
+  {
+    "locationId": 1,
+    "plannedTime": 1441065232642,
+    "capacity": 3,
+    "currentSize": 1,
+    "currentActivity": "Waiting" 
+  },
+  {
+    "locationId": 2,
+    "plannedTime": 1441065225642,
+    "capacity": 3,
+    "currentSize": 1,
+    "currentActivity": "Ordering" 
+  },
+  {
+    "locationId": 3,
+    "plannedTime": 1441065223642,
+    "capacity": 3,
+    "currentSize": 1,
+    "currentActivity": "Planning"
+  },
+  {
+    "locationId": 4,
+    "plannedTime": 1441066222642,
+    "capacity": 3,
+    "currentSize": 1,
+    "currentActivity": "Waiting"
+  },
+  {
+    "locationId": 6,
+    "plannedTime": 1441065212642,
+    "capacity": 3,
+    "currentSize": 1,
+    "currentActivity": "Ordering" 
+  }
+
+]
