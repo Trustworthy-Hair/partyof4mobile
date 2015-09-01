@@ -25,30 +25,30 @@ var listTab = React.createClass({
     })
     .done();
   },
+  
   componentDidMount: function() {
     this.getDataFromServer();
   },
 
   render: function() {
-     if (!this.state.loaded) {
-       return this.renderLoadingView();
-     }
-     var event = this.state.events[0];
-     return this.renderMovie(event);
-
+    if (!this.state.loaded) {
+      return this.renderLoadingView();
+    }
+    var event = this.state.events[0];
+    return this.renderMovie(event);
    },
 
-   renderLoadingView: function() {
-     return (
+  renderLoadingView: function() {
+    return (
       <View style={ styles.container }>
         <Header />
         <Text>Loading</Text>
       </View>
-     );
-   },
+    );
+  },
 
-   renderMovie: function(event) {
-     return (
+  renderMovie: function(event) {
+    return (
       <View style={ styles.container }>
         <Header />
         <View>
@@ -56,8 +56,8 @@ var listTab = React.createClass({
           <Text >{event.currentActivity}</Text>
         </View>
       </View>
-     );
-   }
+    );
+  }
 });
 
 var ListItem = React.createClass({
