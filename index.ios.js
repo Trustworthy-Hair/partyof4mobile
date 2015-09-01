@@ -1,6 +1,6 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * Party of 4 Mobile
+ * https://github.com/Trustworthy-Hair/partyof4mobile
  */
 'use strict';
 
