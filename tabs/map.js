@@ -18,16 +18,29 @@ var mapTab = React.createClass({
   getInitialState() {
     return {
       center: {
-       latitude: 37.7833,
-       longitude: -122.4167
+        latitude: 38.8833,
+        longitude: -77.0167
       },
       zoom: 13
     }
+  },
+  componentDidMount: function() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => this.setState({
+        center: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        }
+      }),
+      (error) => alert(error.message),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
   },
   render: function() {
     return (
       <View style={ styles.container }>
         <Header />
+        <Text>{this.state.initialPosition}</Text>
         <MapboxGLMap
           style={styles.map}
           direction={0}
