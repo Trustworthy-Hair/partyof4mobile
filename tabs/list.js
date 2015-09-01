@@ -14,6 +14,7 @@ var listTab = React.createClass({
     return {data: [],
             loaded: false};
   },
+
   getDataFromServer: function() {
     fetch('http://localhost:8000/events.json')
     .then((response) => response.json())
@@ -25,7 +26,7 @@ var listTab = React.createClass({
     })
     .done();
   },
-  
+
   componentDidMount: function() {
     this.getDataFromServer();
   },
@@ -35,7 +36,7 @@ var listTab = React.createClass({
       return this.renderLoadingView();
     }
     var event = this.state.events[0];
-    return this.renderMovie(event);
+    return this.renderEvents(event);
    },
 
   renderLoadingView: function() {
@@ -47,13 +48,20 @@ var listTab = React.createClass({
     );
   },
 
-  renderMovie: function(event) {
+  renderEvents: function() {
+    var newData = this.state.events;
+    var items = newData.map(function (val) {
+      return (
+        <ListItem location={val.locationId} status={val.currentActivity}
+                  currentSize={val.currentSize} capacity={val.capacity} />
+      );
+    });
+
     return (
       <View style={ styles.container }>
         <Header />
         <View>
-          <Text >{event.locationId}</Text>
-          <Text >{event.currentActivity}</Text>
+          { items }
         </View>
       </View>
     );
@@ -63,7 +71,12 @@ var listTab = React.createClass({
 var ListItem = React.createClass({
   render: function() {
     return (
-      <Text>Hello World2</Text>
+      <View>
+        <Text>{this.props.location}</Text>
+        <Text>{this.props.status}</Text>
+        <Text>{this.props.currentSize}</Text>
+        <Text>{this.props.capacity}</Text>
+      </View>
     );
   }
 });
