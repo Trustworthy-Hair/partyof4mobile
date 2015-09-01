@@ -1,6 +1,7 @@
 'use strict';
 
 var config = require('./../config/config.js'),
+    Header = require('./header'),
     React  = require('react-native');
 
 var {
@@ -14,6 +15,7 @@ var Login = React.createClass({
     return (
       <View style={ styles.container }>
         <Header />
+        <Text>Hello World</Text>
       </View>
     );
   }
