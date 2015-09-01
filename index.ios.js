@@ -35,8 +35,15 @@ var partyof4mobile = React.createClass({
       selectedTab: tabName
     });
   },
+  login: function() {
+    this.setState({
+      loggedIn: true
+    });
+  },
   render: function() {
-    if (this.state.loggedIn) {
+    // FOR TESTING, login page is being bypassed
+    // To visit the login page, change to if (this.state.loggedIn)
+    if (!this.state.loggedIn) { 
       var current = this;
       var selectedTab = this.state.selectedTab;
       var icons = {
@@ -73,7 +80,7 @@ var partyof4mobile = React.createClass({
       );
     } else {
       return (
-        <Login/>
+        <Login onLogin={this.login}/>
       );
     }
   }
