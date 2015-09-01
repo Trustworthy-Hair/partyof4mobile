@@ -4,14 +4,18 @@ var Header = require('../header'),
     React = require('react-native');
 
 var {
+  ListView,
   StyleSheet,
   Text,
-  View
+  View,
 } = React;
 
 var listTab = React.createClass({
   getInitialState: function() {
-    return {data: [],
+    return {events: [],
+            dataSource: new ListView.DataSource({
+              rowHasChanged: (row1, row2) => row1 !== row2,
+            }),
             loaded: false};
   },
 
@@ -21,6 +25,7 @@ var listTab = React.createClass({
     .then((responseData) => {
       this.setState({
         events: responseData,
+        dataSource: this.state.dataSource.cloneWithRows(responseData),
         loaded: true
       });
     })
@@ -35,8 +40,18 @@ var listTab = React.createClass({
     if (!this.state.loaded) {
       return this.renderLoadingView();
     }
-    var event = this.state.events[0];
-    return this.renderEvents(event);
+    return (
+      <View style={ styles.container }>
+        <Header />
+        <View style={ styles.innercontainer }>
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderEvent}
+            style={styles.listView}
+          />
+        </View>
+      </View>
+    );
    },
 
   renderLoadingView: function() {
@@ -49,33 +64,29 @@ var listTab = React.createClass({
   },
 
   renderEvents: function() {
-    var newData = this.state.events;
-    var items = newData.map(function (val) {
-      return (
-        <ListItem location={val.locationId} status={val.currentActivity}
-                  currentSize={val.currentSize} capacity={val.capacity} />
-      );
-    });
-
     return (
       <View style={ styles.container }>
         <Header />
-        <View>
-          { items }
-        </View>
+        <ListView
+          dataSource={this.state.events}
+          renderRow={this.renderEvent}
+          style={styles.listView}
+        />
       </View>
     );
-  }
-});
+  },
 
-var ListItem = React.createClass({
-  render: function() {
+  renderEvent: function(event) {
     return (
-      <View>
-        <Text>{this.props.location}</Text>
-        <Text>{this.props.status}</Text>
-        <Text>{this.props.currentSize}</Text>
-        <Text>{this.props.capacity}</Text>
+      <View style={styles.innercontainer}>
+        <View style={styles.words}>
+          <Text>{event.locationId}</Text>
+          <Text>{event.currentActivity}</Text>
+        </View>
+        <View style={styles.rightContainer}>
+          <Text style={styles.right}>{event.currentSize}</Text>
+          <Text style={styles.right}>{event.capacity}</Text>
+        </View>
       </View>
     );
   }
@@ -85,6 +96,27 @@ var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1
+  },
+  innercontainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  listView: {
+    paddingTop: 20,
+    paddingLeft: 20,
+    paddingRight:20,
+    paddingBottom: 20,
+    backgroundColor: '#F5FCFF',
+  },
+  rightContainer: {
+    flex: 1,
+  },
+  words: {
+    padding: 5,
+    width:200,
+  },
+  right: {
+    textAlign: 'right'
   }
 });
 
