@@ -1,7 +1,8 @@
 'use strict';
 
 var Header = require('../header'),
-    React = require('react-native');
+    React = require('react-native'),
+    config = require('./../config/config.js');
 
 var {
   ListView,
@@ -13,14 +14,16 @@ var {
 var listTab = React.createClass({
   getInitialState: function() {
     return {events: [],
+            locations: [],
             dataSource: new ListView.DataSource({
               rowHasChanged: (row1, row2) => row1 !== row2,
             }),
-            loaded: false};
+            loaded: false
+           };
   },
 
   getDataFromServer: function() {
-    fetch('http://localhost:8000/events.json')
+    fetch(config.url+'/events')
     .then((response) => response.json())
     .then((responseData) => {
       this.setState({
@@ -29,6 +32,14 @@ var listTab = React.createClass({
         loaded: true
       });
     })
+    .then(fetch(config.url+'/locations')
+          .then((response) => response.json())
+          .then((responseData) => {
+            this.setState({
+              locations: responseData
+            })
+          })
+          .done())
     .done();
   },
 
@@ -80,15 +91,23 @@ var listTab = React.createClass({
     return (
       <View style={styles.innercontainer}>
         <View style={styles.words}>
-          <Text>{event.locationId}</Text>
+          <Text>{this.getLocationForEvent(event.locationId)}</Text>
           <Text>{event.currentActivity}</Text>
         </View>
         <View style={styles.rightContainer}>
-          <Text style={styles.right}>{event.currentSize}</Text>
-          <Text style={styles.right}>{event.capacity}</Text>
+          <Text style={styles.right}>Current: {event.currentSize}</Text>
+          <Text style={styles.right}>Total: {event.capacity}</Text>
         </View>
       </View>
     );
+  },
+
+  getLocationForEvent: function(eventId) {
+    for (var i = 0; i<this.state.locations.length; i++) {
+      if (this.state.locations[i].locationId === eventId) {
+        return this.state.locations[i].name;
+      }
+    }
   }
 });
 
