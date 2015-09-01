@@ -40,7 +40,6 @@ var mapTab = React.createClass({
     return (
       <View style={ styles.container }>
         <Header />
-        <Text>{this.state.initialPosition}</Text>
         <MapboxGLMap
           style={styles.map}
           direction={0}
