@@ -7,8 +7,7 @@
   },
   "dependencies": {
     "react-native": "^0.10.1",
-    "react-native-mapbox-gl": "^0.4.1",
-    "stubby": "^0.2.11"
+    "react-native-mapbox-gl": "^0.4.1"
   },
   "devDependencies": {
     "stubby": "^0.2.11"
