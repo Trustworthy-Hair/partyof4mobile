@@ -1,15 +1,15 @@
 'use strict';
 
-var Header = require('../components/header');
+var config = require('./../config/config.js'),
+    React  = require('react-native');
 
-var React = require('react-native');
 var {
   StyleSheet,
   Text,
   View
 } = React;
 
-var searchTab = React.createClass({
+var Login = React.createClass({
   render: function() {
     return (
       <View style={ styles.container }>
@@ -23,7 +23,7 @@ var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     flex: 1
-  }
+  },
 });
 
-module.exports = searchTab;
+module.exports = Login;

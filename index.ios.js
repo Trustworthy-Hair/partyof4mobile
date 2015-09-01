@@ -4,13 +4,13 @@
  */
 'use strict';
 
-var MapTab = require('./tabs/map');
-var SearchTab = require('./tabs/search');
-var ListTab = require('./tabs/list');
-var NewTab = require('./tabs/new');
-var MenuTab = require('./tabs/menu');
+var MapTab    = require('./tabs/map'),
+    SearchTab = require('./tabs/search'),
+    ListTab   = require('./tabs/list'),
+    NewTab    = require('./tabs/new'),
+    MenuTab   = require('./tabs/menu'),
+    React     = require('react-native');
 
-var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,

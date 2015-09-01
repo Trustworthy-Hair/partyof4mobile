@@ -2,7 +2,7 @@
 
 var config = require('./../config/config.js');
 var MapboxGLMap = require('react-native-mapbox-gl');
-var Header = require('../header');
+var Header = require('../components/header');
 
 var React = require('react-native');
 var {
