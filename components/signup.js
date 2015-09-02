@@ -19,35 +19,49 @@ var Signup = React.createClass({
       untouched: true,
       validUsername: false,
       validPassword: false,
-      validPassword2: false
+      validPassword2: true
     };
   },
   returnToLogin() {
     this.props.onSubmit('login');
   },
   checkUsername: function(text) {
-    var valid = (text.length === 0 || text.length < 4) ? false : true;
+    var valid = (text.length >= 4);
     this.setState({validUsername: valid, username: text});
   },
   checkPassword: function(text) {
-    var valid = (text.length === 0 || text.length < 6) ? false : true;
-    this.setState({validPassword: valid, password: text});
+    var valid = (text.length >= 6);
+    if (!/.*(?=.*[a-z])(?=.*[A-Z]).*/.test(text)) valid = false;
+    this.setState({validPassword: valid, validPassword2: false, password: text});
+  },
+  checkPassword2: function(text) {
+    var valid = (text === this.state.password);
+    this.setState({validPassword2: valid, password2: text});
   },
   render: function() {
-    var usernameWarning, passwordWarning, password2Warning;
+    var usernameWarning, passwordWarning, password2Warning, submitButton;
     var warningGenerator = (num) => {
-      var text = (num === undefined) ? 'Required' : 'Must be at least {num} characters';
-      return (<Text style={styles.warning}>{text}</Text>)
+      var text = (num === undefined) ? 'Required' : `Must be at least ${num} characters`;
+      return (<Text style={styles.warning}>{text}</Text>);
     };
 
     if (this.state.validUsername && this.state.validPassword && this.state.validPassword2) {
-
+      submitButton = (<Text>SUBMIT</Text>);
     } else {
       if (!this.state.validUsername) {
         usernameWarning = this.state.username === '' ? warningGenerator() : warningGenerator(4);
       }
       if (!this.state.validPassword) {
-        passwordWarning = this.state.password === '' ? warningGenerator() : warningGenerator(6);
+        if (this.state.password === '') { 
+          passwordWarning = warningGenerator();
+        } else if (this.state.password.length <6) {
+          passwordWarning = warningGenerator(6);
+        } else {
+          passwordWarning = (<Text style={styles.warning}>Must contain uppercase/lowercase characters</Text>);
+        }
+      }
+      if (!this.state.validPassword2) {
+        password2Warning = (<Text style={styles.warning}>Must match password</Text>); 
       }
     }
 
@@ -68,7 +82,7 @@ var Signup = React.createClass({
         {passwordWarning}
 
         <View style={ styles.textInputContainer }>
-          <TextInput style={ styles.textInput } secureTextEntry={true} placeholder='retype password'/>
+          <TextInput style={ styles.textInput } secureTextEntry={true} placeholder='retype password' onChangeText={ this.checkPassword2 }/>
         </View>
         {password2Warning}
 
