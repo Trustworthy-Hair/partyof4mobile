@@ -43,7 +43,7 @@ var partyof4mobile = React.createClass({
   render: function() {
     // FOR TESTING, login page is being bypassed
     // To visit the login page, change to if (this.state.loggedIn)
-    if (!this.state.loggedIn) { 
+    if (this.state.loggedIn) { 
       var current = this;
       var selectedTab = this.state.selectedTab;
       var icons = {
@@ -63,7 +63,7 @@ var partyof4mobile = React.createClass({
 
       var tabBarItems = this.state.tabs.map(function(tabBarItem) {
         return (
-          <TabBarIOS.Item
+          <TabBarIOS.Item key={'tabBar'+tabBarItem}
             title={tabBarItem}
             icon={icons[tabBarItem]}
             onPress={ () => current.changeTab(tabBarItem) }

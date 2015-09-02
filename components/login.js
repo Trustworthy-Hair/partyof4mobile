@@ -5,6 +5,7 @@ var config = require('./../config/config.js'),
     React  = require('react-native');
 
 var {
+  Image,
   StyleSheet,
   Text,
   TextInput,
@@ -22,13 +23,18 @@ var Login = React.createClass({
       <View style={ styles.container }>
         <Header />
         <View style={ styles.innercontainer }> 
-          <Text>Username</Text>
-          <TextInput style={ styles.textInput }/>
-          <Text>Password</Text>
-          <TextInput style={ styles.textInput } secureTextEntry={true}/>
+          <View style={ styles.textInputContainer }>
+            <TextInput style={ styles.textInput } placeholder='username'/>
+          </View>
+          <View style={ styles.textInputContainer }>
+            <TextInput style={ styles.textInput } secureTextEntry={true} placeholder='password'/>
+          </View>
           <TouchableHighlight onPress={ this.pressButton }>
-            <Text style={ styles.submit }>Login</Text>
+            <View style={styles.login}> 
+              <Text style={ styles.submit }>Log In</Text>
+            </View>
           </TouchableHighlight>
+          <Text style={styles.forgot}>Sign up / Forgot your password?</Text>
         </View>
       </View>
     );
@@ -38,19 +44,46 @@ var Login = React.createClass({
 var styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    flex: 1
+    flex: 1,
   },
   innercontainer: {
-    padding: 20
+    backgroundColor: '#14203c',
+    flexDirection: 'column',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  textInputContainer: {
+    overflow: 'hidden',
+    backgroundColor: 'white',
+    borderRadius: 15,
+    width: 220,
+    height: 40,
+    marginBottom: 10
   },
   textInput: {
+    backgroundColor: 'white',
     height: 40, 
-    borderColor: 'gray', 
-    borderWidth: 1
+    width: 220,
+    borderWidth: 0,
+    textAlign: 'center'
   },
   submit: {
-    fontSize: 30,
+    fontSize: 20,
     textAlign: 'center'
+  },
+  login: {
+    overflow: 'hidden',
+    width: 220,
+    height: 40,
+    backgroundColor: '#2e6a8b',
+    borderRadius: 15,
+    justifyContent: 'center',
+    flex: 1,
+    marginBottom: 10
+  },
+  forgot: {
+    color: '#f4efde'
   }
 });
 
