@@ -48,14 +48,14 @@ var mapTab = React.createClass({
         title: location.name,
         subtitle: location.location,
         rightCalloutAccessory: {
-          url: 'https://cldup.com/9Lp0EaBw5s.png',
-          height: 25,
-          width: 25
+          url: 'image!restaurant',
+          height: 24,
+          width: 24
         },
         annotationImage: {
-          url: 'https://cldup.com/CnRLZem9k9.png',
-          height: 25,
-          width: 25
+          url: 'image!restaurant',
+          height: 24,
+          width: 24
         }
       };
     }))
