@@ -10,6 +10,10 @@ var {
   View
 } = React;
 
+const usernameMinLength = 4;
+const usernameMaxLength = 12;
+const passwordMinLength = 6;
+
 var Signup = React.createClass({
   getInitialState() {
     return {
@@ -26,11 +30,11 @@ var Signup = React.createClass({
     this.props.onSubmit('login');
   },
   checkUsername: function(text) {
-    var valid = (text.length >= 4);
+    var valid = (text.length >= usernameMinLength);
     this.setState({validUsername: valid, username: text});
   },
   checkPassword: function(text) {
-    var valid = (text.length >= 6);
+    var valid = (text.length >= passwordMinLength);
     if (!/.*(?=.*[a-z])(?=.*[A-Z]).*/.test(text)) valid = false;
     this.setState({validPassword: valid, validPassword2: false, password: text});
   },
@@ -46,16 +50,17 @@ var Signup = React.createClass({
     };
 
     if (this.state.validUsername && this.state.validPassword && this.state.validPassword2) {
-      submitButton = (<Text>SUBMIT</Text>);
+      submitButton = (<TouchableHighlight onPress={this.returnToLogin} style={styles.submit}>
+                      <Text style={styles.submitText}>SUBMIT</Text></TouchableHighlight>);
     } else {
       if (!this.state.validUsername) {
-        usernameWarning = this.state.username === '' ? warningGenerator() : warningGenerator(4);
+        usernameWarning = this.state.username === '' ? warningGenerator() : warningGenerator(usernameMinLength);
       }
       if (!this.state.validPassword) {
         if (this.state.password === '') { 
           passwordWarning = warningGenerator();
-        } else if (this.state.password.length <6) {
-          passwordWarning = warningGenerator(6);
+        } else if (this.state.password.length < passwordMinLength) {
+          passwordWarning = warningGenerator(passwordMinLength);
         } else {
           passwordWarning = (<Text style={styles.warning}>Must contain uppercase/lowercase characters</Text>);
         }
@@ -67,27 +72,26 @@ var Signup = React.createClass({
 
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={ this.returnToLogin } style={ styles.back }>
-          <Text>Back</Text>
+        <TouchableHighlight onPress={this.returnToLogin} style={styles.back}>
+          <Text style={styles.backText}>&lt; Back</Text>
         </TouchableHighlight>
         <Text>Sign up for PartyOf4!</Text>
-        <View style={ styles.textInputContainer }>
-          <TextInput style={ styles.textInput } placeholder='username' maxLength={12} onChangeText={ this.checkUsername }/>
+        <View style={styles.textInputContainer}>
+          <TextInput style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} onChangeText={this.checkUsername}/>
         </View>
         {usernameWarning}
 
-        <View style={ styles.textInputContainer }>
-          <TextInput style={ styles.textInput } secureTextEntry={true} placeholder='password' onChangeText={ this.checkPassword }/>
+        <View style={styles.textInputContainer}>
+          <TextInput style={styles.textInput} secureTextEntry={true} placeholder='password' onChangeText={this.checkPassword}/>
         </View>
         {passwordWarning}
 
-        <View style={ styles.textInputContainer }>
-          <TextInput style={ styles.textInput } secureTextEntry={true} placeholder='retype password' onChangeText={ this.checkPassword2 }/>
+        <View style={styles.textInputContainer}>
+          <TextInput style={styles.textInput} secureTextEntry={true} placeholder='retype password' onChangeText={this.checkPassword2}/>
         </View>
         {password2Warning}
 
         {submitButton}
-
       </View>
     );
   }
@@ -102,13 +106,12 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   },
   back: {
-    backgroundColor: '#6da7d4',
-    padding: 10,
     height: 40,
-    width: 100,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 10
+    width: 300,
+    marginBottom: 10,
+  },
+  backText: {
+    fontSize: 20
   },
   textInputContainer: {
     width: 250,
@@ -128,6 +131,20 @@ var styles = StyleSheet.create({
   },
   warning: {
     color: 'red'
+  },
+  submit: {
+    backgroundColor: '#2e6a8b',
+    margin: 20,
+    height: 40,
+    width: 200,
+    borderRadius: 10,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  submitText: {
+    color: 'white',
+    fontSize: 20
   }
 });
 
