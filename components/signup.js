@@ -18,10 +18,11 @@ var Signup = React.createClass({
   getInitialState() {
     return {
       username: '',
+      email: '',
       password: '',
       password2: '',
-      untouched: true,
       validUsername: false,
+      validEmail: false,
       validPassword: false,
       validPassword2: true
     };
@@ -33,6 +34,10 @@ var Signup = React.createClass({
     var valid = (text.length >= usernameMinLength);
     this.setState({validUsername: valid, username: text});
   },
+  checkEmail: function(text) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    if (re.test(text)) this.setState({validEmail: true, email: text});
+  },
   checkPassword: function(text) {
     var valid = (text.length >= passwordMinLength);
     if (!/.*(?=.*[a-z])(?=.*[A-Z]).*/.test(text)) valid = false;
@@ -42,19 +47,25 @@ var Signup = React.createClass({
     var valid = (text === this.state.password);
     this.setState({validPassword2: valid, password2: text});
   },
+  isValid() {
+    return (this.state.validUsername && this.state.validEmail && this.state.validPassword && this.state.validPassword2);
+  },
   render: function() {
-    var usernameWarning, passwordWarning, password2Warning, submitButton;
+    var usernameWarning, passwordWarning, password2Warning, emailWarning, submitButton;
     var warningGenerator = (num) => {
       var text = (num === undefined) ? 'Required' : `Must be at least ${num} characters`;
       return (<Text style={styles.warning}>{text}</Text>);
     };
 
-    if (this.state.validUsername && this.state.validPassword && this.state.validPassword2) {
+    if (this.isValid()) {
       submitButton = (<TouchableHighlight onPress={this.returnToLogin} style={styles.submit}>
                       <Text style={styles.submitText}>SUBMIT</Text></TouchableHighlight>);
     } else {
       if (!this.state.validUsername) {
         usernameWarning = this.state.username === '' ? warningGenerator() : warningGenerator(usernameMinLength);
+      }
+      if (!this.state.validEmail) {
+        emailWarning = this.state.email === '' ? warningGenerator() : (<Text style={styles.warning}>Please enter a valid email</Text>);
       }
       if (!this.state.validPassword) {
         if (this.state.password === '') { 
@@ -80,6 +91,12 @@ var Signup = React.createClass({
           <TextInput style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} onChangeText={this.checkUsername}/>
         </View>
         {usernameWarning}
+
+        <View style={styles.textInputContainer}>
+          <TextInput style={styles.textInput} placeholder='email' 
+          onChangeText={this.checkEmail}/>
+        </View>
+        {emailWarning}
 
         <View style={styles.textInputContainer}>
           <TextInput style={styles.textInput} secureTextEntry={true} placeholder='password' onChangeText={this.checkPassword}/>
@@ -130,7 +147,7 @@ var styles = StyleSheet.create({
     borderWidth: 0,
   },
   warning: {
-    color: 'red'
+    color: '#8f3033'
   },
   submit: {
     backgroundColor: '#2e6a8b',
