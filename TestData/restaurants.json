@@ -7,7 +7,11 @@
     "close": "2100"
   },
   "tags": ["sandwiches", "fastFood"],
-  "priceCategory": 1
+  "priceCategory": 1,
+  "coords": {
+    "latitude": 37.783710,
+    "longitude": -122.408841
+  }
 },
 {
   "locationId": 2,
@@ -18,7 +22,11 @@
     "close": "0200"
   },
   "tags": ["bar", "pub"],
-  "priceCategory": 1
+  "priceCategory": 1,
+  "coords": {
+    "latitude": 37.781158,
+    "longitude": -122.406243
+  }
 },
 {
   "locationId": 3,
@@ -29,7 +37,11 @@
     "close": "2300"
   },
   "tags": ["indian"],
-  "priceCategory": 1
+  "priceCategory": 1,
+  "coords": {
+    "latitude": 37.784257,
+    "longitude": -122.409013
+  }
 },
 {
   "locationId": 4,
@@ -40,7 +52,11 @@
     "close": "2100"
   },
   "tags": ["american", "beer"],
-  "priceCategory": 2
+  "priceCategory": 2,
+  "coords": {
+    "latitude": 37.782054,
+    "longitude": -122.410932
+  }
 },
 {
   "locationId": 5,
@@ -51,7 +67,11 @@
     "close": "2200"
   },
   "tags": ["mediterranean"],
-  "priceCategory": 1
+  "priceCategory": 1,
+  "coords": {
+    "latitude": 42.352136,
+    "longitude": -71.132138
+  }
 },
 {
   "locationId": 6,
@@ -62,7 +82,11 @@
     "close": "2300"
   },
   "tags": ["indian", "pakistani"],
-  "priceCategory": 2
+  "priceCategory": 2,
+  "coords": {
+    "latitude": 37.784056,
+    "longitude": -122.409492
+  }
 },
 {
   "locationId": 7,
@@ -73,5 +97,9 @@
     "close": "2200"
   },
   "tags": ["seafood"],
-  "priceCategory": 4
+  "priceCategory": 4,
+  "coords": {
+    "latitude": 37.788355,
+    "longitude": -122.409413
+  }
 }]

@@ -21,7 +21,8 @@ var mapTab = React.createClass({
         latitude: 38.8833,
         longitude: -77.0167
       },
-      zoom: 13
+      zoom: 13,
+      annotations: []
     }
   },
   componentDidMount: function() {
@@ -35,6 +36,41 @@ var mapTab = React.createClass({
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
+    this.getDataFromServer();
+  },
+  getDataFromServer: function() {
+    fetch(config.url+'/locations')
+    .then((response) => response.json())
+    .then((locations) => locations.map(function(location) {
+      return {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        title: location.name,
+        subtitle: location.location,
+        rightCalloutAccessory: {
+          url: 'https://cldup.com/9Lp0EaBw5s.png',
+          height: 25,
+          width: 25
+        },
+        annotationImage: {
+          url: 'https://cldup.com/CnRLZem9k9.png',
+          height: 25,
+          width: 25
+        }
+      };
+    }))
+    .then((annotations) => {
+      this.setState({
+        annotations: annotations
+      });
+    })
+    .done();
+  },
+  onOpenAnnotation(annotation) {
+    console.log(annotation);
+  },
+  onRightAnnotationTapped(e) {
+    console.log(e);
   },
   render: function() {
     return (
@@ -52,7 +88,8 @@ var mapTab = React.createClass({
           styleURL={'asset://styles/mapbox-streets-v7.json'}
           centerCoordinate={this.state.center}
           userLocationVisible={true}
-          zoomLevel={this.state.zoom}/>
+          zoomLevel={this.state.zoom}
+          annotations={this.state.annotations}/>
       </View>
     );
   }
