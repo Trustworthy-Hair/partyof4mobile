@@ -5,7 +5,7 @@ var mapbox_api_key = 'API KEY HERE';
 
 // For testing, use stubby (default: localhost:8882)
 // Later change this to the deployed server url
-var api_url = 'localhost:8882';
+var api_url = 'http://localhost:8882';
 
 module.exports = {
   app_name: application_name,

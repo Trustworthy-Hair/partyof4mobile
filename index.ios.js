@@ -4,13 +4,14 @@
  */
 'use strict';
 
-var MapTab = require('./tabs/map');
-var SearchTab = require('./tabs/search');
-var ListTab = require('./tabs/list');
-var NewTab = require('./tabs/new');
-var MenuTab = require('./tabs/menu');
+var MapTab    = require('./tabs/map'),
+    SearchTab = require('./tabs/search'),
+    ListTab   = require('./tabs/list'),
+    NewTab    = require('./tabs/new'),
+    MenuTab   = require('./tabs/menu'),
+    Login     = require('./components/login'),
+    React     = require('react-native');
 
-var React = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
@@ -23,6 +24,8 @@ var {
 var partyof4mobile = React.createClass({
   getInitialState() {
     return {
+      loggedIn: false,
+      tabs: ['map', 'search', 'list','new','menu'],
       selectedTab: 'map'
     };
   },
@@ -32,46 +35,54 @@ var partyof4mobile = React.createClass({
       selectedTab: tabName
     });
   },
+  login: function() {
+    this.setState({
+      loggedIn: true
+    });
+  },
   render: function() {
-    return (
-      <TabBarIOS>
-        <TabBarIOS.Item
-          title="Map"
-          icon={ require('image!map') }
-          onPress={ () => this.changeTab('map') }
-          selected={ this.state.selectedTab === 'map' }>
-          <MapTab />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          title="Search"
-          icon={ require('image!search') }
-          onPress={ () => this.changeTab('search') }
-          selected={ this.state.selectedTab === 'search' }>
-          <SearchTab />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          title="List"
-          icon={ require('image!list') }
-          onPress={ () => this.changeTab('list') }
-          selected={ this.state.selectedTab === 'list' }>
-          <ListTab />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          title="New"
-          icon={ require('image!new') }
-          onPress={ () => this.changeTab('new') }
-          selected={ this.state.selectedTab === 'new' }>
-          <NewTab />
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          title="Menu"
-          icon={ require('image!menu') }
-          onPress={ () => this.changeTab('menu') }
-          selected={ this.state.selectedTab === 'menu' }>
-          <MenuTab />
-        </TabBarIOS.Item>
-      </TabBarIOS>
-    );
+    // FOR TESTING, login page is being bypassed
+    // To visit the login page, change to if (this.state.loggedIn)
+    if (this.state.loggedIn) { 
+      var current = this;
+      var selectedTab = this.state.selectedTab;
+      var icons = {
+        map: require('image!map'),
+        search : require('image!search'),
+        list : require('image!list'),
+        new : require('image!new'),
+        menu : require('image!menu')
+      };
+      var tabs = {
+        map: (<MapTab />),
+        search : (<SearchTab />),
+        list : (<ListTab />),
+        new : (<NewTab />),
+        menu : (<MenuTab />)
+      }
+
+      var tabBarItems = this.state.tabs.map(function(tabBarItem) {
+        return (
+          <TabBarIOS.Item key={'tabBar'+tabBarItem}
+            title={tabBarItem}
+            icon={icons[tabBarItem]}
+            onPress={ () => current.changeTab(tabBarItem) }
+            selected={ selectedTab === tabBarItem }>
+            {tabs[tabBarItem]}
+          </TabBarIOS.Item>
+        );
+      });
+
+      return (
+        <TabBarIOS>
+          {tabBarItems}
+        </TabBarIOS>
+      );
+    } else {
+      return (
+        <Login onLogin={this.login}/>
+      );
+    }
   }
 });
 

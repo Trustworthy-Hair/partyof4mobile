@@ -1,6 +1,6 @@
 'use strict';
 
-var Header = require('../header');
+var Header = require('../components/header');
 
 var React = require('react-native');
 var {

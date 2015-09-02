@@ -1,8 +1,8 @@
 'use strict';
 
-var config = require('./config/config.js');
-
-var React = require('react-native');
+var config = require('./../config/config.js'),
+    React  = require('react-native');
+    
 var {
   StyleSheet,
   Text,
