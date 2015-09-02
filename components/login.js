@@ -23,6 +23,9 @@ var Login = React.createClass({
       <View style={ styles.container }>
         <Header />
         <View style={ styles.innercontainer }> 
+          <View style= {styles.logocontainer }>
+            <Image source={require('image!logo')} style={styles.logo}/>
+          </View>
           <View style={ styles.textInputContainer }>
             <TextInput style={ styles.textInput } placeholder='username'/>
           </View>
@@ -34,7 +37,13 @@ var Login = React.createClass({
               <Text style={ styles.submit }>Log In</Text>
             </View>
           </TouchableHighlight>
-          <Text style={styles.forgot}>Sign up / Forgot your password?</Text>
+          <Text style={styles.text}>Sign up / Forgot your password?</Text>
+
+          <TouchableHighlight onPress={ this.pressButton }>
+            <View style={styles.login}> 
+              <Text style={ styles.submit }>Sign In with Facebook</Text>
+            </View>
+          </TouchableHighlight>
         </View>
       </View>
     );
@@ -53,28 +62,38 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  logocontainer: {
+    marginBottom: 30,
+    alignItems: 'center'
+  },
+  logo: {
+    width: 90,
+    height: 90,
+    paddingBottom: 10
+  },
   textInputContainer: {
     overflow: 'hidden',
     backgroundColor: 'white',
     borderRadius: 15,
-    width: 220,
+    width: 250,
     height: 40,
     marginBottom: 10
   },
   textInput: {
     backgroundColor: 'white',
     height: 40, 
-    width: 220,
+    width: 250,
     borderWidth: 0,
     textAlign: 'center'
   },
   submit: {
+    color: 'white',
     fontSize: 20,
     textAlign: 'center'
   },
   login: {
     overflow: 'hidden',
-    width: 220,
+    width: 250,
     height: 40,
     backgroundColor: '#2e6a8b',
     borderRadius: 15,
@@ -82,8 +101,9 @@ var styles = StyleSheet.create({
     flex: 1,
     marginBottom: 10
   },
-  forgot: {
-    color: '#f4efde'
+  text: {
+    color: '#a9e2d6',
+    marginBottom: 100
   }
 });
 
