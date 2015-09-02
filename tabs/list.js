@@ -5,6 +5,7 @@ var Header = require('../components/header'),
     config = require('./../config/config.js');
 
 var {
+  Image,
   ListView,
   StyleSheet,
   Text,
@@ -90,6 +91,9 @@ var listTab = React.createClass({
   renderEvent: function(event) {
     return (
       <View style={styles.innercontainer}>
+        <Image
+          style={styles.icon}
+          source={require('image!restaurant')} />
         <View style={styles.words}>
           <Text>{this.getLocationForEvent(event.locationId)}</Text>
           <Text>{event.currentActivity}</Text>
@@ -132,10 +136,14 @@ var styles = StyleSheet.create({
   },
   words: {
     padding: 5,
-    width:200,
+    width:175,
   },
   right: {
     textAlign: 'right'
+  },
+  icon: {
+    backgroundColor: '#2e6a8b',
+    borderRadius: 5
   }
 });
 
