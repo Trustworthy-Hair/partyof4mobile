@@ -10,9 +10,9 @@ var {
   View
 } = React;
 
-const usernameMinLength = 4;
-const usernameMaxLength = 12;
-const passwordMinLength = 6;
+var usernameMinLength = 4;
+var usernameMaxLength = 12;
+var passwordMinLength = 6;
 
 var Signup = React.createClass({
   getInitialState() {
