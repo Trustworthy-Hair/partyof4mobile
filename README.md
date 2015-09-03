@@ -26,16 +26,10 @@ A social app where you can find open seats at nearby restaurants. Meet new peopl
 - React Native 0.10.1
   - Xcode 7 beta 6 (to test on an iOS device)
   - Homebrew to install watchman and flow
-    ``` bash
-    brew install watch flow
-    ```
+    `brew install watchman flow`
   - io.js v2
-    - nvm (to manage node versions)
-      ``` bash
-      nvm install iojs-v2 && nvm alias default iojs-v2
-      ```
+    - nvm (to manage node versions) `nvm install iojs-v2 && nvm alias default iojs-v2`
 - React Native Mapbox GL 0.4.1
-- Watchman (install globally)
 - Stubby (install globally)
 
 ## Development
@@ -46,7 +40,7 @@ From within the root directory:
 
 ```sh
 npm install
-npm install -g watchman stubby
+npm install -g stubby
 ```
 
 ### Install iojs-v2
