@@ -20,6 +20,9 @@ var menuTab = React.createClass({
     };
   },
   changePage: function(name) {
+    if (name === undefined) {
+      var name = 'menu';
+    }
     this.setState({currentPage: name});
   },
   render: function() {
@@ -46,7 +49,15 @@ var menuTab = React.createClass({
       );
     } else if (this.state.currentPage === 'profile') {
       displayTab = (
-        <Profile />
+        <Profile onback={this.changePage}/>
+      );
+    } else if (this.state.currentPage === 'history') {
+      displayTab = (
+        <History onback={this.changePage}/>
+      );
+    } else if (this.state.currentPage === 'about') {
+      displayTab = (
+        <About onback={this.changePage}/>
       );
     }
 
@@ -73,7 +84,6 @@ var styles = StyleSheet.create({
   },
   link: {
     backgroundColor: '#f5efe2',
-    color: 'white',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 10,
