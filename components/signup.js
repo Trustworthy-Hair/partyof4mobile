@@ -1,6 +1,6 @@
 'use strict';
 
-var Back = Back = require('./utils').BackButton
+var Back = Back = require('./common').BackButton
 
 var React  = require('react-native');
 

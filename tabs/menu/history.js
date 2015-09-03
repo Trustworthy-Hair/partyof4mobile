@@ -1,6 +1,6 @@
 'use strict';
 
-var Back = require('../../components/utils').BackButton;
+var Back = require('../../components/common').BackButton;
 
 var React = require('react-native');
 var {
@@ -14,7 +14,7 @@ var historyTab = React.createClass({
   render: function() {
     return (
       <View> 
-        <Back />
+        <Back onback={this.props.onback}/>
         <Text> History</Text>
       </View>
     );
