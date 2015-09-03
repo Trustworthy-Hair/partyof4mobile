@@ -36,7 +36,7 @@ var mapTab = React.createClass({
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-    this.getDataFromServer();
+    setTimeout(this.getDataFromServer.bind(this), 1000);
   },
   getDataFromServer: function() {
     fetch(config.url+'/locations')
@@ -60,9 +60,11 @@ var mapTab = React.createClass({
       };
     }))
     .then((annotations) => {
-      this.setState({
-        annotations: annotations
-      });
+      if (this.isMounted()) {
+        this.setState({
+          annotations: annotations
+        });
+      }
     })
     .done();
   },
