@@ -74,8 +74,9 @@ var partyof4mobile = React.createClass({
       });
 
       return (
-        <TabBarIOS>
+        <TabBarIOS tintColor='#2e6a8b' barTintColor='white' translucent={false}>
           {tabBarItems}
+
         </TabBarIOS>
       );
     } else {
