@@ -5,6 +5,8 @@ var Header = require('../components/header'),
     config = require('./../config/config.js');
 
 var {
+  ActivityIndicatorIOS,
+  Image,
   ListView,
   StyleSheet,
   Text,
@@ -40,6 +42,7 @@ var listTab = React.createClass({
             })
           })
           .done())
+    .catch((error) => console.warn(error))
     .done();
   },
 
@@ -69,7 +72,12 @@ var listTab = React.createClass({
     return (
       <View style={ styles.container }>
         <Header />
-        <Text>Loading</Text>
+        <View style={styles.loading}>
+          <ActivityIndicatorIOS
+            animating={true}
+            color={'#808080'}
+            size={'large'} />
+        </View>
       </View>
     );
   },
@@ -90,9 +98,14 @@ var listTab = React.createClass({
   renderEvent: function(event) {
     return (
       <View style={styles.innercontainer}>
+        <View style={styles.iconBox}>
+          <Image
+            style={styles.icon}
+            source={require('image!restaurant')} />
+        </View>
         <View style={styles.words}>
-          <Text>{this.getLocationForEvent(event.locationId)}</Text>
-          <Text>{event.currentActivity}</Text>
+          <Text style={styles.location}>{this.getLocationForEvent(event.locationId)}</Text>
+          <Text style={styles.event}>{event.currentActivity}</Text>
         </View>
         <View style={styles.rightContainer}>
           <Text style={styles.right}>Current: {event.currentSize}</Text>
@@ -119,23 +132,55 @@ var styles = StyleSheet.create({
   innercontainer: {
     flex: 1,
     flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: '#2e6a8b',
+    borderStyle: 'solid',
+    justifyContent: 'center',
+    height: 74
   },
   listView: {
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight:20,
-    paddingBottom: 20,
+    paddingTop: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    paddingBottom: 5,
     backgroundColor: '#F5FCFF',
   },
   rightContainer: {
     flex: 1,
+    padding: 5
   },
   words: {
-    padding: 5,
-    width:200,
+    width: 150,
+    padding: 5
+  },
+  location: {
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  event: {
+    fontSize: 12,
+    color: 'gray'
   },
   right: {
-    textAlign: 'right'
+    textAlign: 'right',
+    color: 'gray',
+    fontSize: 12
+  },
+  icon: {
+    flex: 0,
+    backgroundColor: '#2e6a8b',
+    borderRadius: 3,
+    width: 64,
+    height: 64
+  },
+  iconBox: {
+    padding: 5
+  },
+  loading: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'column'
   }
 });
 
