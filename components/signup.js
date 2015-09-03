@@ -1,5 +1,7 @@
 'use strict';
 
+var Back = Back = require('./utils').BackButton
+
 var React  = require('react-native');
 
 var {
@@ -99,9 +101,7 @@ var Signup = React.createClass({
 
     return (
       <View style={styles.container}>
-        <TouchableHighlight onPress={this.returnToLogin} style={styles.back}>
-          <Text style={styles.backText}>&lt; Back</Text>
-        </TouchableHighlight>
+        <Back onback={this.returnToLogin} />
         <Text style={styles.headingText}>Get started with PartyOf4</Text>
 
         {labels[0]}
@@ -152,14 +152,6 @@ var styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     alignItems: 'center'
-  },
-  back: {
-    marginTop: 20,
-    height: 40,
-    width: 310,
-  },
-  backText: {
-    fontSize: 20
   },
   headingText: {
     fontSize: 17,

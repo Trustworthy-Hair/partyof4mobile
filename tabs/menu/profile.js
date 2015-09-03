@@ -1,5 +1,7 @@
 'use strict';
 
+var Back = require('../../components/utils').BackButton;
+
 var React = require('react-native');
 var {
   StyleSheet,
@@ -12,9 +14,7 @@ var profileTab = React.createClass({
   render: function() {
     return (
       <View>
-        <TouchableHighlight onPress={this.props.onback} style={styles.back}>
-          <Text style={styles.backText}>&lt; Back</Text>
-        </TouchableHighlight>
+        <Back onback={this.props.onback}/>
         <Text> Profile</Text>
       </View>
     );
@@ -22,14 +22,7 @@ var profileTab = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  back: {
-    marginTop: 20,
-    height: 40,
-    width: 310,
-  },
-  backText: {
-    fontSize: 20
-  },
+
 });
 
 module.exports = profileTab;
