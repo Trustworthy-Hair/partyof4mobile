@@ -2,7 +2,8 @@
 
 var config = require('./../config/config.js'),
     Header = require('./header'),
-    React  = require('react-native');
+    React  = require('react-native'),
+    Signup = require('./signup');
 
 var {
   Image,
@@ -14,14 +15,24 @@ var {
 } = React;
 
 var Login = React.createClass({
-  pressButton: function() {
+  getInitialState() {
+    return {
+      view: 'login'
+    };
+  },
+  pressButton() {
     // TO-DO: Implement authentication
     this.props.onLogin();
   },
-  render: function() {
-    return (
-      <View style={ styles.container }>
-        <Header />
+  changeView(state) {
+    this.setState({
+      view: state
+    });
+  },
+  render() {
+    var current = this;
+    if (this.state.view === 'login') {
+      var inner = (
         <View style={ styles.innercontainer }> 
           <View style= {styles.logocontainer }>
             <Image source={require('image!logo')} style={styles.logo}/>
@@ -37,14 +48,27 @@ var Login = React.createClass({
               <Text style={ styles.submit }>Log In</Text>
             </View>
           </TouchableHighlight>
-          <Text style={styles.text}>Sign up / Forgot your password?</Text>
-
+          <TouchableHighlight onPress={ function() {current.changeView('signup')} }> 
+            <Text style={styles.text}>Sign up / Forgot your password?</Text>
+          </TouchableHighlight>
           <TouchableHighlight onPress={ this.pressButton }>
             <View style={styles.login}> 
               <Text style={ styles.submit }>Sign In with Facebook</Text>
             </View>
           </TouchableHighlight>
         </View>
+      );
+    } else if (this.state.view === 'signup') {
+      var inner = (
+        <Signup onSubmit={this.changeView}/>
+      );
+    } else if (this.state.view === 'forgotpw') {
+    }
+
+    return (
+      <View style={ styles.container }>
+        <Header />
+        {inner}
       </View>
     );
   }
