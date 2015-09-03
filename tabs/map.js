@@ -64,7 +64,6 @@ var mapTab = React.createClass({
         this.setState({
           annotations: annotations
         });
-        console.log(this.state.annotations);
       }
     })
     .done();
