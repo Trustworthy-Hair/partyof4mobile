@@ -32,17 +32,17 @@ var menuTab = React.createClass({
         <View style={styles.innercontainer}>
           <TouchableHighlight style={styles.link} onPress={ function() { current.changePage('profile') }}>
               <View > 
-                <Text >edit your profile</Text>
+                <Text >View Your Profile</Text>
               </View>
           </TouchableHighlight>
           <TouchableHighlight style={styles.link} onPress={ function() { current.changePage('history') }}>
               <View > 
-                <Text >view your history</Text>
+                <Text >View Your History</Text>
               </View>
           </TouchableHighlight>
           <TouchableHighlight style={styles.link} onPress={ function() { current.changePage('about') }}>
               <View > 
-                <Text >learn about us</Text>
+                <Text >About Us</Text>
               </View>
           </TouchableHighlight>
         </View>

@@ -6,7 +6,7 @@ A social app where you can find open seats at nearby restaurants. Meet new peopl
 
   - Warren Wong ([@wrrnwng](https://github.com/wrrnwng)) 
   - Shelley Wang ([@shelleywang](https://github.com/shelleywang))
-  - Nick Toscano ([@ntoscano](https://github.com/ntoscano))
+  - Nicolas Toscano ([@ntoscano](https://github.com/ntoscano))
   - Brandon J Lewis ([@bjlewis88](https://github.com/bjlewis88))
 
 ## Table of Contents

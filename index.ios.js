@@ -5,12 +5,17 @@
 'use strict';
 
 var MapTab    = require('./tabs/map'),
+    // store     = require('./store/userStore'),
     SearchTab = require('./tabs/search'),
     ListTab   = require('./tabs/list'),
     NewTab    = require('./tabs/new'),
     MenuTab   = require('./tabs/menu'),
     Login     = require('./components/login'),
     React     = require('react-native');
+
+var store = {};
+
+var REQUEST_URL = 'https://localhost:3000/users/login';
 
 var {
   AppRegistry,
@@ -24,7 +29,8 @@ var {
 var partyof4mobile = React.createClass({
   getInitialState() {
     return {
-      loggedIn: false,
+      token: null,
+      user: null,
       tabs: ['map', 'search', 'list','new','menu'],
       selectedTab: 'map'
     };
@@ -36,14 +42,37 @@ var partyof4mobile = React.createClass({
     });
   },
   login: function() {
+ 
+     //  fetch(requestURL, {
+     //   method: 'POST',
+     //   headers: {
+     //    'Accept': 'application/json',
+     //    'Content-Type': 'application/json'
+     //   },
+     //   body: JSON.stringify({
+     //    username: store.username,
+     //    password: store.passowrd
+     //   })
+     //  }).then((responseData) => {
+     //   // this.setState({
+     //   //   token: responseData.token,
+     //   //   user: responseData.user
+     //   // });
+     //    store.user = responseData.user;
+     //    store.token = responseData.token;
+     //    store.password = null;
+     // })
+     // .done();
+
     this.setState({
-      loggedIn: true
+      loggedIn: true,
+      token: true
     });
   },
   render: function() {
     // FOR TESTING, login page is being bypassed
     // To visit the login page, change to if (this.state.loggedIn)
-    if (this.state.loggedIn) { 
+    if (this.state.token) { 
       var current = this;
       var selectedTab = this.state.selectedTab;
       var icons = {
