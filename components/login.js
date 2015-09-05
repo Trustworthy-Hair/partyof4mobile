@@ -1,9 +1,12 @@
 'use strict';
 
 var config = require('./../config/config.js'),
+    // store  = require('./../store/userStore'),
     Header = require('./header'),
     React  = require('react-native'),
     Signup = require('./signup');
+
+var store = {};
 
 var {
   Image,
@@ -15,13 +18,17 @@ var {
 } = React;
 
 var Login = React.createClass({
+
   getInitialState() {
     return {
       view: 'login'
     };
   },
   pressButton() {
-    // TO-DO: Implement authentication
+    
+    store.username = this.state.username;
+    store.password = this.state.password;
+
     this.props.onLogin();
   },
   changeView(state) {
@@ -38,10 +45,27 @@ var Login = React.createClass({
             <Image source={require('image!logo')} style={styles.logo}/>
           </View>
           <View style={ styles.textInputContainer }>
-            <TextInput style={ styles.textInput } placeholder='username'/>
+            <TextInput 
+            style={ styles.textInput }
+            placeholder='username'
+            onChangeText={(text) => {
+              text = text.replace(/ /g, '_');
+              this.setState({username: text});
+            }}
+            value={this.state.username}/>
           </View>
           <View style={ styles.textInputContainer }>
-            <TextInput style={ styles.textInput } secureTextEntry={true} placeholder='password'/>
+            <TextInput 
+            style={ styles.textInput }
+            secureTextEntry={true}
+            placeholder='password'
+            style={ styles.textInput }
+            placeholder='username'
+            onChangeText={(text) => {
+              text = text.replace(/ /g, '_');
+              this.setState({password: text});
+            }}
+            value={this.state.password}/>
           </View>
           <TouchableHighlight onPress={ this.pressButton }>
             <View style={styles.login}> 
