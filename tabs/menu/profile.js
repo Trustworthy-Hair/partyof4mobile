@@ -58,6 +58,7 @@ var profileTab = React.createClass({
 var styles = StyleSheet.create({
   container: {
     // backgroundColor: '#F5FCFF',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
   },
