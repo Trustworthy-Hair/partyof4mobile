@@ -6,8 +6,6 @@ var config = require('./../config/config.js'),
     React  = require('react-native'),
     Signup = require('./signup');
 
-var store = {};
-
 var {
   Image,
   StyleSheet,
@@ -19,23 +17,25 @@ var {
 
 var Login = React.createClass({
 
-  getInitialState() {
+  getInitialState: function () {
     return {
       view: 'login'
     };
   },
-  pressButton() {
-    
-    store.username = this.state.username;
-    store.password = this.state.password;
 
-    this.props.onLogin();
+  pressButton: function () {
+    this.props.onLogin({
+      username: this.state.username,
+      password: this.state.password
+    });
   },
-  changeView(state) {
+
+  changeView: function (state) {
     this.setState({
       view: state
     });
   },
+  
   render() {
     var current = this;
     if (this.state.view === 'login') {
@@ -59,8 +59,6 @@ var Login = React.createClass({
             style={ styles.textInput }
             secureTextEntry={true}
             placeholder='password'
-            style={ styles.textInput }
-            placeholder='username'
             onChangeText={(text) => {
               text = text.replace(/ /g, '_');
               this.setState({password: text});
