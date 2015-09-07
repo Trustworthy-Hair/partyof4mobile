@@ -25,10 +25,12 @@ var {
 var profileTab = React.createClass({
 
   getInitialState: function(){
-    return UserStore.getUser();
-    // var dataSource = new ListView.DataSource({
-    //   rowHasChanged: (row1, row2) => row1 !== row2,
-    // });
+    var user = UserStore.getUser();
+    var dataSource = new ListView.DataSource({
+      rowHasChanged: (row1, row2) => row1 !== row2,
+    });
+    user.interests = dataSource.cloneWithRows(user.interests);
+    return user;
     // return {
     //   interests: dataSource.cloneWithRows(store.user.interests)
     // };
@@ -53,8 +55,8 @@ var profileTab = React.createClass({
         source={{uri: this.state.profileImageUrl}}/>
         // source={{uri: store.user.profileImageUrl}}/>
         <Text style={styles.status}>{this.state.status}</Text>
-        <Text style={styles.description}>{this.state.description}</Text>
         // <Text style={styles.status}>{store.user.status}</Text>
+        <Text style={styles.description}>{this.state.description}</Text>
         // <Text style={styles.description}>{store.user.description}</Text>
         <ListView 
           dataSource={this.state.interests}
