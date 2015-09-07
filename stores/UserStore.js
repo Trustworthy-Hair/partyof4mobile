@@ -1,6 +1,6 @@
 // UserStore.js
 
-var Dispatcher = require('../dispatcher/AppDispatcher');
+var Dispatcher = require('../dispatcher/dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/constants');
 var assign = require('object-assign');
@@ -8,10 +8,11 @@ var assign = require('object-assign');
 var ActionTypes = Constants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
-var _user = {};
+var _store = {};
 
-var _storeUser = function (user) {
-  _user = user;
+var _storeData = function (user, token) {
+  _store.user = user;
+  _store.token = token;
 };
 
 
@@ -29,8 +30,8 @@ var UserStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-  getUser: function() {
-    return _user;
+  getData: function () {
+    return _store;
   }
 
 });
@@ -40,7 +41,7 @@ UserStore.dispatchToken = Dispatcher.register(function (action) {
   switch(action.type) {
 
     case ActionTypes.STORE_USER:
-      _storeUser(action.payload);
+      _storeUser(action.user, action.token);
       UserStore.emitChange();
       break;
 
