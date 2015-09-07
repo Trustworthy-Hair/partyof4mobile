@@ -1,7 +1,6 @@
 'use strict';
 
 var config = require('./../config/config.js'),
-    // store  = require('./../store/userStore'),
     Header = require('./header'),
     React  = require('react-native'),
     Signup = require('./signup');
