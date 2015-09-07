@@ -72,7 +72,7 @@ var partyof4mobile = React.createClass({
 
   _onChange: function () {
     this.setState({
-      token: UserStore.getUser().token
+      token: UserStore.getData().token
     });
   },
 

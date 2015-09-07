@@ -41,7 +41,7 @@ UserStore.dispatchToken = Dispatcher.register(function (action) {
   switch(action.type) {
 
     case ActionTypes.STORE_USER:
-      _storeUser(action.user, action.token);
+      _storeData(action.user, action.token);
       UserStore.emitChange();
       break;
 
