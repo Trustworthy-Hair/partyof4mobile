@@ -97,6 +97,7 @@ var menuTab = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
+    backgroundColor: '#F5FCFF',
     flexDirection: 'column',
     flex: 1
   },
