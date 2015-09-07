@@ -3,6 +3,11 @@
 var config = require('./../config/config.js');
 var MapboxGLMap = require('react-native-mapbox-gl');
 var Header = require('../components/header');
+var Dispatcher = require ('../dispatcher/dispatcher');
+var EventsStore = require('../stores/EventsStore');
+var Constants = require('../constants/constants');
+
+var ActionTypes = Constants.ActionTypes;
 
 var React = require('react-native');
 var {
@@ -25,19 +30,26 @@ var mapTab = React.createClass({
       annotations: []
     }
   },
+
   componentDidMount: function() {
+    var _this = this;
     navigator.geolocation.getCurrentPosition(
-      (position) => this.setState({
-        center: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }
-      }),
+      function (position) {
+        console.log('awesome');
+        _this.setState({
+          center: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
+        });
+        _this.getDataFromServer()
+      },
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-    setTimeout(this.getDataFromServer, 1000);
+    EventsStore.addChangeListener(this._onEventsChange);
   },
+
   getDataFromServer: function() {
     fetch(config.url+'/locations')
     .then((response) => response.json())
@@ -60,18 +72,24 @@ var mapTab = React.createClass({
       };
     }))
     .then((annotations) => {
-      if (this.isMounted()) {
-        this.setState({
-          annotations: annotations
-        });
-      }
+      Dispatcher.dispatch({
+        type: ActionTypes.STORE_EVENTS,
+        events: annotations
+      });
     })
     .done();
   },
-  onOpenAnnotation(annotation) {
+
+  _onEventsChange: function () {
+    this.setState({
+      annotations: EventsStore.getEvents()
+    });
+  },
+
+  onOpenAnnotation: function (annotation) {
     console.log(annotation);
   },
-  onRightAnnotationTapped(e) {
+  onRightAnnotationTapped: function (e) {
     console.log(e);
   },
   render: function() {
