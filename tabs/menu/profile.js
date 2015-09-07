@@ -1,16 +1,7 @@
 'use strict';
 
 var Back = require('../../components/common').BackButton;
-var UserStore = require('../../store/userStore');
-// var store = {
-//   user: {
-//     username: 'Butts Mgee',
-//     interests: ['butts', 'butts', 'moreButts', 'butts', 'butts'],
-//     description: 'lets go eat burritos and touch eachothers butts',
-//     status: 'online',
-//     profileImageUrl: 'https://pbs.twimg.com/profile_images/3778366046/631957224cdaf93b24b36370e4d8486d.jpeg'
-//   }
-// };
+var UserStore = require('../../stores/UserStore');
 
 var React = require('react-native');
 var {
@@ -25,15 +16,15 @@ var {
 var profileTab = React.createClass({
 
   getInitialState: function(){
-    var user = UserStore.getUser();
+    var user = UserStore.getData().user;
+    return user;
+  },
+
+  createInterestsDataSource: function () {
     var dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-    user.interests = dataSource.cloneWithRows(user.interests);
-    return user;
-    // return {
-    //   interests: dataSource.cloneWithRows(store.user.interests)
-    // };
+    return dataSource.cloneWithRows(this.state.interests);
   },
 
   renderInterests: function(interest){
@@ -49,17 +40,13 @@ var profileTab = React.createClass({
       <View style={styles.container}>
         <Back onback={this.props.onback}/>
         <Text style={styles.username} >{this.state.username}</Text>
-        // <Text style={styles.username} >{store.user.username}</Text>
         <Image
         style={styles.profileImg}
         source={{uri: this.state.profileImageUrl}}/>
-        // source={{uri: store.user.profileImageUrl}}/>
         <Text style={styles.status}>{this.state.status}</Text>
-        // <Text style={styles.status}>{store.user.status}</Text>
         <Text style={styles.description}>{this.state.description}</Text>
-        // <Text style={styles.description}>{store.user.description}</Text>
         <ListView 
-          dataSource={this.state.interests}
+          dataSource={this.createInterestsDataSource()}
           renderRow={this.renderInterests}
           style={styles.listView}
         />
