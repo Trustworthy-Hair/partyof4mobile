@@ -5,17 +5,19 @@
 'use strict';
 
 var MapTab    = require('./tabs/map'),
-    // store     = require('./store/userStore'),
     SearchTab = require('./tabs/search'),
     ListTab   = require('./tabs/list'),
     NewTab    = require('./tabs/new'),
     MenuTab   = require('./tabs/menu'),
     Login     = require('./components/login'),
-    React     = require('react-native');
+    React     = require('react-native'),
+    Dispatcher = require('./dispatcher/dispatcher'),
+    Constants = require('./constants/constants'),
+    UserStore = require('./stores/UserStore');
 
-var store = {};
+var ActionTypes = Constants.ActionTypes;
 
-var REQUEST_URL = 'https://localhost:3000/users/login';
+var REQUEST_URL = 'http://localhost:3000/users/login';
 
 var {
   AppRegistry,
@@ -27,7 +29,7 @@ var {
 } = React;
 
 var partyof4mobile = React.createClass({
-  getInitialState() {
+  getInitialState: function () {
     return {
       token: null,
       user: null,
@@ -35,40 +37,45 @@ var partyof4mobile = React.createClass({
       selectedTab: 'map'
     };
   },
-  changeTab(tabName) {
+
+  componentDidMount: function () {
+    UserStore.addChangeListener(this._onChange);
+  },
+
+  changeTab: function (tabName) {
     StatusBarIOS.setStyle(tabName === 'map' ? 1 : 0);
     this.setState({
       selectedTab: tabName
     });
   },
-  login: function() {
- 
-     //  fetch(requestURL, {
-     //   method: 'POST',
-     //   headers: {
-     //    'Accept': 'application/json',
-     //    'Content-Type': 'application/json'
-     //   },
-     //   body: JSON.stringify({
-     //    username: store.username,
-     //    password: store.passowrd
-     //   })
-     //  }).then((responseData) => {
-     //   // this.setState({
-     //   //   token: responseData.token,
-     //   //   user: responseData.user
-     //   // });
-     //    store.user = responseData.user;
-     //    store.token = responseData.token;
-     //    store.password = null;
-     // })
-     // .done();
 
+  login: function (user) {
+ 
+      fetch(REQUEST_URL, {
+       method: 'POST',
+       headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+       },
+       body: JSON.stringify(user)
+      }).then((responseData) => {
+        responseData = JSON.parse(responseData._bodyInit);
+        Dispatcher.dispatch({
+          type: ActionTypes.STORE_USER,
+          user: responseData.user,
+          token: responseData.token
+        });
+     })
+     .done();
+
+  },
+
+  _onChange: function () {
     this.setState({
-      loggedIn: true,
-      token: true
+      token: UserStore.getUser().token
     });
   },
+
   render: function() {
     // FOR TESTING, login page is being bypassed
     // To visit the login page, change to if (this.state.loggedIn)
