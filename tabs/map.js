@@ -20,7 +20,7 @@ var mapRef = 'mapRef';
 
 var mapTab = React.createClass({
   mixins: [MapboxGLMap.Mixin],
-  getInitialState() {
+  getInitialState: function () {
     return {
       center: {
         latitude: 38.8833,
@@ -32,17 +32,15 @@ var mapTab = React.createClass({
   },
 
   componentDidMount: function() {
-    var _this = this;
     navigator.geolocation.getCurrentPosition(
-      function (position) {
-        console.log('awesome');
-        _this.setState({
+      (position) => {
+        this.setState({
           center: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           }
         });
-        _this.getDataFromServer()
+        this.getDataFromServer();
       },
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
