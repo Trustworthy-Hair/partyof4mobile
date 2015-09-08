@@ -42,9 +42,9 @@ var profileTab = React.createClass({
         <Text style={styles.username} >{this.state.username}</Text>
         <Image
         style={styles.profileImg}
-        source={{uri: store.user.profileImageUrl}}/>
-        <Text style={styles.status}>{store.user.status}</Text>
-        <Text style={styles.description}>{store.user.description}</Text>
+        source={{uri: this.state.profileImageUrl}}/>
+        <Text style={styles.status}>{this.state.status}</Text>
+        <Text style={styles.description}>{this.state.description}</Text>
         <Text style={styles.interests}>Interests: </Text>
         <ListView 
           dataSource={this.createInterestsDataSource()}
