@@ -3,6 +3,11 @@
 var config = require('./../config/config.js');
 var MapboxGLMap = require('react-native-mapbox-gl');
 var Header = require('../components/header');
+var Dispatcher = require ('../dispatcher/dispatcher');
+var EventsStore = require('../stores/EventsStore');
+var Constants = require('../constants/constants');
+
+var ActionTypes = Constants.ActionTypes;
 
 var React = require('react-native');
 var {
@@ -15,7 +20,7 @@ var mapRef = 'mapRef';
 
 var mapTab = React.createClass({
   mixins: [MapboxGLMap.Mixin],
-  getInitialState() {
+  getInitialState: function () {
     return {
       center: {
         latitude: 38.8833,
@@ -25,19 +30,24 @@ var mapTab = React.createClass({
       annotations: []
     }
   },
+
   componentDidMount: function() {
     navigator.geolocation.getCurrentPosition(
-      (position) => this.setState({
-        center: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        }
-      }),
+      (position) => {
+        this.setState({
+          center: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          }
+        });
+        this.getDataFromServer();
+      },
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
     );
-    setTimeout(this.getDataFromServer, 1000);
+    EventsStore.addChangeListener(this._onEventsChange);
   },
+
   getDataFromServer: function() {
     fetch(config.url+'/locations')
     .then((response) => response.json())
@@ -60,18 +70,24 @@ var mapTab = React.createClass({
       };
     }))
     .then((annotations) => {
-      if (this.isMounted()) {
-        this.setState({
-          annotations: annotations
-        });
-      }
+      Dispatcher.dispatch({
+        type: ActionTypes.STORE_EVENTS,
+        events: annotations
+      });
     })
     .done();
   },
-  onOpenAnnotation(annotation) {
+
+  _onEventsChange: function () {
+    this.setState({
+      annotations: EventsStore.getEvents()
+    });
+  },
+
+  onOpenAnnotation: function (annotation) {
     console.log(annotation);
   },
-  onRightAnnotationTapped(e) {
+  onRightAnnotationTapped: function (e) {
     console.log(e);
   },
   render: function() {
