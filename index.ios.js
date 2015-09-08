@@ -79,13 +79,11 @@ var partyof4mobile = React.createClass({
       console.log('asdf', response);
       return response.json();
     }).then((response) => {
-      console.log('!!!!!!!!!', response);
       if (response.token && response.user) {
         AsyncStorage.multiSet([
           ['token', response.token],
           ['userId', response.user.id.toString()]
         ]);
-        console.log('asdf', response);
         Dispatcher.dispatch({
           type: ActionTypes.STORE_USER,
           user: response.user,
