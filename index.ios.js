@@ -4,20 +4,21 @@
  */
 'use strict';
 
-var MapTab    = require('./tabs/map'),
-    SearchTab = require('./tabs/search'),
-    ListTab   = require('./tabs/list'),
-    NewTab    = require('./tabs/new'),
-    MenuTab   = require('./tabs/menu'),
-    Login     = require('./components/login'),
-    React     = require('react-native'),
+var MapTab     = require('./tabs/map'),
+    SearchTab  = require('./tabs/search'),
+    ListTab    = require('./tabs/list'),
+    NewTab     = require('./tabs/new'),
+    MenuTab    = require('./tabs/menu'),
+    Login      = require('./components/login'),
+    React      = require('react-native'),
     Dispatcher = require('./dispatcher/dispatcher'),
-    Constants = require('./constants/constants'),
-    UserStore = require('./stores/UserStore');
+    Constants  = require('./constants/constants'),
+    UserStore  = require('./stores/UserStore');
 
 var ActionTypes = Constants.ActionTypes;
 
-var REQUEST_URL = 'http://localhost:3000/users/login';
+var LOGIN_REQUEST_URL = 'http://localhost:3000/users/login';
+var GET_USER_REQUEST_URL = 'http://localhost:3000/users/';
 
 var {
   AppRegistry,
@@ -25,7 +26,8 @@ var {
   Text,
   View,
   TabBarIOS,
-  StatusBarIOS
+  StatusBarIOS,
+  AsyncStorage
 } = React;
 
 var partyof4mobile = React.createClass({
@@ -33,9 +35,25 @@ var partyof4mobile = React.createClass({
     return {
       token: null,
       user: null,
-      tabs: ['map', 'search', 'list','new','menu'],
+      tabs: ['map', 'search','list', 'new', 'menu'],
       selectedTab: 'map'
     };
+  },
+
+  componentWillMount: function () {
+    var token;
+    AsyncStorage.multiGet(['token', 'userId']).then((data) => {
+      token = data[0][1];
+      return this.getUser(data[1][1]);
+    }).then((user) => {
+      return user.json();
+    }).then((user) => {
+      Dispatcher.dispatch({
+        type: ActionTypes.STORE_USER,
+        user: user,
+        token: token
+      });
+    });
   },
 
   componentDidMount: function () {
@@ -50,24 +68,38 @@ var partyof4mobile = React.createClass({
   },
 
   login: function (user) {
- 
-      fetch(REQUEST_URL, {
-       method: 'POST',
-       headers: {
+    fetch(LOGIN_REQUEST_URL, {
+      method: 'POST',
+      headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-       },
-       body: JSON.stringify(user)
-      }).then((responseData) => {
-        responseData = JSON.parse(responseData._bodyInit);
+      },
+      body: JSON.stringify(user)
+    }).then((response) => {
+      return response.json();
+    }).then((response) => {
+      if (response.token && response.user) {
+        AsyncStorage.multiSet([
+          ['token', response.token],
+          ['userId', response.user.id.toString()]
+        ]);
         Dispatcher.dispatch({
           type: ActionTypes.STORE_USER,
-          user: responseData.user,
-          token: responseData.token
+          user: response.user,
+          token: response.token
         });
-     })
-     .done();
+      }
+    }).done();
+  },
 
+  getUser: function (userId) {
+    return fetch(GET_USER_REQUEST_URL + userId, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
   },
 
   _onChange: function () {
@@ -112,7 +144,6 @@ var partyof4mobile = React.createClass({
       return (
         <TabBarIOS tintColor='#2e6a8b' barTintColor='white' translucent={false}>
           {tabBarItems}
-
         </TabBarIOS>
       );
     } else {

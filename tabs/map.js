@@ -107,7 +107,8 @@ var mapTab = React.createClass({
           centerCoordinate={this.state.center}
           userLocationVisible={true}
           zoomLevel={this.state.zoom}
-          annotations={this.state.annotations}/>
+          annotations={this.state.annotations}
+        />
       </View>
     );
   }
