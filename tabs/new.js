@@ -7,6 +7,9 @@ var SearchBar = require('react-native-search-bar');
 var Dispatcher = require ('../dispatcher/dispatcher');
 var UserStore = require('../stores/UserStore');
 
+var SERVER_URL = 'http://trustworthywonton.herokuapp.com/';
+var LOCAL_URL = 'http://localhost:3000';
+
 var {
   StyleSheet,
   ListView,
@@ -56,8 +59,9 @@ var newTab = React.createClass({
 
   search: function(time){
     var data = UserStore.getData();
-    fetch('http://localhost:3000/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=7000'+'&q='+this.state.searchQ, {
+    fetch(LOCAL_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=7000'+'&q='+this.state.searchQ, {
     }).then((response) => {
+      console.log('~~~~~', response);
       return response.json();
     }).then((response) => {
       if(response.locations.length > 0){
