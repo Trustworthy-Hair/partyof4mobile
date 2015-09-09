@@ -19,8 +19,6 @@ var {
 
 var mapRef = 'mapRef';
 
-var data = UserStore.getData();
-
 var mapTab = React.createClass({
   mixins: [MapboxGLMap.Mixin],
   getInitialState: function () {
