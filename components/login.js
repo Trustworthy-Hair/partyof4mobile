@@ -48,7 +48,6 @@ var Login = React.createClass({
             style={ styles.textInput }
             placeholder='username'
             onChangeText={(text) => {
-              text = text.replace(/ /g, '_');
               this.setState({username: text});
             }}
             value={this.state.username}/>
@@ -59,7 +58,6 @@ var Login = React.createClass({
             secureTextEntry={true}
             placeholder='password'
             onChangeText={(text) => {
-              text = text.replace(/ /g, '_');
               this.setState({password: text});
             }}
             value={this.state.password}/>

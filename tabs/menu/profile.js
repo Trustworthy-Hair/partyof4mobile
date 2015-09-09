@@ -45,6 +45,7 @@ var profileTab = React.createClass({
         source={{uri: this.state.profileImageUrl}}/>
         <Text style={styles.status}>{this.state.status}</Text>
         <Text style={styles.description}>{this.state.description}</Text>
+        <Text style={styles.interests}>Interests: </Text>
         <ListView 
           dataSource={this.createInterestsDataSource()}
           renderRow={this.renderInterests}
@@ -57,9 +58,13 @@ var profileTab = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#F5FCFF',
+    backgroundColor: '#F5FCFF',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  interests:{
+    fontSize: 20,
   },
   username: {
     fontSize: 30,

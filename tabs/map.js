@@ -5,6 +5,7 @@ var MapboxGLMap = require('react-native-mapbox-gl');
 var Header = require('../components/header');
 var Dispatcher = require ('../dispatcher/dispatcher');
 var EventsStore = require('../stores/EventsStore');
+var UserStore = require('../stores/UserStore');
 var Constants = require('../constants/constants');
 
 var ActionTypes = Constants.ActionTypes;
@@ -41,6 +42,15 @@ var mapTab = React.createClass({
           }
         });
         this.getDataFromServer();
+
+        var location = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
+        Dispatcher.dispatch({
+          type: ActionTypes.STORE_USER,
+          location: location
+        });
       },
       (error) => alert(error.message),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
