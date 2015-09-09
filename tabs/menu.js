@@ -1,48 +1,73 @@
 'use strict';
 
-var Header = require('../components/header'),
+var React = require('react-native'),
+    Header = require('../components/header'),
     Profile = require('./menu/profile'),
     History = require('./menu/history'),
-    About = require('./menu/about');
+    About = require('./menu/about'),
+    Dispatcher = require('../dispatcher/dispatcher'),
+    Constants = require('../constants/constants');
 
-var React = require('react-native');
+var ActionTypes = Constants.ActionTypes;
+
 var {
+  AsyncStorage,
   StyleSheet,
   Text,
   TouchableHighlight,
   View
 } = React;
 
+var LOGOUT_REQUEST_URL = 'http://localhost:3000/logout'
+
 var menuTab = React.createClass({
-  getInitialState() {
+  getInitialState: function () {
     return {
       currentPage: 'menu'
     };
   },
+
+  logout: function () {
+    fetch(LOGOUT_REQUEST_URL, {
+      method: 'GET'
+    }).then(function () {
+      AsyncStorage.multiRemove(['userId', 'token']);
+      Dispatcher.dispatch({
+        type: ActionTypes.LOGOUT
+      });
+    });
+  },
+
   changePage: function(name) {
     if (name === undefined) {
       var name = 'menu';
     }
     this.setState({currentPage: name});
   },
+
   render: function() {
     var displayTab;
     if (this.state.currentPage ==='menu') {
       displayTab = (
         <View style={styles.innercontainer}>
-          <TouchableHighlight style={styles.link} onPress={ function() { current.changePage('profile') }}>
+          <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('profile'); }}>
               <View > 
                 <Text >View Your Profile</Text>
               </View>
           </TouchableHighlight>
-          <TouchableHighlight style={styles.link} onPress={ function() { current.changePage('history') }}>
+          <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('history'); }}>
               <View > 
                 <Text >View Your History</Text>
               </View>
           </TouchableHighlight>
-          <TouchableHighlight style={styles.link} onPress={ function() { current.changePage('about') }}>
+          <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('about'); }}>
               <View > 
                 <Text >About Us</Text>
+              </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.link} onPress={ () => { this.logout(); }}>
+              <View > 
+                <Text >Logout</Text>
               </View>
           </TouchableHighlight>
         </View>
@@ -61,7 +86,6 @@ var menuTab = React.createClass({
       );
     }
 
-    var current = this;
     return (
       <View style={ styles.container }>
         <Header />
