@@ -15,6 +15,9 @@ var _storeData = function (user, token) {
   _store.token = token;
 };
 
+var _clearData = function () {
+  _store = {};
+};
 
 var UserStore = assign({}, EventEmitter.prototype, {
 
@@ -42,6 +45,11 @@ UserStore.dispatchToken = Dispatcher.register(function (action) {
 
     case ActionTypes.STORE_USER:
       _storeData(action.user, action.token);
+      UserStore.emitChange();
+      break;
+
+    case ActionTypes.LOGOUT:
+      _clearData();
       UserStore.emitChange();
       break;
 
