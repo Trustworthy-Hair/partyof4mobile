@@ -17,7 +17,9 @@ var {
 var newTab = React.createClass({
   getInitialState: function () {
     return {
-      searchQ: []
+      searchQ: '',
+      results: [],
+      time: 0
     };
   },
 
@@ -25,11 +27,10 @@ var newTab = React.createClass({
     var dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-    return dataSource.cloneWithRows(this.state.searchQ);
+    return dataSource.cloneWithRows(this.state.results);
   },
 
   renderSearch: function (location){
-    console.log('~~~~~~~~', this.state.searchQ);
     return (
       <View style={styles.container}>
         <Text style={styles.description} >{location.name}</Text>
@@ -37,18 +38,33 @@ var newTab = React.createClass({
       );
   },
 
-  search: function (){
-    console.log('asdfasdfasfasdfasdfasdf');
-    var data = UserStore.getData();
+  throttle: function (){
+    var that = this;
+    var date = new Date();
+    var time = date.getTime();
+    this.setState({
+      time: time
+    });
+    setTimeout(() => {
+      var date = new Date();
+      var newTime = date.getTime();
+      if(Math.abs(this.state.time - newTime) > 500){
+        that.search(time);
+      }
+    }, 500)
+  },
 
-    fetch('http://localhost:3000/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&q='+this.state.searchQ+'&radius=7000', {
+  search: function(time){
+    var data = UserStore.getData();
+    fetch('http://localhost:3000/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=7000'+'&q='+this.state.searchQ, {
     }).then((response) => {
       return response.json();
     }).then((response) => {
-      // console.log(response.locations);
-      this.setState({
-        searchQ: response.locations
-      })
+      if(response.locations.length > 0){
+        this.setState({
+          results: response.locations
+        })
+      }
     }).done();
     return;
   },
@@ -61,8 +77,9 @@ var newTab = React.createClass({
         <Header />
         <SearchBar
         onChangeText={(text) => {
+          text = text.replace(/ /g, '%20');
           this.setState({searchQ: text});
-          this.search();
+          this.throttle();
         }}
         onPress={this.press}
         placeholder='Search' />
