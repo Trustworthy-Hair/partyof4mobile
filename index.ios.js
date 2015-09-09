@@ -76,7 +76,6 @@ var partyof4mobile = React.createClass({
       },
       body: JSON.stringify(user)
     }).then((response) => {
-      console.log('asdf', response);
       return response.json();
     }).then((response) => {
       if (response.token && response.user) {

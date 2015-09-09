@@ -49,8 +49,6 @@ var mapTab = React.createClass({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         };
-
-        console.log('loc: ', location);
         Dispatcher.dispatch({
           type: ActionTypes.STORE_USER,
           location: location
