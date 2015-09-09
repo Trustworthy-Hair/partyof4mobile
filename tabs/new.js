@@ -23,7 +23,7 @@ var newTab = React.createClass({
     };
   },
 
-  createInterestsDataSource: function () {
+  createResultsDataSource: function () {
     var dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
@@ -84,7 +84,7 @@ var newTab = React.createClass({
         onPress={this.press}
         placeholder='Search' />
         <ListView 
-          dataSource={this.createInterestsDataSource()}
+          dataSource={this.createResultsDataSource()}
           renderRow={this.renderSearch}
           style={styles.listView}/>
       </View>
