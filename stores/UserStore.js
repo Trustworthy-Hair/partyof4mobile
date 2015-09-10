@@ -11,13 +11,15 @@ var CHANGE_EVENT = 'change';
 var _store = {};
 
 var _storeData = function (data) {
-  _store.user = data.user || _store.user;
-  _store.token = data.token || _store.token;
-  _store.location = data.location || _store.location;
+  for (var x in data) {
+    _store[x] = data[x];
+  }
 };
 
 var _clearData = function () {
-  _store = {};
+  for (var x in _store) {
+    _store[x] = null;
+  }
 };
 
 var UserStore = assign({}, EventEmitter.prototype, {
@@ -45,11 +47,7 @@ UserStore.dispatchToken = Dispatcher.register(function (action) {
   switch(action.type) {
 
     case ActionTypes.STORE_USER:
-      _storeData({
-        user: action.user,
-        token: action.token,
-        location: action.location
-      });
+      _storeData(action.payload);
       UserStore.emitChange();
       break;
 
