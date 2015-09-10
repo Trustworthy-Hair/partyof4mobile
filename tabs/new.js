@@ -6,6 +6,8 @@ var config = require('./../config/config.js');
 var SearchBar = require('react-native-search-bar');
 var Dispatcher = require ('../dispatcher/dispatcher');
 var UserStore = require('../stores/UserStore');
+var Back = require('../components/common').BackButton;
+var Button = require('react-native-button');
 
 var REQUEST_URL = 'http://localhost:3000';
 
@@ -14,16 +16,28 @@ var {
   ListView,
   Text,
   TextInput,
-  View
+  View,
+  DatePickerIOS
 } = React;
 
 var newTab = React.createClass({
+
+  getDefaultProps: function () {
+     return {
+       date: new Date(),
+       timeZoneOffsetInHours: (-1) * (new Date()).getTimezoneOffset() / 60,
+     };
+   },
+
   getInitialState: function () {
     return {
       searchQ: '',
       results: [],
       location: {},
-      time: 0
+      time: 0,
+      date: this.props.date,
+      today: new Date(),
+      timeZoneOffsetInHours: this.props.timeZoneOffsetInHours,
     };
   },
 
@@ -60,7 +74,6 @@ var newTab = React.createClass({
   },
 
   throttle: function (){
-    var that = this;
     var date = new Date();
     var time = date.getTime();
     this.setState({
@@ -70,7 +83,7 @@ var newTab = React.createClass({
       var date = new Date();
       var newTime = date.getTime();
       if(Math.abs(this.state.time - newTime) > 500){
-        that.search(time);
+        this.search(time);
       }
     }, 500)
   },
@@ -91,6 +104,9 @@ var newTab = React.createClass({
     return;
   },
 
+ onDateChange: function(date) {
+    this.setState({date: date});
+  },
 
 
   render: function() {
@@ -99,12 +115,33 @@ var newTab = React.createClass({
       return (
         <View style={styles.container} >
           <Header />
-          <Text>{this.state.location.name}</Text>
-          <Text>How many people</Text>
-          <View style={styles.listContainer} >
-            <TextInput keyboardType="numeric" style={styles.input}></TextInput>
-            <Text> / </Text>
-            <TextInput keyboardType="numeric" style={styles.input}></TextInput>
+          <Back onback={() =>{
+            this.setState({location: {}})
+          }}/>
+          <Text style={styles.title} >{this.state.location.name}</Text>
+          <View>
+            <View style={styles.listContainer}>
+              <Text style={styles.title} >How many people? </Text>
+              <TextInput keyboardType="numeric" style={styles.numInput}></TextInput>
+              <Text> / </Text>
+              <TextInput keyboardType="numeric" style={styles.numInput}></TextInput>
+            </View>
+            <View>
+              <Text style={styles.title} >Description:  </Text>
+              <TextInput style={styles.desInput} ></TextInput>
+            </View>
+            <Text style={styles.title} >When?</Text>
+            <View>
+              <DatePickerIOS
+              date={this.state.date}
+              minimumDate={this.state.today}
+              mode="datetime"
+              timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
+              onDateChange={this.onDateChange} />
+            </View>
+            <Button style={{color: 'green'}} onPress={this.createEvent}>
+              Create Event
+            </Button>
           </View>
         </View>
         )
@@ -132,15 +169,22 @@ var newTab = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  input: {
-    height: 20,
-    width: 20,
+  desInput: {
+    height: 50,
+    padding: 5,
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  numInput: {
+    height: 25,
+    width: 25,
+    padding: 5,
     borderColor: 'gray',
     borderWidth: 1,
   },
   container: {
     backgroundColor: '#F5FCFF',
-    flex: 1
+    flex: 1,
   },
   listView: {
     marginBottom: 50
@@ -149,6 +193,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom: 10
   },
   title: {
     fontSize: 20,
