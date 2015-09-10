@@ -13,6 +13,7 @@ var {
   StyleSheet,
   ListView,
   Text,
+  TextInput,
   View
 } = React;
 
@@ -21,8 +22,13 @@ var newTab = React.createClass({
     return {
       searchQ: '',
       results: [],
+      location: {},
       time: 0
     };
+  },
+
+  pickRestaurant: function(){
+    console.log('picked: ', this.state.location)
   },
 
   createResultsDataSource: function () {
@@ -33,9 +39,22 @@ var newTab = React.createClass({
   },
 
   renderSearch: function (location){
+    var price = '';
+    for(var i = 0; i < location.price; i++){
+      price = price + '$'
+    }
     return (
-      <View style={styles.container}>
-        <Text style={styles.description} >{location.name}</Text>
+      <View style={styles.listContainer}>
+        <View>
+          <Text onPress={() => {
+            console.log('@@@@@@', location);
+            this.setState({location: location});
+            this.pickRestaurant();
+          }} style={styles.title} >{location.name}</Text>
+        </View>
+        <View>
+          <Text style={styles.price} >{price}</Text>
+        </View>
       </View>
       );
   },
@@ -60,10 +79,10 @@ var newTab = React.createClass({
     var data = UserStore.getData();
     fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=7000'+'&q='+this.state.searchQ, {
     }).then((response) => {
-      console.log('~~~~~', response);
       return response.json();
     }).then((response) => {
       if(response.locations.length > 0){
+        console.log('~~~~~', response.locations);
         this.setState({
           results: response.locations
         })
@@ -75,30 +94,71 @@ var newTab = React.createClass({
 
 
   render: function() {
-    return (
-      <View style={ styles.container }>
-        <Header />
-        <SearchBar
-        onChangeText={(text) => {
-          text = text.replace(/ /g, '%20');
-          this.setState({searchQ: text});
-          this.throttle();
-        }}
-        onPress={this.press}
-        placeholder='Search' />
-        <ListView 
-          dataSource={this.createResultsDataSource()}
-          renderRow={this.renderSearch}
-          style={styles.listView}/>
-      </View>
-    );
+
+    if(this.state.location.name){
+      return (
+        <View style={styles.container} >
+          <Header />
+          <Text>{this.state.location.name}</Text>
+          <Text>How many people</Text>
+          <View style={styles.listContainer} >
+            <TextInput keyboardType="numeric" style={styles.input}></TextInput>
+            <Text> / </Text>
+            <TextInput keyboardType="numeric" style={styles.input}></TextInput>
+          </View>
+        </View>
+        )
+    }else{
+      return (
+        <View style={ styles.container }>
+          <Header />
+          <SearchBar
+          onChangeText={(text) => {
+            text = text.replace(/ /g, '%20');
+            this.setState({searchQ: text});
+            this.throttle();
+          }}
+          onPress={this.press}
+          placeholder='Search' />
+          <ListView 
+            dataSource={this.createResultsDataSource()}
+            renderRow={this.renderSearch}
+            style={styles.listView}/>
+        </View>
+      );
+    }
+
   }
 });
 
 var styles = StyleSheet.create({
+  input: {
+    height: 20,
+    width: 20,
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
   container: {
-    flexDirection: 'column',
+    backgroundColor: '#F5FCFF',
     flex: 1
+  },
+  listView: {
+    marginBottom: 50
+  },
+  listContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: 8,
+    textAlign: 'left'
+  },
+  price: {
+    fontSize: 20,
+    marginBottom: 8,
+    textAlign: 'right'
   }
 });
 
