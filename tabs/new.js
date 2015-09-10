@@ -168,12 +168,15 @@ var newTab = React.createClass({
           </View>
         </View>
         )
-    }else if(this.state.event.description){
+    }else if(this.state.event.description && this.state.location.name){
       var des = this.state.event.description;
       return (
-        <View>
-        <Header />
-        <Text>{des}</Text>
+        <View style={styles.container} >
+          <Back onback={() =>{
+              this.setState({location: {}})
+            }}/>
+          <Header />
+          <Text>{des}</Text>
         </View>
         );
     }else{
