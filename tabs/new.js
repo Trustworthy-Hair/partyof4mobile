@@ -38,6 +38,10 @@ var newTab = React.createClass({
       date: this.props.date,
       today: new Date(),
       timeZoneOffsetInHours: this.props.timeZoneOffsetInHours,
+      capacity: 0,
+      filledSeats: 0,
+      description: '',
+      event: {}
     };
   },
 
@@ -108,10 +112,23 @@ var newTab = React.createClass({
     this.setState({date: date});
   },
 
+  createEvent: function(){
+    this.setState({
+      event: {
+        location: this.state.location,
+        description: this.state.description,
+        capacity: this.state.capacity,
+        filledSeats: this.state.filledSeats,
+        date: this.state.date
+      }
+    })
+
+  },
+
 
   render: function() {
 
-    if(this.state.location.name){
+    if(this.state.location.name && !this.state.event.description){
       return (
         <View style={styles.container} >
           <Header />
@@ -122,13 +139,19 @@ var newTab = React.createClass({
           <View>
             <View style={styles.listContainer}>
               <Text style={styles.title} >How many people? </Text>
-              <TextInput keyboardType="numeric" style={styles.numInput}></TextInput>
+              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(filledSeats) => {
+                this.setState({filledSeats : filledSeats});
+              }} />
               <Text> / </Text>
-              <TextInput keyboardType="numeric" style={styles.numInput}></TextInput>
+              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(capacity) => {
+                this.setState({capacity: capacity});
+              }} />
             </View>
             <View>
               <Text style={styles.title} >Description:  </Text>
-              <TextInput style={styles.desInput} ></TextInput>
+              <TextInput style={styles.desInput} onChangeText={(description) =>{
+                this.setState({description: description});
+              }} />
             </View>
             <Text style={styles.title} >When?</Text>
             <View>
@@ -145,6 +168,14 @@ var newTab = React.createClass({
           </View>
         </View>
         )
+    }else if(this.state.event.description){
+      var des = this.state.event.description;
+      return (
+        <View>
+        <Header />
+        <Text>{des}</Text>
+        </View>
+        );
     }else{
       return (
         <View style={ styles.container }>
