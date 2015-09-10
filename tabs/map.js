@@ -1,5 +1,6 @@
 'use strict';
 
+var React = require('react-native');
 var config = require('./../config/config.js');
 var MapboxGLMap = require('react-native-mapbox-gl');
 var Header = require('../components/header');
@@ -10,7 +11,8 @@ var Constants = require('../constants/constants');
 
 var ActionTypes = Constants.ActionTypes;
 
-var React = require('react-native');
+var GET_NEARBY_EVENTS_REQUEST_URL = config.url + '/locations';
+
 var {
   StyleSheet,
   Text,
@@ -47,9 +49,12 @@ var mapTab = React.createClass({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         };
+        var payload = {
+          location: location
+        };
         Dispatcher.dispatch({
           type: ActionTypes.STORE_USER,
-          location: location
+          payload: payload
         });
       },
       (error) => alert(error.message),
@@ -58,8 +63,12 @@ var mapTab = React.createClass({
     EventsStore.addChangeListener(this._onEventsChange);
   },
 
+  componentWillUnmount: function () {
+    EventsStore.removeChangeListener(this._onEventsChange);
+  },
+
   getDataFromServer: function() {
-    fetch(config.url+'/locations')
+    fetch(GET_NEARBY_EVENTS_REQUEST_URL)
     .then((response) => response.json())
     .then((locations) => locations.map(function(location) {
       return {

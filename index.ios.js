@@ -9,6 +9,7 @@ var MapTab     = require('./tabs/map'),
     ListTab    = require('./tabs/list'),
     NewTab     = require('./tabs/new'),
     MenuTab    = require('./tabs/menu'),
+    // EventView  = require('./tabs/eventDetail'),
     Login      = require('./components/login'),
     React      = require('react-native'),
     Dispatcher = require('./dispatcher/dispatcher'),
@@ -30,13 +31,34 @@ var {
   AsyncStorage
 } = React;
 
+var icons = {
+  map: require('image!map'),
+  search : require('image!search'),
+  list : require('image!list'),
+  new : require('image!new'),
+  menu : require('image!menu')
+};
+
+var tabs = {
+  map: (<MapTab />),
+  search : (<SearchTab />),
+  list : (<ListTab />),
+  new : (<NewTab />),
+  menu : (<MenuTab />)
+};
+
 var partyof4mobile = React.createClass({
+
+  getDefaultProps: function () {
+    return {
+      icons: ['map', 'search', 'list', 'new', 'menu']
+    };
+  },
+
   getInitialState: function () {
     return {
       token: null,
-      user: null,
-      tabs: ['map', 'search','list', 'new', 'menu'],
-      selectedTab: 'map'
+      user: null
     };
   },
 
@@ -48,10 +70,14 @@ var partyof4mobile = React.createClass({
     }).then((user) => {
       return user.json();
     }).then((user) => {
+      var payload = {
+        user: user,
+        token: token,
+        currentView: 'map'
+      };
       Dispatcher.dispatch({
         type: ActionTypes.STORE_USER,
-        user: user,
-        token: token
+        payload: payload
       });
     });
   },
@@ -60,10 +86,14 @@ var partyof4mobile = React.createClass({
     UserStore.addChangeListener(this._onChange);
   },
 
+  componentWillUnmount: function () {
+    UserStore.removeChangeListener(this._onChange);
+  },
+
   changeTab: function (tabName) {
     StatusBarIOS.setStyle(tabName === 'map' ? 1 : 0);
     this.setState({
-      selectedTab: tabName
+      currentView: tabName
     });
   },
 
@@ -83,10 +113,14 @@ var partyof4mobile = React.createClass({
           ['token', response.token],
           ['userId', response.user.id.toString()]
         ]);
+        var payload = {
+          user: response.user,
+          token: response.token,
+          currentView: 'map'
+        };
         Dispatcher.dispatch({
           type: ActionTypes.STORE_USER,
-          user: response.user,
-          token: response.token
+          payload: payload
         });
       }
     }).done();
@@ -103,38 +137,22 @@ var partyof4mobile = React.createClass({
   },
 
   _onChange: function () {
-    this.setState({
-      token: UserStore.getData().token
-    });
+    var data = UserStore.getData();
+    this.setState(data);
   },
 
   render: function() {
     // FOR TESTING, login page is being bypassed
     // To visit the login page, change to if (this.state.loggedIn)
     if (this.state.token) { 
-      var current = this;
-      var selectedTab = this.state.selectedTab;
-      var icons = {
-        map: require('image!map'),
-        search : require('image!search'),
-        list : require('image!list'),
-        new : require('image!new'),
-        menu : require('image!menu')
-      };
-      var tabs = {
-        map: (<MapTab />),
-        search : (<SearchTab />),
-        list : (<ListTab />),
-        new : (<NewTab />),
-        menu : (<MenuTab />)
-      }
+      var selectedTab = this.state.currentView;
 
-      var tabBarItems = this.state.tabs.map(function(tabBarItem) {
+      var tabBarItems = this.props.icons.map((tabBarItem) => {
         return (
           <TabBarIOS.Item key={'tabBar'+tabBarItem}
             title={tabBarItem}
             icon={icons[tabBarItem]}
-            onPress={ () => current.changeTab(tabBarItem) }
+            onPress={ () => this.changeTab(tabBarItem) }
             selected={ selectedTab === tabBarItem }>
             {tabs[tabBarItem]}
           </TabBarIOS.Item>
