@@ -3,7 +3,8 @@
 var config = require('./../config/config.js'),
     Header = require('./header'),
     React  = require('react-native'),
-    Signup = require('./signup');
+    Signup = require('./signup'),
+    styleGuide = require('../config/style.js').styleGuide;
 
 var {
   Image,
@@ -99,7 +100,7 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   innercontainer: {
-    backgroundColor: '#14203c',
+    backgroundColor: styleGuide.colors.dark,
     flexDirection: 'column',
     flex: 1,
     justifyContent: 'center',
@@ -116,37 +117,42 @@ var styles = StyleSheet.create({
   },
   textInputContainer: {
     overflow: 'hidden',
-    backgroundColor: 'white',
+    backgroundColor: styleGuide.colors.white,
     borderRadius: 15,
     width: 250,
     height: 40,
     marginBottom: 10
   },
   textInput: {
-    backgroundColor: 'white',
+    backgroundColor: styleGuide.colors.white,
     height: 40, 
     width: 250,
     borderWidth: 0,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontFamily: styleGuide.font, 
+    fontSize: styleGuide.sizes.main
   },
   submit: {
-    color: 'white',
-    fontSize: 20,
-    textAlign: 'center'
+    color: styleGuide.colors.white,
+    fontSize: styleGuide.sizes.larger,
+    textAlign: 'center',
+    fontFamily: styleGuide.font
   },
   login: {
     overflow: 'hidden',
     width: 250,
     height: 40,
-    backgroundColor: '#2e6a8b',
+    backgroundColor: styleGuide.colors.main,
     borderRadius: 15,
     justifyContent: 'center',
     flex: 1,
     marginBottom: 10
   },
   text: {
-    color: '#a9e2d6',
-    marginBottom: 100
+    color: styleGuide.colors.highlight,
+    marginBottom: 100,
+    fontSize: 16,
+    fontFamily: styleGuide.font
   }
 });
 

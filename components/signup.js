@@ -1,6 +1,7 @@
 'use strict';
 
-var Back = require('./common').BackButton;
+var Back = require('./common').BackButton,
+    styleGuide = require('../config/style.js').styleGuide;
 
 var React  = require('react-native');
 var UserStore   = require('../stores/UserStore');
@@ -195,37 +196,40 @@ var SignupLabel = React.createClass({
 
 var styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: styleGuide.colors.white,
     flexDirection: 'column',
     flex: 1,
     padding: 10,
     alignItems: 'center'
   },
   headingText: {
-    fontSize: 17,
-    color: '#2e6a8b'
+    fontSize: styleGuide.sizes.larger,
+    color: styleGuide.colors.main,
+    fontFamily: styleGuide.font
   },
   textInputContainer: {
     width: 230,
     height: 40,
     marginBottom: 5,
     borderWidth: 1,
-    borderTopColor: 'white', 
-    borderRightColor: 'white',
+    borderTopColor: styleGuide.colors.white, 
+    borderRightColor: styleGuide.colors.white,
     borderBottomColor: 'black',
-    borderLeftColor: 'white',
+    borderLeftColor: styleGuide.colors.white,
     padding: 5
   },
   textInput: {
     height: 30, 
     width: 220,
     borderWidth: 0,
+    fontFamily: styleGuide.font
   },
   warning: {
-    color: '#8f3033'
+    color: '#8f3033',
+    fontFamily: styleGuide.font
   },
   submit: {
-    backgroundColor: '#2e6a8b',
+    backgroundColor: styleGuide.colors.main,
     margin: 10,
     height: 40,
     width: 240,
@@ -233,15 +237,17 @@ var styles = StyleSheet.create({
     justifyContent: 'center'
   },
   submitText: {
-    color: 'white',
-    fontSize: 20
+    color: styleGuide.colors.white,
+    fontSize: styleGuide.sizes.larger,
+    fontFamily: styleGuide.font
   },
   label: {
     width: 250
   },
   labelText: {
-    color: '#14203c',
-    fontSize: 12
+    color: styleGuide.colors.dark,
+    fontSize: 15,
+    fontFamily: styleGuide.font
   }
 });
 

@@ -1,6 +1,8 @@
 'use strict';
 
-var React = require('react-native');
+var React = require('react-native'),
+    styleGuide = require('../config/style.js').styleGuide;
+
 var {
   StyleSheet,
   Text,
@@ -27,7 +29,8 @@ var styles = StyleSheet.create({
     width: 310,
   },
   backText: {
-    fontSize: 20
+    fontSize: styleGuide.sizes.larger,
+    fontFamily: styleGuide.font
   },
 });
 

@@ -1,7 +1,8 @@
 'use strict';
 
 var config = require('./../config/config.js'),
-    React  = require('react-native');
+    React  = require('react-native'),
+    styleGuide = require('../config/style.js').styleGuide;
     
 var {
   StyleSheet,
@@ -24,13 +25,13 @@ var header = React.createClass({
 var styles = StyleSheet.create({
   header: {
     height: 40,
-    backgroundColor: '#2e6a8b',
+    backgroundColor: styleGuide.colors.main,
     paddingTop: 18,
     alignItems: 'center'
   },
   headerText: {
-    color: '#fff',
-    fontSize: 18,
+    color: styleGuide.colors.white,
+    fontSize: styleGuide.sizes.main,
     fontWeight: 'bold'
   }
 });
