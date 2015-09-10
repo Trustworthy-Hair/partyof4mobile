@@ -24,7 +24,7 @@ var profileTab = React.createClass({
     var dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
     });
-    return dataSource.cloneWithRows(this.state.interests);
+    return dataSource.cloneWithRows(this.state.interests || {});
   },
 
   renderInterests: function(interest){
