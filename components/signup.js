@@ -6,9 +6,9 @@ var React  = require('react-native');
 var UserStore   = require('../stores/UserStore');
 var Dispatcher  = require('../dispatcher/dispatcher');
 var Constants   = require('../constants/constants');
+var config = require('../config/config')
 var ActionTypes = Constants.ActionTypes;
-
-var SIGNUP_REQUEST_URL = 'http://localhost:3000/users/signup';
+var SIGNUP_REQUEST_URL = config.url + '/users/signup';
 
 var {
   StyleSheet,
