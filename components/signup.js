@@ -1,7 +1,10 @@
 'use strict';
 
 var Back = require('./common').BackButton,
-    styleGuide = require('../config/style.js').styleGuide;
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var React  = require('react-native');
 var UserStore   = require('../stores/UserStore');
@@ -195,18 +198,16 @@ var SignupLabel = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    backgroundColor: styleGuide.colors.white,
-    flexDirection: 'column',
-    flex: 1,
+  container: styleExtend({
     padding: 10,
     alignItems: 'center'
-  },
-  headingText: {
+  }, 'container'),
+
+  headingText: styleExtend({
     fontSize: styleGuide.sizes.larger,
     color: styleGuide.colors.main,
-    fontFamily: styleGuide.font
-  },
+  }, 'font'),
+
   textInputContainer: {
     width: 230,
     height: 40,
@@ -214,36 +215,34 @@ var styles = StyleSheet.create({
     borderWidth: 1,
     borderTopColor: styleGuide.colors.white, 
     borderRightColor: styleGuide.colors.white,
-    borderBottomColor: 'black',
     borderLeftColor: styleGuide.colors.white,
+    borderBottomColor: 'black',
     padding: 5
   },
+
   textInput: {
     height: 30, 
     width: 220,
     borderWidth: 0,
     fontFamily: styleGuide.font
   },
+
   warning: {
     color: '#8f3033',
     fontFamily: styleGuide.font
   },
-  submit: {
-    backgroundColor: styleGuide.colors.main,
-    margin: 10,
-    height: 40,
-    width: 240,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  submitText: {
-    color: styleGuide.colors.white,
-    fontSize: styleGuide.sizes.larger,
-    fontFamily: styleGuide.font
-  },
+
+  submit: styleExtend({
+    marginTop: 10,
+  }, 'center', 'button'),
+
+  submitText: styleExtend({
+  }, 'submitfont'),
+
   label: {
     width: 250
   },
+  
   labelText: {
     color: styleGuide.colors.dark,
     fontSize: 15,

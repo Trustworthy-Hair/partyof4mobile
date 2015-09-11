@@ -4,7 +4,10 @@ var config = require('./../config/config.js'),
     Header = require('./header'),
     React  = require('react-native'),
     Signup = require('./signup'),
-    styleGuide = require('../config/style.js').styleGuide;
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   Image,
@@ -69,12 +72,7 @@ var Login = React.createClass({
             </View>
           </TouchableHighlight>
           <TouchableHighlight onPress={ function() {current.changeView('signup')} }> 
-            <Text style={styles.text}>Sign up / Forgot your password?</Text>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={ this.pressButton }>
-            <View style={styles.login}> 
-              <Text style={ styles.submit }>Sign In with Facebook</Text>
-            </View>
+            <Text style={styles.text}>Sign up</Text>
           </TouchableHighlight>
         </View>
       );
@@ -94,66 +92,45 @@ var Login = React.createClass({
   }
 });
 
+
 var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1,
-  },
-  innercontainer: {
-    backgroundColor: styleGuide.colors.dark,
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  logocontainer: {
-    marginBottom: 30,
-    alignItems: 'center'
-  },
+  container: styleExtend({}, 'container'),
+
+  innercontainer: styleExtend({
+    backgroundColor: styleGuide.colors.dark
+  }, 'container', 'center'),
+
+  logocontainer: styleExtend({
+    marginBottom: 30
+  }, 'center'),
+
   logo: {
     width: 90,
     height: 90,
     paddingBottom: 10
   },
-  textInputContainer: {
-    overflow: 'hidden',
-    backgroundColor: styleGuide.colors.white,
-    borderRadius: 15,
-    width: 250,
-    height: 40,
-    marginBottom: 10
-  },
-  textInput: {
-    backgroundColor: styleGuide.colors.white,
+
+  textInputContainer: styleExtend({
+    backgroundColor: styleGuide.colors.white
+  }, 'button'),
+
+  textInput: styleExtend({
     height: 40, 
     width: 250,
-    borderWidth: 0,
-    textAlign: 'center',
-    fontFamily: styleGuide.font, 
-    fontSize: styleGuide.sizes.main
-  },
-  submit: {
-    color: styleGuide.colors.white,
-    fontSize: styleGuide.sizes.larger,
-    textAlign: 'center',
-    fontFamily: styleGuide.font
-  },
-  login: {
-    overflow: 'hidden',
-    width: 250,
-    height: 40,
-    backgroundColor: styleGuide.colors.main,
-    borderRadius: 15,
+  }, 'font'),
+
+  submit: styleExtend({
+  }, 'submitfont'),
+
+  login: styleExtend({
     justifyContent: 'center',
     flex: 1,
-    marginBottom: 10
-  },
-  text: {
+  }, 'button'),
+
+  text: styleExtend({
     color: styleGuide.colors.highlight,
-    marginBottom: 100,
     fontSize: 16,
-    fontFamily: styleGuide.font
-  }
+  }, 'font')
 });
 
 module.exports = Login;

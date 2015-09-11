@@ -2,7 +2,10 @@
 
 var config = require('./../config/config.js'),
     React  = require('react-native'),
-    styleGuide = require('../config/style.js').styleGuide;
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
     
 var {
   StyleSheet,
@@ -24,16 +27,14 @@ var header = React.createClass({
 
 var styles = StyleSheet.create({
   header: {
-    height: 40,
     backgroundColor: styleGuide.colors.main,
     paddingTop: 18,
+    height: 40,
     alignItems: 'center'
   },
-  headerText: {
-    color: styleGuide.colors.white,
-    fontSize: styleGuide.sizes.main,
-    fontWeight: 'bold'
-  }
+  headerText: styleExtend({
+    color: styleGuide.colors.white
+  }, 'font')
 });
 
 module.exports = header;
