@@ -130,7 +130,6 @@ var newTab = React.createClass({
   },
 
   render: function() {
-    this.search();
     if(this.state.location.name && !this.state.event.description){
       return (
         <View style={styles.container} >
@@ -183,6 +182,7 @@ var newTab = React.createClass({
         </View>
         );
     }else{
+      this.search();
       return (
         <View style={ styles.container }>
           <Header />
