@@ -4,14 +4,14 @@
  */
 'use strict';
 
-var MapTab      = require('./tabs/map'),
+var React       = require('react-native'),
+    MapTab      = require('./tabs/map'),
     SearchTab   = require('./tabs/search'),
     ListTab     = require('./tabs/list'),
     NewTab      = require('./tabs/new'),
     MenuTab     = require('./tabs/menu'),
     EventDetail = require('./tabs/eventDetail'),
     Login       = require('./components/login'),
-    React       = require('react-native'),
     Dispatcher  = require('./dispatcher/dispatcher'),
     Constants   = require('./constants/constants'),
     UserStore   = require('./stores/UserStore');
