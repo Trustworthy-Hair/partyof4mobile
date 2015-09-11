@@ -101,7 +101,7 @@ var partyof4mobile = React.createClass({
     });
   },
 
-  login: function (user) {
+  login: function (user, callback) {
     fetch(LOGIN_REQUEST_URL, {
       method: 'POST',
       headers: {
@@ -126,6 +126,8 @@ var partyof4mobile = React.createClass({
           type: ActionTypes.STORE_USER,
           payload: payload
         });
+      } else {
+        if (callback) { callback(); }
       }
     }).done();
   },
@@ -146,8 +148,6 @@ var partyof4mobile = React.createClass({
   },
 
   render: function() {
-    // FOR TESTING, login page is being bypassed
-    // To visit the login page, change to if (this.state.loggedIn)
     if (!this.state.token) { 
       return (
         <Login onLogin={this.login}/>

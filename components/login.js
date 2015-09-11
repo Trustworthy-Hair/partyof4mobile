@@ -23,7 +23,8 @@ var Login = React.createClass({
 
   getInitialState: function () {
     return {
-      view: 'login'
+      view: 'login', 
+      badLogin: false
     };
   },
 
@@ -31,6 +32,8 @@ var Login = React.createClass({
     this.props.onLogin({
       username: this.state.username,
       password: this.state.password
+    }, () => {
+      this.setState({ badLogin: true });
     });
   },
 
@@ -41,28 +44,40 @@ var Login = React.createClass({
   },
 
   scrollUp: function(field) {
+    // NOTE: Workaround for a ScrollView/TextInput fix that is in React Native 0.11.1
     if (field === 'username') {
       this.refs['usernameinput'].focus();
     } else if (field === 'password') {
       this.refs['passwordinput'].focus();
     }
 
-    this.refs['scrollview'].scrollTo(120);
+    this.refs['scrollview'].scrollTo(100);
+    this.setState({ badLogin: false });
   },
 
   scrollDown: function() {
     setTimeout(() => {
       if (!(this.refs['usernameinput'].isFocused() || this.refs['passwordinput'].isFocused())) {
         this.refs['scrollview'].scrollTo(0);
+
+      // NOTE: Workaround for the scrollview/touchablehighlight problem where the scrollview
+      //       always becomes the responder and users cannot press the login button until
+      //       the keyboard is hidden 
+        this.pressButton();
       }
     }, 200);
+
   },
   
   render() {
     if (this.state.view === 'login') {
+      var loginWarning;
+      if (this.state.badLogin) loginWarning = (<Text style={styles.warning} > Invalid login </Text>);
+
+
       var inner = (
         <ScrollView ref='scrollview' contentContainerStyle={styles.innercontainer} 
-                    style={styles.scroll} showsVerticalScrollIndicator={true} scrollEnabled={false}>
+                    style={styles.scroll} scrollEnabled={false}>
           <View style= {styles.logocontainer }>
             <Image source={require('image!logo')} style={styles.logo}/>
           </View>
@@ -96,9 +111,9 @@ var Login = React.createClass({
               <Text style={ styles.submit }>Log In</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={ () => this.changeView('signup') }> 
-            <Text style={styles.text}>Sign up</Text>
-          </TouchableHighlight>
+          {loginWarning}
+          <Text style={styles.text} onPress={ () => this.changeView('signup') }>Sign up</Text>
+          <View style={styles.space}/>
         </ScrollView>
       );
     } else if (this.state.view === 'signup') {
@@ -124,7 +139,6 @@ var styles = StyleSheet.create({
 
   scroll: styleExtend({
     backgroundColor: styleGuide.colors.dark,
-    height: 1500
   }, 'container'),
 
   innercontainer: styleExtend({
@@ -132,7 +146,7 @@ var styles = StyleSheet.create({
   }, 'container', 'center'),
 
   logocontainer: styleExtend({
-    marginBottom: 30
+    marginBottom: 20
   }, 'center'),
 
   logo: {
@@ -161,7 +175,16 @@ var styles = StyleSheet.create({
   text: styleExtend({
     color: styleGuide.colors.highlight,
     fontSize: 16,
-  }, 'font')
+  }, 'font'),
+
+  warning: styleExtend({
+    color: 'red',
+    fontSize: styleGuide.sizes.larger,
+  }, 'font'),
+
+  space: {
+    height: 40
+  }
 });
 
 module.exports = Login;
