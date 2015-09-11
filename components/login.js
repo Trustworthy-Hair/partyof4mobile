@@ -11,6 +11,7 @@ var styleGuide = stylingHelper.styleGuide,
 
 var {
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -38,50 +39,73 @@ var Login = React.createClass({
       view: state
     });
   },
+
+  scrollUp: function(field) {
+    if (field === 'username') {
+      this.refs['usernameinput'].focus();
+    } else if (field === 'password') {
+      this.refs['passwordinput'].focus();
+    }
+
+    this.refs['scrollview'].scrollTo(120);
+  },
+
+  scrollDown: function() {
+    setTimeout(() => {
+      if (!(this.refs['usernameinput'].isFocused() || this.refs['passwordinput'].isFocused())) {
+        this.refs['scrollview'].scrollTo(0);
+      }
+    }, 200);
+  },
   
   render() {
-    var current = this;
     if (this.state.view === 'login') {
       var inner = (
-        <View style={ styles.innercontainer }> 
+        <ScrollView ref='scrollview' contentContainerStyle={styles.innercontainer} 
+                    style={styles.scroll} showsVerticalScrollIndicator={true} scrollEnabled={false}>
           <View style= {styles.logocontainer }>
             <Image source={require('image!logo')} style={styles.logo}/>
           </View>
           <View style={ styles.textInputContainer }>
             <TextInput 
+            ref='usernameinput'
             style={ styles.textInput }
             placeholder='username'
             onChangeText={(text) => {
               this.setState({username: text});
             }}
-            value={this.state.username}/>
+            value={this.state.username}
+            onBlur={this.scrollDown}
+            onFocus={() => this.scrollUp('username')}/>
           </View>
           <View style={ styles.textInputContainer }>
             <TextInput 
+            ref = 'passwordinput'
             style={ styles.textInput }
             secureTextEntry={true}
             placeholder='password'
             onChangeText={(text) => {
               this.setState({password: text});
             }}
-            value={this.state.password}/>
+            value={this.state.password}
+            onBlur={this.scrollDown}
+            onFocus={() => this.scrollUp('password')}/>
           </View>
           <TouchableHighlight onPress={ this.pressButton }>
             <View style={styles.login}> 
               <Text style={ styles.submit }>Log In</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={ function() {current.changeView('signup')} }> 
+          <TouchableHighlight onPress={ () => this.changeView('signup') }> 
             <Text style={styles.text}>Sign up</Text>
           </TouchableHighlight>
-        </View>
+        </ScrollView>
       );
     } else if (this.state.view === 'signup') {
       var inner = (
         <Signup onSubmit={this.changeView}/>
       );
-    } else if (this.state.view === 'forgotpw') {
-    }
+    } 
 
     return (
       <View style={ styles.container }>
@@ -94,10 +118,17 @@ var Login = React.createClass({
 
 
 var styles = StyleSheet.create({
-  container: styleExtend({}, 'container'),
+  container: styleExtend({
+    backgroundColor: styleGuide.colors.dark,
+  }, 'container'),
+
+  scroll: styleExtend({
+    backgroundColor: styleGuide.colors.dark,
+    height: 1500
+  }, 'container'),
 
   innercontainer: styleExtend({
-    backgroundColor: styleGuide.colors.dark
+    backgroundColor: styleGuide.colors.dark,
   }, 'container', 'center'),
 
   logocontainer: styleExtend({
