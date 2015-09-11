@@ -101,7 +101,7 @@ var newTab = React.createClass({
     return;
   },
 
- onDateChange: function(date) {
+  onDateChange: function(date) {
     this.setState({date: date});
   },
 
@@ -127,6 +127,10 @@ var newTab = React.createClass({
       delete response.token;
       this.setState({event: response});
     }).done();
+  },
+
+  componentDidMount: function(){
+    this.search();
   },
 
   render: function() {
@@ -182,7 +186,7 @@ var newTab = React.createClass({
         </View>
         );
     }else{
-      this.search();
+
       return (
         <View style={ styles.container }>
           <Header />
