@@ -45,10 +45,6 @@ var newTab = React.createClass({
     };
   },
 
-  pickRestaurant: function(){
-    console.log('picked: ', this.state.location)
-  },
-
   createResultsDataSource: function () {
     var dataSource = new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2,
@@ -65,9 +61,7 @@ var newTab = React.createClass({
       <View style={styles.listContainer}>
         <View>
           <Text onPress={() => {
-            console.log('@@@@@@', location);
             this.setState({location: location});
-            this.pickRestaurant();
           }} style={styles.title} >{location.name}</Text>
         </View>
         <View>
@@ -99,7 +93,6 @@ var newTab = React.createClass({
       return response.json();
     }).then((response) => {
       if(response.locations.length > 0){
-        console.log('~~~~~', response.locations);
         this.setState({
           results: response.locations
         })
@@ -121,7 +114,6 @@ var newTab = React.createClass({
       plannedTime: this.state.date,
       accessToken: UserStore.getData().token
     };
-    console.log('^^^^^^^^^^^^^', data);
     fetch(REQUEST_URL + '/events', {
       method: 'POST',
       headers: {
@@ -132,7 +124,8 @@ var newTab = React.createClass({
     }).then((response) => {
       return response.json();
     }).then((response) => {
-        console.log('%%%%%%%%%%%%%%%%', response);
+      delete response.token;
+      this.setState({event: response});
     }).done();
   },
 
@@ -184,7 +177,7 @@ var newTab = React.createClass({
         <View style={styles.container} >
           <Header />
           <Back onback={() =>{
-              this.setState({location: {}})
+              this.setState({event: {}})
             }}/>
           <Text>{des}</Text>
         </View>
