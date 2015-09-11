@@ -42,8 +42,7 @@ var mapTab = React.createClass({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           }
-        });
-        this.getDataFromServer();
+        }, this.getDataFromServer);
 
         var location = {
           latitude: position.coords.latitude,
@@ -68,14 +67,18 @@ var mapTab = React.createClass({
   },
 
   getDataFromServer: function() {
-    fetch(GET_NEARBY_EVENTS_REQUEST_URL)
+    fetch(
+      GET_NEARBY_EVENTS_REQUEST_URL +
+      '?latitude=' + this.state.center.latitude +
+      '&longitude=' + this.state.center.longitude
+    )
     .then((response) => response.json())
-    .then((locations) => locations.map(function(location) {
+    .then((locations) => locations.locations.map(function(location) {
       return {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         title: location.name,
-        subtitle: location.location,
+        subtitle: location.tags,
         rightCalloutAccessory: {
           url: 'image!restaurant',
           height: 24,
