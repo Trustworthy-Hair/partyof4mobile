@@ -39,7 +39,7 @@ var newTab = React.createClass({
       today: new Date(),
       timeZoneOffsetInHours: this.props.timeZoneOffsetInHours,
       capacity: 0,
-      filledSeats: 0,
+      currentSize: 0,
       description: '',
       event: {}
     };
@@ -113,18 +113,28 @@ var newTab = React.createClass({
   },
 
   createEvent: function(){
-    this.setState({
-      event: {
-        location: this.state.location,
-        description: this.state.description,
-        capacity: this.state.capacity,
-        filledSeats: this.state.filledSeats,
-        date: this.state.date
-      }
-    })
-
+    var data = {
+      location: this.state.location,
+      description: this.state.description,
+      capacity: this.state.capacity,
+      currentSize: this.state.currentSize,
+      plannedTime: this.state.date,
+      accessToken: UserStore.getData().token
+    };
+    console.log('^^^^^^^^^^^^^', data);
+    fetch(REQUEST_URL + '/events', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then((response) => {
+      return response.json();
+    }).then((response) => {
+        console.log('%%%%%%%%%%%%%%%%', response);
+    }).done();
   },
-
 
   render: function() {
 
@@ -139,8 +149,8 @@ var newTab = React.createClass({
           <View>
             <View style={styles.listContainer}>
               <Text style={styles.title} >How many people? </Text>
-              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(filledSeats) => {
-                this.setState({filledSeats : filledSeats});
+              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(currentSize) => {
+                this.setState({currentSize : currentSize});
               }} />
               <Text> / </Text>
               <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(capacity) => {
@@ -172,10 +182,10 @@ var newTab = React.createClass({
       var des = this.state.event.description;
       return (
         <View style={styles.container} >
+          <Header />
           <Back onback={() =>{
               this.setState({location: {}})
             }}/>
-          <Header />
           <Text>{des}</Text>
         </View>
         );
