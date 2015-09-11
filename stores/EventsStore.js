@@ -9,9 +9,14 @@ var ActionTypes = Constants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
 var _events = [];
+var _currentEvent = {};
 
 var _storeEvents = function (events) {
   _events = events;
+};
+
+var _storeCurrentEvent = function (event) {
+  _currentEvent = event;
 };
 
 var EventsStore = assign({}, EventEmitter.prototype, {
@@ -30,6 +35,10 @@ var EventsStore = assign({}, EventEmitter.prototype, {
 
   getEvents: function () {
     return _events;
+  },
+
+  getCurrentEvent: function () {
+    return _currentEvent;
   }
 
 });
@@ -40,6 +49,11 @@ EventsStore.dispatchToken = Dispatcher.register(function (action) {
 
     case ActionTypes.STORE_EVENTS:
       _storeEvents(action.events);
+      EventsStore.emitChange();
+      break;
+
+    case ActionTypes.STORE_CURRENT_EVENT:
+      _storeCurrentEvent(action.payload);
       EventsStore.emitChange();
       break;
 
