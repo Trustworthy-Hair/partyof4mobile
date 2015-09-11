@@ -1,7 +1,7 @@
 'use strict';
 
-var Header = require('../components/header');
 var React = require('react-native');
+var Header = require('../components/header');
 var config = require('./../config/config.js');
 var SearchBar = require('react-native-search-bar');
 var Dispatcher = require ('../dispatcher/dispatcher');
@@ -130,7 +130,7 @@ var newTab = React.createClass({
   },
 
   render: function() {
-
+    this.search();
     if(this.state.location.name && !this.state.event.description){
       return (
         <View style={styles.container} >
