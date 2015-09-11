@@ -141,7 +141,6 @@ var partyof4mobile = React.createClass({
   },
 
   _onChange: function () {
-    console.log('CHANGING INDEX STATE');
     var data = UserStore.getData();
     this.setState(data);
   },
