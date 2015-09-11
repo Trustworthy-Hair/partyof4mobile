@@ -15,6 +15,7 @@ var ActionTypes = Constants.ActionTypes;
 var SIGNUP_REQUEST_URL = config.url + '/users/signup';
 
 var {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -43,31 +44,33 @@ var Signup = React.createClass({
       showLabels: [false,false,false,false]
     };
   },
-  showLabel: function(num, text) {
+  showLabel: function(num, valid) {
     var showLabels = this.state.showLabels;
-    showLabels[num] = (text.length >num);
+    showLabels[num] = valid;
     this.setState({showLabels: showLabels});
   },
   checkUsername: function(text) {
     var valid = (text.length >= usernameMinLength);
     this.setState({validUsername: valid, username: text});
-    this.showLabel(0, text);
+    this.showLabel(0, valid);
   },
   checkEmail: function(text) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-    if (re.test(text)) this.setState({validEmail: true, email: text});
-    this.showLabel(1, text);
+    var valid = re.test(text)
+    this.setState({validEmail: valid, email: text});
+    this.showLabel(1, valid);
   },
   checkPassword: function(text) {
     var valid = (text.length >= passwordMinLength);
     if (!/.*(?=.*[a-z])(?=.*[A-Z]).*/.test(text)) valid = false;
-    this.setState({validPassword: valid, validPassword2: false, password: text});
-    this.showLabel(2, text);
+    this.setState({validPassword: valid, password: text, validPassword2: (text === this.state.password2)});
+    this.showLabel(2, valid);
+    this.showLabel(3, valid);
   },
   checkPassword2: function(text) {
     var valid = (text === this.state.password);
     this.setState({validPassword2: valid, password2: text});
-    this.showLabel(3, text);
+    this.showLabel(3, valid);
   },
   isValid() {
     return (this.state.validUsername && this.state.validEmail && this.state.validPassword && this.state.validPassword2);
@@ -115,6 +118,31 @@ var Signup = React.createClass({
       payload: payload
     });
   },
+  scrollUp: function(field) {
+    var fieldname = field + 'input'; 
+    this.refs[fieldname].focus();
+
+    var scrollDistance;
+    if (field === 'username') {
+      scrollDistance = 20;
+    } else if (field === 'email') {
+      scrollDistance = 40;
+    } else if (field === 'password') {
+      scrollDistance = 60;
+    } else if (field === 'password2') {
+      scrollDistance = 80;
+    }
+
+    this.refs['scrollview'].scrollTo(scrollDistance);
+  },
+  scrollDown: function() {
+    setTimeout(() => {
+      if (!(this.refs['usernameinput'].isFocused() || this.refs['emailinput'].isFocused() ||
+            this.refs['passwordinput'].isFocused() || this.refs['password2input'].isFocused())) {
+        this.refs['scrollview'].scrollTo(0);
+      }
+    }, 200);
+  },
   render: function() {
     var usernameWarning, passwordWarning, password2Warning, emailWarning, submitButton;
     var warningGenerator = (num) => {
@@ -153,36 +181,39 @@ var Signup = React.createClass({
     });
 
     return (
-      <View style={styles.container}>
+      <ScrollView ref='scrollview' contentContainerStyle={styles.container} style={styles.scroll} scrollEnabled={false}>
         <Back onback={this.returnToLogin} />
         <Text style={styles.headingText}>Get started with PartyOf4</Text>
         {labels[0]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} onChangeText={this.checkUsername}/>
+          <TextInput ref='usernameinput' style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} 
+          onChangeText={this.checkUsername} onFocus={() => this.scrollUp('username')} onBlur={this.scrollDown}/>
         </View>
         {usernameWarning}
 
         {labels[1]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} placeholder='email' 
-          onChangeText={this.checkEmail}/>
+          <TextInput ref='emailinput' style={styles.textInput} placeholder='email' 
+          onChangeText={this.checkEmail} onFocus={() => this.scrollUp('email')} onBlur={this.scrollDown}/>
         </View>
         {emailWarning}
 
         {labels[2]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} secureTextEntry={true} placeholder='password' onChangeText={this.checkPassword}/>
+          <TextInput ref='passwordinput' style={styles.textInput} secureTextEntry={true} placeholder='password' 
+          onChangeText={this.checkPassword} onFocus={() => this.scrollUp('password')} onBlur={this.scrollDown}/>
         </View>
         {passwordWarning}
 
         {labels[3]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} secureTextEntry={true} placeholder='retype password' onChangeText={this.checkPassword2}/>
+          <TextInput ref='password2input' style={styles.textInput} secureTextEntry={true} placeholder='retype password' 
+          onChangeText={this.checkPassword2} onFocus={() => this.scrollUp('password2')} onBlur={this.scrollDown}/>
         </View>
         {password2Warning}
 
         {submitButton}
-      </View>
+      </ScrollView>
     );
   }
 });
@@ -198,8 +229,11 @@ var SignupLabel = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  scroll: styleExtend({
+    backgroundColor: styleGuide.colors.white,
+  }, 'container'),
+
   container: styleExtend({
-    padding: 10,
     alignItems: 'center'
   }, 'container'),
 

@@ -29,12 +29,14 @@ var Login = React.createClass({
   },
 
   pressButton: function () {
-    this.props.onLogin({
-      username: this.state.username,
-      password: this.state.password
-    }, () => {
-      this.setState({ badLogin: true });
-    });
+    if (this.state.username !== undefined && this.state.password !== undefined) {
+      this.props.onLogin({
+        username: this.state.username,
+        password: this.state.password
+      }, () => {
+        this.setState({ badLogin: true });
+      });
+    }
   },
 
   changeView: function (state) {
@@ -45,11 +47,8 @@ var Login = React.createClass({
 
   scrollUp: function(field) {
     // NOTE: Workaround for a ScrollView/TextInput fix that is in React Native 0.11.1
-    if (field === 'username') {
-      this.refs['usernameinput'].focus();
-    } else if (field === 'password') {
-      this.refs['passwordinput'].focus();
-    }
+    var fieldname = field+'input'; 
+    this.refs[fieldname].focus();
 
     this.refs['scrollview'].scrollTo(100);
     this.setState({ badLogin: false });
@@ -66,14 +65,12 @@ var Login = React.createClass({
         this.pressButton();
       }
     }, 200);
-
   },
   
   render() {
     if (this.state.view === 'login') {
       var loginWarning;
       if (this.state.badLogin) loginWarning = (<Text style={styles.warning} > Invalid login </Text>);
-
 
       var inner = (
         <ScrollView ref='scrollview' contentContainerStyle={styles.innercontainer} 
