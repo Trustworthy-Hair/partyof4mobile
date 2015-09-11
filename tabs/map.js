@@ -11,7 +11,7 @@ var Constants = require('../constants/constants');
 
 var ActionTypes = Constants.ActionTypes;
 
-var GET_NEARBY_EVENTS_REQUEST_URL = config.url + '/locations';
+var GET_NEARBY_EVENTS_REQUEST_URL = config.url + '/events';
 
 var {
   StyleSheet,
@@ -42,8 +42,7 @@ var mapTab = React.createClass({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           }
-        });
-        this.getDataFromServer();
+        }, this.getDataFromServer);
 
         var location = {
           latitude: position.coords.latitude,
@@ -68,14 +67,18 @@ var mapTab = React.createClass({
   },
 
   getDataFromServer: function() {
-    fetch(GET_NEARBY_EVENTS_REQUEST_URL)
+    fetch(
+      GET_NEARBY_EVENTS_REQUEST_URL +
+      '?latitude=' + this.state.center.latitude +
+      '&longitude=' + this.state.center.longitude
+    )
     .then((response) => response.json())
-    .then((locations) => locations.map(function(location) {
+    .then((events) => events.map(function(event) {
       return {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        title: location.name,
-        subtitle: location.location,
+        latitude: event.Location.latitude,
+        longitude: event.Location.longitude,
+        title: event.Location.name,
+        subtitle: event.currentActivity,
         rightCalloutAccessory: {
           url: 'image!restaurant',
           height: 24,
