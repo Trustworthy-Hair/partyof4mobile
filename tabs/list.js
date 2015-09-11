@@ -2,7 +2,15 @@
 
 var Header = require('../components/header'),
     React = require('react-native'),
-    config = require('./../config/config.js');
+    config = require('../config/config.js'),
+    Dispatcher = require('../dispatcher/dispatcher'),
+    EventsStore = require('../stores/EventsStore'),
+    UserStore = require('../stores/UserStore'),
+    Constants = require('../constants/constants');
+
+var ActionTypes = Constants.ActionTypes;
+
+var GET_NEARBY_EVENTS_REQUEST_URL = 'http://localhost:3000/events';
 
 var {
   ActivityIndicatorIOS,
@@ -11,21 +19,29 @@ var {
   StyleSheet,
   Text,
   View,
+  TouchableHighlight
 } = React;
 
 var listTab = React.createClass({
   getInitialState: function() {
-    return {events: [],
-            locations: [],
-            dataSource: new ListView.DataSource({
-              rowHasChanged: (row1, row2) => row1 !== row2,
-            }),
-            loaded: false
-           };
+    return {
+      events: [],
+      dataSource: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1 !== row2,
+      }),
+      userLocation: UserStore.getData().location,
+      loaded: false
+    };
   },
 
   getDataFromServer: function() {
-    fetch(config.url+'/events')
+    // fetch(config.url + '/events')
+    var queryString = [
+      'latitude=' + this.state.userLocation.latitude,
+      'longitude=' + this.state.userLocation.longitude
+    ].join('&');
+
+    fetch(GET_NEARBY_EVENTS_REQUEST_URL + '?' + queryString)
     .then((response) => response.json())
     .then((responseData) => {
       this.setState({
@@ -34,14 +50,6 @@ var listTab = React.createClass({
         loaded: true
       });
     })
-    .then(fetch(config.url+'/locations')
-          .then((response) => response.json())
-          .then((responseData) => {
-            this.setState({
-              locations: responseData
-            })
-          })
-          .done())
     .catch((error) => console.warn(error))
     .done();
   },
@@ -97,31 +105,41 @@ var listTab = React.createClass({
 
   renderEvent: function(event) {
     return (
-      <View style={styles.innercontainer}>
-        <View style={styles.iconBox}>
-          <Image
-            style={styles.icon}
-            source={require('image!restaurant')} />
+      <TouchableHighlight onPress={() => this.setCurrentEvent(event)}>
+        <View style={styles.innercontainer}>
+          <View style={styles.iconBox}>
+            <Image
+              style={styles.icon}
+              source={require('image!restaurant')} />
+          </View>
+          <View style={styles.words}>
+            <Text style={styles.location}>{event.Location.name}</Text>
+            <Text style={styles.event}>{event.currentActivity}</Text>
+          </View>
+          <View style={styles.rightContainer}>
+            <Text style={styles.right}>Current: {event.currentSize}</Text>
+            <Text style={styles.right}>Total: {event.capacity}</Text>
+          </View>
         </View>
-        <View style={styles.words}>
-          <Text style={styles.location}>{this.getLocationForEvent(event.locationId)}</Text>
-          <Text style={styles.event}>{event.currentActivity}</Text>
-        </View>
-        <View style={styles.rightContainer}>
-          <Text style={styles.right}>Current: {event.currentSize}</Text>
-          <Text style={styles.right}>Total: {event.capacity}</Text>
-        </View>
-      </View>
+      </TouchableHighlight>
     );
   },
 
-  getLocationForEvent: function(eventId) {
-    for (var i = 0; i<this.state.locations.length; i++) {
-      if (this.state.locations[i].locationId === eventId) {
-        return this.state.locations[i].name;
-      }
-    }
+  setCurrentEvent: function (event) {
+    var payload = {};
+    payload.event = event;
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_CURRENT_EVENT,
+      payload: payload
+    });
+    payload = {};
+    payload.currentView = 'eventDetail';
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
   }
+
 });
 
 var styles = StyleSheet.create({

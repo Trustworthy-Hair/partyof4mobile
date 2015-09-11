@@ -4,17 +4,17 @@
  */
 'use strict';
 
-var MapTab     = require('./tabs/map'),
-    SearchTab  = require('./tabs/search'),
-    ListTab    = require('./tabs/list'),
-    NewTab     = require('./tabs/new'),
-    MenuTab    = require('./tabs/menu'),
-    // EventView  = require('./tabs/eventDetail'),
-    Login      = require('./components/login'),
-    React      = require('react-native'),
-    Dispatcher = require('./dispatcher/dispatcher'),
-    Constants  = require('./constants/constants'),
-    UserStore  = require('./stores/UserStore');
+var MapTab      = require('./tabs/map'),
+    SearchTab   = require('./tabs/search'),
+    ListTab     = require('./tabs/list'),
+    NewTab      = require('./tabs/new'),
+    MenuTab     = require('./tabs/menu'),
+    EventDetail = require('./tabs/eventDetail'),
+    Login       = require('./components/login'),
+    React       = require('react-native'),
+    Dispatcher  = require('./dispatcher/dispatcher'),
+    Constants   = require('./constants/constants'),
+    UserStore   = require('./stores/UserStore');
 
 var ActionTypes = Constants.ActionTypes;
 
@@ -44,7 +44,8 @@ var tabs = {
   search : (<SearchTab />),
   list : (<ListTab />),
   new : (<NewTab />),
-  menu : (<MenuTab />)
+  menu : (<MenuTab />),
+  eventDetail: (<EventDetail />)
 };
 
 var partyof4mobile = React.createClass({
@@ -92,8 +93,11 @@ var partyof4mobile = React.createClass({
 
   changeTab: function (tabName) {
     StatusBarIOS.setStyle(tabName === 'map' ? 1 : 0);
-    this.setState({
-      currentView: tabName
+    var payload = {};
+    payload.currentView = tabName;
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
     });
   },
 
@@ -137,6 +141,7 @@ var partyof4mobile = React.createClass({
   },
 
   _onChange: function () {
+    console.log('CHANGING INDEX STATE');
     var data = UserStore.getData();
     this.setState(data);
   },
@@ -144,21 +149,25 @@ var partyof4mobile = React.createClass({
   render: function() {
     // FOR TESTING, login page is being bypassed
     // To visit the login page, change to if (this.state.loggedIn)
-    if (this.state.token) { 
-      var selectedTab = this.state.currentView;
+    if (!this.state.token) { 
+      return (
+        <Login onLogin={this.login}/>
+      );
+    }
+    var selectedTab = this.state.currentView;
+    var tabBarItems = this.props.icons.map((tabBarItem) => {
+      return (
+        <TabBarIOS.Item key={'tabBar'+tabBarItem}
+          title={tabBarItem}
+          icon={icons[tabBarItem]}
+          onPress={ () => this.changeTab(tabBarItem) }
+          selected={ selectedTab === tabBarItem }>
+          {tabs[tabBarItem]}
+        </TabBarIOS.Item>
+      );
+    });
 
-      var tabBarItems = this.props.icons.map((tabBarItem) => {
-        return (
-          <TabBarIOS.Item key={'tabBar'+tabBarItem}
-            title={tabBarItem}
-            icon={icons[tabBarItem]}
-            onPress={ () => this.changeTab(tabBarItem) }
-            selected={ selectedTab === tabBarItem }>
-            {tabs[tabBarItem]}
-          </TabBarIOS.Item>
-        );
-      });
-
+    if (icons[selectedTab]) {
       return (
         <TabBarIOS tintColor='#2e6a8b' barTintColor='white' translucent={false}>
           {tabBarItems}
@@ -166,13 +175,22 @@ var partyof4mobile = React.createClass({
       );
     } else {
       return (
-        <Login onLogin={this.login}/>
+        <View style={styles.container}>
+          {tabs[selectedTab]}
+          <TabBarIOS tintColor='#2e6a8b' barTintColor='white' translucent={false}>
+            {tabBarItems}
+          </TabBarIOS>
+        </View>
       );
     }
   }
 });
 
 var styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    flex: 1
+  },
 });
 
 AppRegistry.registerComponent('partyof4mobile', () => partyof4mobile);
