@@ -3,14 +3,23 @@
 var Back = require('./common').BackButton;
 
 var React  = require('react-native');
+var UserStore   = require('../stores/UserStore');
+var Dispatcher  = require('../dispatcher/dispatcher');
+var Constants   = require('../constants/constants');
+var config = require('../config/config')
+var ActionTypes = Constants.ActionTypes;
+var SIGNUP_REQUEST_URL = config.url + '/users/signup';
 
 var {
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
+  StatusBarIOS,
+  AsyncStorage,
   View
 } = React;
+
 
 var usernameMinLength = 4;
 var usernameMaxLength = 12;
@@ -29,9 +38,6 @@ var Signup = React.createClass({
       validPassword2: true,
       showLabels: [false,false,false,false]
     };
-  },
-  returnToLogin() {
-    this.props.onSubmit('login');
   },
   showLabel: function(num, text) {
     var showLabels = this.state.showLabels;
@@ -62,6 +68,49 @@ var Signup = React.createClass({
   isValid() {
     return (this.state.validUsername && this.state.validEmail && this.state.validPassword && this.state.validPassword2);
   },
+  signUp: function(){
+    var user = {
+      username: this.state.username,
+      password: this.state.password,
+      email: this.state.email
+    }
+    fetch(SIGNUP_REQUEST_URL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    }).then((response) => {
+      return response.json();
+    }).then((response) => {
+      if (response.token && response.user) {
+        AsyncStorage.multiSet([
+          ['token', response.token],
+          ['userId', response.user.id.toString()]
+        ]);
+        var payload = {
+          user: response.user,
+          token: response.token,
+          currentView: 'map'
+        };
+        Dispatcher.dispatch({
+          type: ActionTypes.STORE_USER,
+          payload: payload
+        });
+      }
+      this.changeTab('map');
+    }).done();
+  },
+  changeTab: function (tabName) {
+    StatusBarIOS.setStyle(tabName === 'map' ? 1 : 0);
+    var payload = {};
+    payload.currentView = tabName;
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
+  },
   render: function() {
     var usernameWarning, passwordWarning, password2Warning, emailWarning, submitButton;
     var warningGenerator = (num) => {
@@ -70,7 +119,7 @@ var Signup = React.createClass({
     };
 
     if (this.isValid()) {
-      submitButton = (<TouchableHighlight onPress={this.returnToLogin} style={styles.submit}>
+      submitButton = (<TouchableHighlight onPress={this.signUp} style={styles.submit}>
                       <Text style={styles.submitText}>SIGN UP</Text></TouchableHighlight>);
     } else {
       if (!this.state.validUsername) {
@@ -103,7 +152,6 @@ var Signup = React.createClass({
       <View style={styles.container}>
         <Back onback={this.returnToLogin} />
         <Text style={styles.headingText}>Get started with PartyOf4</Text>
-
         {labels[0]}
         <View style={styles.textInputContainer}>
           <TextInput style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} onChangeText={this.checkUsername}/>
