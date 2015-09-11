@@ -35,7 +35,6 @@ var listTab = React.createClass({
   },
 
   getDataFromServer: function() {
-    // fetch(config.url + '/events')
     var queryString = [
       'latitude=' + this.state.userLocation.latitude,
       'longitude=' + this.state.userLocation.longitude
