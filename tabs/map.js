@@ -4,6 +4,7 @@ var React = require('react-native');
 var config = require('./../config/config.js');
 var MapboxGLMap = require('react-native-mapbox-gl');
 var Header = require('../components/header');
+var SearchBar = require('react-native-search-bar');
 var Dispatcher = require ('../dispatcher/dispatcher');
 var EventsStore = require('../stores/EventsStore');
 var UserStore = require('../stores/UserStore');
@@ -30,7 +31,8 @@ var mapTab = React.createClass({
         longitude: -77.0167
       },
       zoom: 13,
-      annotations: []
+      annotations: [],
+      searchQ: ''
     }
   },
 
@@ -70,7 +72,8 @@ var mapTab = React.createClass({
     fetch(
       GET_NEARBY_EVENTS_REQUEST_URL +
       '?latitude=' + this.state.center.latitude +
-      '&longitude=' + this.state.center.longitude
+      '&longitude=' + this.state.center.longitude +
+      '&q=' + this.state.searchQ
     )
     .then((response) => response.json())
     .then((events) => events.map(function(event) {
@@ -112,10 +115,17 @@ var mapTab = React.createClass({
   onRightAnnotationTapped: function (e) {
     console.log(e);
   },
+  onCancel: function() {
+    console.log('cancel button pressed');
+  },
   render: function() {
     return (
       <View style={ styles.container }>
         <Header />
+        <SearchBar
+          onSearchButtonPress={ this.getDataFromServer }
+          onCancelButtonPress={ this.onCancel }
+        />
         <MapboxGLMap
           style={styles.map}
           direction={0}

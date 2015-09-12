@@ -63,8 +63,10 @@ var partyof4mobile = React.createClass({
   componentWillMount: function () {
     var token;
     AsyncStorage.multiGet(['token', 'userId']).then((data) => {
-      token = data[0][1];
-      return this.getUser(data[1][1]);
+      if (data[0][1]) {
+        token = data[0][1];
+        return this.getUser(data[1][1]);
+      }
     }).then((user) => {
       return user.json();
     }).then((user) => {

@@ -14,6 +14,6 @@
     "react-native": "^0.10.1",
     "react-native-button": "^1.2.1",
     "react-native-mapbox-gl": "^0.4.1",
-    "react-native-search-bar": "^2.0.0"
+    "react-native-search-bar": "git://github.com/wrrnwng/react-native-search-bar.git"
   }
 }
