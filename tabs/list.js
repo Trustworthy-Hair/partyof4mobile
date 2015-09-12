@@ -6,11 +6,15 @@ var Header = require('../components/header'),
     Dispatcher = require('../dispatcher/dispatcher'),
     EventsStore = require('../stores/EventsStore'),
     UserStore = require('../stores/UserStore'),
-    Constants = require('../constants/constants');
+    Constants = require('../constants/constants'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var ActionTypes = Constants.ActionTypes;
 
-var GET_NEARBY_EVENTS_REQUEST_URL = 'http://localhost:3000/events';
+var GET_NEARBY_EVENTS_REQUEST_URL = config.url + '/events';
 
 var {
   ActivityIndicatorIOS,
@@ -96,13 +100,22 @@ var listTab = React.createClass({
         <ListView
           dataSource={this.state.events}
           renderRow={this.renderEvent}
-          style={styles.listView}
         />
       </View>
     );
   },
 
   renderEvent: function(event) {
+    var people = [];
+    for (var i = 0; i< event.currentSize; i++) {
+      people.push((<Image style={styles.personTaken} source={{uri:'http://i.imgur.com/4izv6mx.png'}} />));
+    }
+
+    var openpeople = [];
+    for (var i = 0; i< (event.capacity - event.currentSize); i++) {
+      openpeople.push((<Image style={styles.personOpen} source={{uri: 'http://i.imgur.com/C1MqnOr.png'}} />));
+    }
+
     return (
       <TouchableHighlight onPress={() => this.setCurrentEvent(event)}>
         <View style={styles.innercontainer}>
@@ -111,13 +124,18 @@ var listTab = React.createClass({
               style={styles.icon}
               source={require('image!restaurant')} />
           </View>
-          <View style={styles.words}>
+          <View style={styles.rightContainer}> 
             <Text style={styles.location}>{event.Location.name}</Text>
-            <Text style={styles.event}>{event.currentActivity}</Text>
-          </View>
-          <View style={styles.rightContainer}>
-            <Text style={styles.right}>Current: {event.currentSize}</Text>
-            <Text style={styles.right}>Total: {event.capacity}</Text>
+            <View style={styles.rightBottomContainer}>
+              <View style={styles.words}>
+                <Text style={styles.info}>{event.currentActivity}</Text>
+                <Text style={styles.info}>{(event.distance/1609).toFixed(2) + 'mi'}</Text>
+              </View>
+              <View style={styles.peopleContainer}>
+                <View style={styles.people}>{openpeople}</View>
+                <View style={styles.people}>{people}</View>
+              </View>
+            </View>
           </View>
         </View>
       </TouchableHighlight>
@@ -142,62 +160,76 @@ var listTab = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1
-  },
+  container: styleExtend({
+  }, 'container'),
+
   innercontainer: {
     flex: 1,
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#2e6a8b',
+    borderBottomColor: styleGuide.colors.light,
     borderStyle: 'solid',
     justifyContent: 'center',
     height: 74
   },
-  listView: {
-    paddingTop: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingBottom: 5,
-    backgroundColor: '#F5FCFF',
-  },
-  rightContainer: {
+
+  rightContainer: styleExtend({
+  }, 'container'),
+
+  rightBottomContainer: {
     flex: 1,
-    padding: 5
+    flexDirection: 'row'
   },
+
+  people: styleExtend({
+    flexDirection: 'row',
+  }, 'container', 'center'),
+
+  peopleContainer: styleExtend({
+  }, 'container', 'center'),
+
   words: {
-    width: 150,
-    padding: 5
+    width: 160,
   },
-  location: {
-    fontSize: 12,
+
+  location: styleExtend({
     fontWeight: 'bold',
-  },
-  event: {
-    fontSize: 12,
-    color: 'gray'
-  },
-  right: {
-    textAlign: 'right',
-    color: 'gray',
-    fontSize: 12
-  },
+    textAlign: 'left',
+    color: styleGuide.colors.dark
+  }, 'font'),
+
+  info: styleExtend({
+    fontSize: 14,
+    textAlign: 'left'
+  }, 'font'),
+
   icon: {
-    flex: 0,
-    backgroundColor: '#2e6a8b',
-    borderRadius: 3,
     width: 64,
-    height: 64
+    height: 64,
+    tintColor: styleGuide.colors.main,
+    opacity: 0.5
   },
+
   iconBox: {
     padding: 5
   },
+
   loading: {
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column'
+  },
+
+  personTaken: {
+    width: 14,
+    height: 14,
+    tintColor: 'black',
+  },
+
+  personOpen: {
+    width: 14,
+    height: 14,
   }
 });
 

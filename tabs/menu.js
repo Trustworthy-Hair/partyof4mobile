@@ -6,7 +6,11 @@ var React = require('react-native'),
     History = require('./menu/history'),
     About = require('./menu/about'),
     Dispatcher = require('../dispatcher/dispatcher'),
-    Constants = require('../constants/constants');
+    Constants = require('../constants/constants'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var ActionTypes = Constants.ActionTypes;
 
@@ -51,24 +55,16 @@ var menuTab = React.createClass({
       displayTab = (
         <View style={styles.innercontainer}>
           <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('profile'); }}>
-              <View > 
-                <Text >View Your Profile</Text>
-              </View>
+                <Text style={styles.text}>View Your Profile</Text>
           </TouchableHighlight>
           <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('history'); }}>
-              <View > 
-                <Text >View Your History</Text>
-              </View>
+                <Text style={styles.text}>View Your History</Text>
           </TouchableHighlight>
           <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('about'); }}>
-              <View > 
-                <Text >About Us</Text>
-              </View>
+                <Text style={styles.text}>About Us</Text>
           </TouchableHighlight>
           <TouchableHighlight style={styles.link} onPress={ () => { this.logout(); }}>
-              <View > 
-                <Text >Logout</Text>
-              </View>
+                <Text style={styles.text}>Logout</Text>
           </TouchableHighlight>
         </View>
       );
@@ -96,26 +92,17 @@ var menuTab = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#F5FCFF',
-    flexDirection: 'column',
-    flex: 1
-  },
-  innercontainer: {
+  container: styleExtend({
+  }, 'container'),
+  innercontainer: styleExtend({
     padding: 20,
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  link: {
-    backgroundColor: '#f5efe2',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 10,
-    width: 300,
-    height: 50,
+  }, 'center'),
+  link: styleExtend({
     margin: 7
-  }
+  }, 'center', 'button'),
+  text: styleExtend({
+  }, 'submitfont')
 });
 
 module.exports = menuTab;

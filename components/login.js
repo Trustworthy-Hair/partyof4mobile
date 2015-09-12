@@ -3,10 +3,15 @@
 var config = require('./../config/config.js'),
     Header = require('./header'),
     React  = require('react-native'),
-    Signup = require('./signup');
+    Signup = require('./signup'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -18,15 +23,20 @@ var Login = React.createClass({
 
   getInitialState: function () {
     return {
-      view: 'login'
+      view: 'login', 
+      badLogin: false
     };
   },
 
   pressButton: function () {
-    this.props.onLogin({
-      username: this.state.username,
-      password: this.state.password
-    });
+    if (this.state.username !== undefined && this.state.password !== undefined) {
+      this.props.onLogin({
+        username: this.state.username,
+        password: this.state.password
+      }, () => {
+        this.setState({ badLogin: true });
+      });
+    }
   },
 
   changeView: function (state) {
@@ -34,55 +44,80 @@ var Login = React.createClass({
       view: state
     });
   },
+
+  scrollUp: function(field) {
+    // NOTE: Workaround for a ScrollView/TextInput fix that is in React Native 0.11.1
+    var fieldname = field+'input'; 
+    this.refs[fieldname].focus();
+
+    this.refs['scrollview'].scrollTo(100);
+    this.setState({ badLogin: false });
+  },
+
+  scrollDown: function() {
+    setTimeout(() => {
+      if (!(this.refs['usernameinput'].isFocused() || this.refs['passwordinput'].isFocused())) {
+        this.refs['scrollview'].scrollTo(0);
+
+      // NOTE: Workaround for the scrollview/touchablehighlight problem where the scrollview
+      //       always becomes the responder and users cannot press the login button until
+      //       the keyboard is hidden 
+        this.pressButton();
+      }
+    }, 200);
+  },
   
   render() {
-    var current = this;
     if (this.state.view === 'login') {
+      var loginWarning;
+      if (this.state.badLogin) loginWarning = (<Text style={styles.warning} > Invalid login </Text>);
+
       var inner = (
-        <View style={ styles.innercontainer }> 
+        <ScrollView ref='scrollview' contentContainerStyle={styles.innercontainer} 
+                    style={styles.scroll} scrollEnabled={false}>
           <View style= {styles.logocontainer }>
             <Image source={require('image!logo')} style={styles.logo}/>
           </View>
           <View style={ styles.textInputContainer }>
             <TextInput 
+            ref='usernameinput'
             style={ styles.textInput }
             placeholder='username'
             onChangeText={(text) => {
               this.setState({username: text});
             }}
-            value={this.state.username}/>
+            value={this.state.username}
+            onBlur={this.scrollDown}
+            onFocus={() => this.scrollUp('username')}/>
           </View>
           <View style={ styles.textInputContainer }>
             <TextInput 
+            ref = 'passwordinput'
             style={ styles.textInput }
             secureTextEntry={true}
             placeholder='password'
             onChangeText={(text) => {
               this.setState({password: text});
             }}
-            value={this.state.password}/>
+            value={this.state.password}
+            onBlur={this.scrollDown}
+            onFocus={() => this.scrollUp('password')}/>
           </View>
           <TouchableHighlight onPress={ this.pressButton }>
             <View style={styles.login}> 
               <Text style={ styles.submit }>Log In</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={ function() {current.changeView('signup')} }> 
-            <Text style={styles.text}>Sign up / Forgot your password?</Text>
-          </TouchableHighlight>
-          <TouchableHighlight onPress={ this.pressButton }>
-            <View style={styles.login}> 
-              <Text style={ styles.submit }>Sign In with Facebook</Text>
-            </View>
-          </TouchableHighlight>
-        </View>
+          {loginWarning}
+          <Text style={styles.text} onPress={ () => this.changeView('signup') }>Sign up</Text>
+          <View style={styles.space}/>
+        </ScrollView>
       );
     } else if (this.state.view === 'signup') {
       var inner = (
         <Signup onSubmit={this.changeView}/>
       );
-    } else if (this.state.view === 'forgotpw') {
-    }
+    } 
 
     return (
       <View style={ styles.container }>
@@ -93,60 +128,59 @@ var Login = React.createClass({
   }
 });
 
+
 var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1,
-  },
-  innercontainer: {
-    backgroundColor: '#14203c',
-    flexDirection: 'column',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  logocontainer: {
-    marginBottom: 30,
-    alignItems: 'center'
-  },
+  container: styleExtend({
+    backgroundColor: styleGuide.colors.dark,
+  }, 'container'),
+
+  scroll: styleExtend({
+    backgroundColor: styleGuide.colors.dark,
+  }, 'container'),
+
+  innercontainer: styleExtend({
+    backgroundColor: styleGuide.colors.dark,
+  }, 'container', 'center'),
+
+  logocontainer: styleExtend({
+    marginBottom: 20
+  }, 'center'),
+
   logo: {
     width: 90,
     height: 90,
     paddingBottom: 10
   },
-  textInputContainer: {
-    overflow: 'hidden',
-    backgroundColor: 'white',
-    borderRadius: 15,
-    width: 250,
-    height: 40,
-    marginBottom: 10
-  },
-  textInput: {
-    backgroundColor: 'white',
+
+  textInputContainer: styleExtend({
+    backgroundColor: styleGuide.colors.white
+  }, 'button'),
+
+  textInput: styleExtend({
     height: 40, 
     width: 250,
-    borderWidth: 0,
-    textAlign: 'center'
-  },
-  submit: {
-    color: 'white',
-    fontSize: 20,
-    textAlign: 'center'
-  },
-  login: {
-    overflow: 'hidden',
-    width: 250,
-    height: 40,
-    backgroundColor: '#2e6a8b',
-    borderRadius: 15,
+  }, 'font'),
+
+  submit: styleExtend({
+  }, 'submitfont'),
+
+  login: styleExtend({
     justifyContent: 'center',
     flex: 1,
-    marginBottom: 10
-  },
-  text: {
-    color: '#a9e2d6',
-    marginBottom: 100
+  }, 'button'),
+
+  text: styleExtend({
+    color: styleGuide.colors.highlight,
+    fontSize: 16,
+  }, 'font'),
+
+  warning: styleExtend({
+    color: 'red',
+    fontSize: styleGuide.sizes.larger,
+  }, 'font'),
+
+  space: {
+    height: 40
   }
 });
 

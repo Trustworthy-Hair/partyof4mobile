@@ -1,6 +1,10 @@
 'use strict';
 
-var Back = require('./common').BackButton;
+var Back = require('./common').BackButton,
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var React  = require('react-native');
 var UserStore   = require('../stores/UserStore');
@@ -11,6 +15,7 @@ var ActionTypes = Constants.ActionTypes;
 var SIGNUP_REQUEST_URL = config.url + '/users/signup';
 
 var {
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -39,31 +44,33 @@ var Signup = React.createClass({
       showLabels: [false,false,false,false]
     };
   },
-  showLabel: function(num, text) {
+  showLabel: function(num, valid) {
     var showLabels = this.state.showLabels;
-    showLabels[num] = (text.length >num);
+    showLabels[num] = valid;
     this.setState({showLabels: showLabels});
   },
   checkUsername: function(text) {
     var valid = (text.length >= usernameMinLength);
     this.setState({validUsername: valid, username: text});
-    this.showLabel(0, text);
+    this.showLabel(0, valid);
   },
   checkEmail: function(text) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
-    if (re.test(text)) this.setState({validEmail: true, email: text});
-    this.showLabel(1, text);
+    var valid = re.test(text)
+    this.setState({validEmail: valid, email: text});
+    this.showLabel(1, valid);
   },
   checkPassword: function(text) {
     var valid = (text.length >= passwordMinLength);
     if (!/.*(?=.*[a-z])(?=.*[A-Z]).*/.test(text)) valid = false;
-    this.setState({validPassword: valid, validPassword2: false, password: text});
-    this.showLabel(2, text);
+    this.setState({validPassword: valid, password: text, validPassword2: (text === this.state.password2)});
+    this.showLabel(2, valid);
+    this.showLabel(3, valid);
   },
   checkPassword2: function(text) {
     var valid = (text === this.state.password);
     this.setState({validPassword2: valid, password2: text});
-    this.showLabel(3, text);
+    this.showLabel(3, valid);
   },
   isValid() {
     return (this.state.validUsername && this.state.validEmail && this.state.validPassword && this.state.validPassword2);
@@ -111,6 +118,31 @@ var Signup = React.createClass({
       payload: payload
     });
   },
+  scrollUp: function(field) {
+    var fieldname = field + 'input'; 
+    this.refs[fieldname].focus();
+
+    var scrollDistance;
+    if (field === 'username') {
+      scrollDistance = 20;
+    } else if (field === 'email') {
+      scrollDistance = 40;
+    } else if (field === 'password') {
+      scrollDistance = 60;
+    } else if (field === 'password2') {
+      scrollDistance = 80;
+    }
+
+    this.refs['scrollview'].scrollTo(scrollDistance);
+  },
+  scrollDown: function() {
+    setTimeout(() => {
+      if (!(this.refs['usernameinput'].isFocused() || this.refs['emailinput'].isFocused() ||
+            this.refs['passwordinput'].isFocused() || this.refs['password2input'].isFocused())) {
+        this.refs['scrollview'].scrollTo(0);
+      }
+    }, 200);
+  },
   render: function() {
     var usernameWarning, passwordWarning, password2Warning, emailWarning, submitButton;
     var warningGenerator = (num) => {
@@ -149,36 +181,39 @@ var Signup = React.createClass({
     });
 
     return (
-      <View style={styles.container}>
+      <ScrollView ref='scrollview' contentContainerStyle={styles.container} style={styles.scroll} scrollEnabled={false}>
         <Back onback={this.returnToLogin} />
         <Text style={styles.headingText}>Get started with PartyOf4</Text>
         {labels[0]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} onChangeText={this.checkUsername}/>
+          <TextInput ref='usernameinput' style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} 
+          onChangeText={this.checkUsername} onFocus={() => this.scrollUp('username')} onBlur={this.scrollDown}/>
         </View>
         {usernameWarning}
 
         {labels[1]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} placeholder='email' 
-          onChangeText={this.checkEmail}/>
+          <TextInput ref='emailinput' style={styles.textInput} placeholder='email' 
+          onChangeText={this.checkEmail} onFocus={() => this.scrollUp('email')} onBlur={this.scrollDown}/>
         </View>
         {emailWarning}
 
         {labels[2]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} secureTextEntry={true} placeholder='password' onChangeText={this.checkPassword}/>
+          <TextInput ref='passwordinput' style={styles.textInput} secureTextEntry={true} placeholder='password' 
+          onChangeText={this.checkPassword} onFocus={() => this.scrollUp('password')} onBlur={this.scrollDown}/>
         </View>
         {passwordWarning}
 
         {labels[3]}
         <View style={styles.textInputContainer}>
-          <TextInput style={styles.textInput} secureTextEntry={true} placeholder='retype password' onChangeText={this.checkPassword2}/>
+          <TextInput ref='password2input' style={styles.textInput} secureTextEntry={true} placeholder='retype password' 
+          onChangeText={this.checkPassword2} onFocus={() => this.scrollUp('password2')} onBlur={this.scrollDown}/>
         </View>
         {password2Warning}
 
         {submitButton}
-      </View>
+      </ScrollView>
     );
   }
 });
@@ -194,54 +229,58 @@ var SignupLabel = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    flexDirection: 'column',
-    flex: 1,
-    padding: 10,
+  scroll: styleExtend({
+    backgroundColor: styleGuide.colors.white,
+  }, 'container'),
+
+  container: styleExtend({
     alignItems: 'center'
-  },
-  headingText: {
-    fontSize: 17,
-    color: '#2e6a8b'
-  },
+  }, 'container'),
+
+  headingText: styleExtend({
+    fontSize: styleGuide.sizes.larger,
+    color: styleGuide.colors.main,
+  }, 'font'),
+
   textInputContainer: {
     width: 230,
     height: 40,
     marginBottom: 5,
     borderWidth: 1,
-    borderTopColor: 'white', 
-    borderRightColor: 'white',
+    borderTopColor: styleGuide.colors.white, 
+    borderRightColor: styleGuide.colors.white,
+    borderLeftColor: styleGuide.colors.white,
     borderBottomColor: 'black',
-    borderLeftColor: 'white',
     padding: 5
   },
+
   textInput: {
     height: 30, 
     width: 220,
     borderWidth: 0,
+    fontFamily: styleGuide.font
   },
+
   warning: {
-    color: '#8f3033'
+    color: '#8f3033',
+    fontFamily: styleGuide.font
   },
-  submit: {
-    backgroundColor: '#2e6a8b',
-    margin: 10,
-    height: 40,
-    width: 240,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  submitText: {
-    color: 'white',
-    fontSize: 20
-  },
+
+  submit: styleExtend({
+    marginTop: 10,
+  }, 'center', 'button'),
+
+  submitText: styleExtend({
+  }, 'submitfont'),
+
   label: {
     width: 250
   },
+  
   labelText: {
-    color: '#14203c',
-    fontSize: 12
+    color: styleGuide.colors.dark,
+    fontSize: 15,
+    fontFamily: styleGuide.font
   }
 });
 
