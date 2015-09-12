@@ -12,6 +12,8 @@ var React = require('react-native'),
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;
 
+var config = require('../config/config');
+
 var ActionTypes = Constants.ActionTypes;
 
 var {
@@ -22,7 +24,7 @@ var {
   View
 } = React;
 
-var LOGOUT_REQUEST_URL = 'http://localhost:3000/logout'
+var LOGOUT_REQUEST_URL = config.url + '/logout'
 
 var menuTab = React.createClass({
   getInitialState: function () {
