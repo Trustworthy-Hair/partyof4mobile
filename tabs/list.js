@@ -106,6 +106,16 @@ var listTab = React.createClass({
   },
 
   renderEvent: function(event) {
+    var people = [];
+    for (var i = 0; i< event.currentSize; i++) {
+      people.push((<Image style={styles.personTaken} source={{uri:'http://i.imgur.com/4izv6mx.png'}} />));
+    }
+
+    var openpeople = [];
+    for (var i = 0; i< (event.capacity - event.currentSize); i++) {
+      openpeople.push((<Image style={styles.personOpen} source={{uri: 'http://i.imgur.com/C1MqnOr.png'}} />));
+    }
+
     return (
       <TouchableHighlight onPress={() => this.setCurrentEvent(event)}>
         <View style={styles.innercontainer}>
@@ -121,9 +131,9 @@ var listTab = React.createClass({
                 <Text style={styles.info}>{event.currentActivity}</Text>
                 <Text style={styles.info}>{(event.distance/1609).toFixed(2) + 'mi'}</Text>
               </View>
-              <View style={styles.people}>
-                <Text style={styles.info}>Current: {event.currentSize}</Text>
-                <Text style={styles.info}>Total: {event.capacity}</Text>
+              <View style={styles.peopleContainer}>
+                <View style={styles.people}>{openpeople}</View>
+                <View style={styles.people}>{people}</View>
               </View>
             </View>
           </View>
@@ -171,9 +181,12 @@ var styles = StyleSheet.create({
     flexDirection: 'row'
   },
 
-  people: {
-    flex: 1,
-  },
+  people: styleExtend({
+    flexDirection: 'row',
+  }, 'container', 'center'),
+
+  peopleContainer: styleExtend({
+  }, 'container', 'center'),
 
   words: {
     width: 160,
@@ -186,7 +199,8 @@ var styles = StyleSheet.create({
   }, 'font'),
 
   info: styleExtend({
-    fontSize: 14
+    fontSize: 14,
+    textAlign: 'left'
   }, 'font'),
 
   icon: {
@@ -205,6 +219,17 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column'
+  },
+
+  personTaken: {
+    width: 14,
+    height: 14,
+    tintColor: 'black',
+  },
+
+  personOpen: {
+    width: 14,
+    height: 14,
   }
 });
 
