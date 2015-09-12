@@ -6,7 +6,11 @@ var Header = require('../components/header'),
     Dispatcher = require('../dispatcher/dispatcher'),
     EventsStore = require('../stores/EventsStore'),
     UserStore = require('../stores/UserStore'),
-    Constants = require('../constants/constants');
+    Constants = require('../constants/constants'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var ActionTypes = Constants.ActionTypes;
 
@@ -36,8 +40,8 @@ var listTab = React.createClass({
 
   getDataFromServer: function() {
     var queryString = [
-      'latitude=' + this.state.userLocation.latitude,
-      'longitude=' + this.state.userLocation.longitude
+      'latitude=37.7837209',
+      'longitude=-122.4090445'
     ].join('&');
 
     fetch(GET_NEARBY_EVENTS_REQUEST_URL + '?' + queryString)
@@ -96,7 +100,6 @@ var listTab = React.createClass({
         <ListView
           dataSource={this.state.events}
           renderRow={this.renderEvent}
-          style={styles.listView}
         />
       </View>
     );
@@ -111,13 +114,18 @@ var listTab = React.createClass({
               style={styles.icon}
               source={require('image!restaurant')} />
           </View>
-          <View style={styles.words}>
+          <View style={styles.rightContainer}> 
             <Text style={styles.location}>{event.Location.name}</Text>
-            <Text style={styles.event}>{event.currentActivity}</Text>
-          </View>
-          <View style={styles.rightContainer}>
-            <Text style={styles.right}>Current: {event.currentSize}</Text>
-            <Text style={styles.right}>Total: {event.capacity}</Text>
+            <View style={styles.rightBottomContainer}>
+              <View style={styles.words}>
+                <Text style={styles.info}>{event.currentActivity}</Text>
+                <Text style={styles.info}>{(event.distance/1609).toFixed(2) + 'mi'}</Text>
+              </View>
+              <View style={styles.people}>
+                <Text style={styles.info}>Current: {event.currentSize}</Text>
+                <Text style={styles.info}>Total: {event.capacity}</Text>
+              </View>
+            </View>
           </View>
         </View>
       </TouchableHighlight>
@@ -142,57 +150,56 @@ var listTab = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  container: {
-    flexDirection: 'column',
-    flex: 1
-  },
+  container: styleExtend({
+  }, 'container'),
+
   innercontainer: {
     flex: 1,
     flexDirection: 'row',
     borderBottomWidth: 1,
-    borderBottomColor: '#2e6a8b',
+    borderBottomColor: styleGuide.colors.light,
     borderStyle: 'solid',
     justifyContent: 'center',
     height: 74
   },
-  listView: {
-    paddingTop: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingBottom: 5,
-    backgroundColor: '#F5FCFF',
-  },
-  rightContainer: {
+
+  rightContainer: styleExtend({
+  }, 'container'),
+
+  rightBottomContainer: {
     flex: 1,
-    padding: 5
+    flexDirection: 'row'
   },
+
+  people: {
+    flex: 1,
+  },
+
   words: {
-    width: 150,
-    padding: 5
+    width: 160,
   },
-  location: {
-    fontSize: 12,
+
+  location: styleExtend({
     fontWeight: 'bold',
-  },
-  event: {
-    fontSize: 12,
-    color: 'gray'
-  },
-  right: {
-    textAlign: 'right',
-    color: 'gray',
-    fontSize: 12
-  },
+    textAlign: 'left',
+    color: styleGuide.colors.dark
+  }, 'font'),
+
+  info: styleExtend({
+    fontSize: 14
+  }, 'font'),
+
   icon: {
-    flex: 0,
-    backgroundColor: '#2e6a8b',
-    borderRadius: 3,
     width: 64,
-    height: 64
+    height: 64,
+    tintColor: styleGuide.colors.main,
+    opacity: 0.5
   },
+
   iconBox: {
     padding: 5
   },
+
   loading: {
     alignItems: 'center',
     flex: 1,

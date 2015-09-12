@@ -42,7 +42,8 @@ var common = {
   font: {
     textAlign: 'center',
     fontFamily: styleGuide.font,
-    fontSize: styleGuide.sizes.main
+    fontSize: styleGuide.sizes.main,
+    backgroundColor: 'rgba(0,0,0,0)'
   },
   submitfont: {
     textAlign: 'center',
