@@ -40,8 +40,8 @@ var listTab = React.createClass({
 
   getDataFromServer: function() {
     var queryString = [
-      'latitude=37.7837209',
-      'longitude=-122.4090445'
+      'latitude=' + this.state.userLocation.latitude,
+      'longitude=' + this.state.userLocation.longitude
     ].join('&');
 
     fetch(GET_NEARBY_EVENTS_REQUEST_URL + '?' + queryString)
