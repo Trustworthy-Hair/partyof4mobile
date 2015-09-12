@@ -118,6 +118,9 @@ var mapTab = React.createClass({
   onCancel: function() {
     console.log('cancel button pressed');
   },
+  onUpdateUserLocation: function() {
+    console.log('updated:', this.state.center);
+  },
   render: function() {
     return (
       <View style={ styles.container }>
@@ -140,6 +143,7 @@ var mapTab = React.createClass({
           userLocationVisible={true}
           zoomLevel={this.state.zoom}
           annotations={this.state.annotations}
+          onUpdateUserLocation={this.onUpdateUserLocation}
         />
       </View>
     );

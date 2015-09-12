@@ -13,12 +13,13 @@ var React       = require('react-native'),
     Login       = require('./components/login'),
     Dispatcher  = require('./dispatcher/dispatcher'),
     Constants   = require('./constants/constants'),
-    UserStore   = require('./stores/UserStore');
+    UserStore   = require('./stores/UserStore'),
+    config      = require('./config/config');
 
 var ActionTypes = Constants.ActionTypes;
 
-var LOGIN_REQUEST_URL = 'http://localhost:3000/users/login';
-var GET_USER_REQUEST_URL = 'http://localhost:3000/users/';
+var LOGIN_REQUEST_URL = config.url + '/users/login';
+var GET_USER_REQUEST_URL = config.url + '/users/';
 
 var {
   AppRegistry,
