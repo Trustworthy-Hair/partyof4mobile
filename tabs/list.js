@@ -14,7 +14,7 @@ var styleGuide = stylingHelper.styleGuide,
 
 var ActionTypes = Constants.ActionTypes;
 
-var GET_NEARBY_EVENTS_REQUEST_URL = 'http://localhost:3000/events';
+var GET_NEARBY_EVENTS_REQUEST_URL = config.url + '/events';
 
 var {
   ActivityIndicatorIOS,

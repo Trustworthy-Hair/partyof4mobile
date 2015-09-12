@@ -9,7 +9,7 @@ var UserStore = require('../stores/UserStore');
 var Back = require('../components/common').BackButton;
 var Button = require('react-native-button');
 
-var REQUEST_URL = 'http://localhost:3000';
+var REQUEST_URL = config.url;
 
 var {
   StyleSheet,
