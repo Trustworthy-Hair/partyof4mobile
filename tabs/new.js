@@ -107,6 +107,7 @@ var newTab = React.createClass({
 
   createEvent: function(){
     var data = {
+      hostId: UserStore.getData().user.id,
       location: this.state.location,
       description: this.state.description,
       capacity: this.state.capacity,
@@ -124,6 +125,7 @@ var newTab = React.createClass({
     }).then((response) => {
       return response.json();
     }).then((response) => {
+      console.log('@@@@@@@@@@@', response)
       delete response.token;
       this.setState({event: response});
     }).done();
