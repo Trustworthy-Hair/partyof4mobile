@@ -96,8 +96,8 @@ var newEventTab = React.createClass({
   search: function(reset, time){
     var queryPart = reset ? '' : '&q='+this.state.searchQ;
     var data = UserStore.getData();
-    // fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=2000'+queryPart, {
-    fetch(REQUEST_URL + '/locations?latitude=37.7837209&longitude=-122.4090445&radius=2000'+queryPart, {
+    fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=2000'+queryPart, {
+    // fetch(REQUEST_URL + '/locations?latitude=37.7837209&longitude=-122.4090445&radius=2000'+queryPart, {
     }).then((response) => {
       return response.json();
     }).then((response) => {
@@ -161,7 +161,7 @@ var newEventTab = React.createClass({
               <View style={styles.listContainer}>
                 <Text style={styles.title}>How many open seats? </Text>
                 <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(openSeats) => {
-                  this.setState({capacity: openSeats+this.state.currentSize});
+                  this.setState({capacity: +openSeats+ +this.state.currentSize});
                 }} />
               </View>
               <View style={styles.colContainer}>
