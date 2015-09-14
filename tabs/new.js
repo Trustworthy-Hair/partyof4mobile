@@ -65,17 +65,13 @@ var newEventTab = React.createClass({
 
     return (
       <TouchableHighlight onPress={() => {this.setState({location: location});}}>
-        <View style={styles.innercontainer}>
-          <View style={styles.rightContainer}> 
-            <Text style={styles.location}>{location.name.substring(0, 35)}</Text>
-            <View style={styles.rightBottomContainer}>
-              <View style={styles.words}>
-                <Text style={styles.info}>{location.tags ? location.tags[0] : 'Unknown'}, {distance}</Text>
-              </View>
-              <View style={styles.peopleContainer}>
-                <Text>{price}</Text>
-              </View>
+        <View style={styles.innerContainer}>
+          <Text style={styles.location}>{location.name.substring(0, 35)}</Text>
+          <View style={styles.itemBottomContainer}>
+            <View style={styles.words}>
+              <Text style={styles.info}>{location.tags ? location.tags[0] : 'Unknown'}, {distance}</Text>
             </View>
+            <Text>{price}</Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -100,8 +96,8 @@ var newEventTab = React.createClass({
   search: function(reset, time){
     var queryPart = reset ? '' : '&q='+this.state.searchQ;
     var data = UserStore.getData();
-    fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=2000'+queryPart, {
-    // fetch(REQUEST_URL + '/locations?latitude=37.7837209&longitude=-122.4090445&radius=2000'+queryPart, {
+    // fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=2000'+queryPart, {
+    fetch(REQUEST_URL + '/locations?latitude=37.7837209&longitude=-122.4090445&radius=2000'+queryPart, {
     }).then((response) => {
       return response.json();
     }).then((response) => {
@@ -190,7 +186,7 @@ var newEventTab = React.createClass({
             </View>
           </View>
         </View>
-        )
+      );
     } else if (this.state.event.description && this.state.location.name) {
       var des = this.state.event.description;
       return (
@@ -201,10 +197,10 @@ var newEventTab = React.createClass({
             }}/>
           <Text>{des}</Text>
         </View>
-        );
+      );
     } else {
       return (
-        <View style={ styles.container }>
+        <View style={styles.container}>
           <Header />
           <SearchBar
             onChangeText={(text) => {
@@ -219,7 +215,7 @@ var newEventTab = React.createClass({
           <ListView 
             dataSource={this.createResultsDataSource()}
             renderRow={this.renderSearch}
-            style={styles.listView}/>
+            style={{marginBottom: 40}}/>
         </View>
       );
     }
@@ -251,10 +247,6 @@ var styles = StyleSheet.create({
     alignItems: 'center'
   }, 'container'),
 
-  listView: {
-    marginBottom: 40
-  },
-
   listContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -262,36 +254,22 @@ var styles = StyleSheet.create({
     margin: 10
   },
 
-  innercontainer: {
-    flex: 1,
-    flexDirection: 'row',
+  innerContainer: styleExtend({
     borderBottomWidth: 1,
     borderBottomColor: styleGuide.colors.light,
     borderStyle: 'solid',
     justifyContent: 'center',
-    height: 55
-  },
-
-  rightContainer: styleExtend({
+    height: 55,
     marginLeft: 20
   }, 'container'),
 
-  formContainer: styleExtend({
-    marginLeft: 20,
-    marginRight: 20
-  }, 'container'),
-
-  rightBottomContainer: {
+  itemBottomContainer: {
     flex: 1,
     flexDirection: 'row'
   },
 
-  peopleContainer: styleExtend({
-  }, 'container', 'center'),
-
   words: {
-    width: 270,
-    justifyContent: 'center',
+    width: 300,
   },
 
   location: styleExtend({
@@ -299,6 +277,11 @@ var styles = StyleSheet.create({
     textAlign: 'left',
     color: styleGuide.colors.main
   }, 'font'),
+
+  formContainer: styleExtend({
+    marginLeft: 20,
+    marginRight: 20
+  }, 'container'),
 
   info: styleExtend({
     fontSize: 14,
@@ -313,7 +296,6 @@ var styles = StyleSheet.create({
 
   login: styleExtend({
     justifyContent: 'center',
-    flex: 1,
   }, 'button'),
 
 });
