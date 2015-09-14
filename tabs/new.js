@@ -7,7 +7,6 @@ var React      = require('react-native'),
     Dispatcher = require ('../dispatcher/dispatcher'),
     UserStore  = require('../stores/UserStore'),
     Back       = require('../components/common').BackButton,
-    Button     = require('react-native-button'),
     stylingHelper = require('./../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
@@ -102,6 +101,7 @@ var newEventTab = React.createClass({
     var queryPart = reset ? '' : '&q='+this.state.searchQ;
     var data = UserStore.getData();
     fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=2000'+queryPart, {
+    // fetch(REQUEST_URL + '/locations?latitude=37.7837209&longitude=-122.4090445&radius=2000'+queryPart, {
     }).then((response) => {
       return response.json();
     }).then((response) => {
@@ -148,47 +148,50 @@ var newEventTab = React.createClass({
   },
 
   render: function() {
-    if(this.state.location.name && !this.state.event.description){
+    if (this.state.location.name && !this.state.event.description) {
       return (
         <View style={styles.container} >
           <Header />
-          <Back onback={() =>{
-            this.setState({location: {}})
-          }}/>
-          <Text style={styles.title} >{this.state.location.name}</Text>
-          <View>
-            <View style={styles.listContainer}>
-              <Text style={styles.title} >How many people? </Text>
-              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(currentSize) => {
-                this.setState({currentSize : currentSize});
-              }} />
-              <Text> / </Text>
-              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(capacity) => {
-                this.setState({capacity: capacity});
-              }} />
-            </View>
+          <View style={styles.formContainer}>
+            <Back onback={() =>{this.setState({location: {}})}}/>
+            <Text style={styles.location} >{this.state.location.name}</Text>
             <View>
-              <Text style={styles.title} >Description:  </Text>
-              <TextInput style={styles.desInput} onChangeText={(description) =>{
-                this.setState({description: description});
-              }} />
-            </View>
-            <Text style={styles.title} >When?</Text>
-            <View>
+              <View style={styles.listContainer}>
+                <Text style={styles.title}>How many people are there? </Text>
+                <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(currentSize) => {
+                  this.setState({currentSize : currentSize});
+                }} />
+              </View>
+              <View style={styles.listContainer}>
+                <Text style={styles.title}>How many open seats? </Text>
+                <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(openSeats) => {
+                  this.setState({capacity: openSeats+this.state.currentSize});
+                }} />
+              </View>
+              <View style={styles.colContainer}>
+                <Text style={styles.title}>Description:  </Text>
+                <TextInput style={styles.desInput} onChangeText={(description) =>{
+                  this.setState({description: description});
+                }} />
+              </View>
               <DatePickerIOS
                 date={this.state.date}
                 minimumDate={this.state.today}
                 mode="datetime"
                 timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
                 onDateChange={this.onDateChange} />
+              <View style={styles.colContainer}>
+                <TouchableHighlight onPress={ this.createEvent }>
+                  <View style={styles.login}> 
+                    <Text style={ styles.submit }>Create Event</Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
             </View>
-            <Button style={{color: 'green'}} onPress={this.createEvent}>
-              Create Event
-            </Button>
           </View>
         </View>
         )
-    }else if(this.state.event.description && this.state.location.name){
+    } else if (this.state.event.description && this.state.location.name) {
       var des = this.state.event.description;
       return (
         <View style={styles.container} >
@@ -199,8 +202,7 @@ var newEventTab = React.createClass({
           <Text>{des}</Text>
         </View>
         );
-    }else{
-
+    } else {
       return (
         <View style={ styles.container }>
           <Header />
@@ -232,6 +234,7 @@ var styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
   },
+
   numInput: {
     height: 25,
     width: 25,
@@ -239,12 +242,19 @@ var styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
   },
+
   container: {
     flex: 1,
   },
+
+  colContainer: styleExtend({
+    alignItems: 'center'
+  }, 'container'),
+
   listView: {
     marginBottom: 40
   },
+
   listContainer: {
     flex: 1,
     flexDirection: 'row',
@@ -259,11 +269,16 @@ var styles = StyleSheet.create({
     borderBottomColor: styleGuide.colors.light,
     borderStyle: 'solid',
     justifyContent: 'center',
-    height: 50
+    height: 55
   },
 
   rightContainer: styleExtend({
     marginLeft: 20
+  }, 'container'),
+
+  formContainer: styleExtend({
+    marginLeft: 20,
+    marginRight: 20
   }, 'container'),
 
   rightBottomContainer: {
@@ -275,19 +290,32 @@ var styles = StyleSheet.create({
   }, 'container', 'center'),
 
   words: {
-    width: 250,
+    width: 270,
+    justifyContent: 'center',
   },
 
   location: styleExtend({
     fontWeight: 'bold',
     textAlign: 'left',
-    color: styleGuide.colors.dark
+    color: styleGuide.colors.main
   }, 'font'),
 
   info: styleExtend({
     fontSize: 14,
     textAlign: 'left'
   }, 'font'),
+
+  title: styleExtend({
+  }, 'font'),
+
+  submit: styleExtend({
+  }, 'submitfont'),
+
+  login: styleExtend({
+    justifyContent: 'center',
+    flex: 1,
+  }, 'button'),
+
 });
 
 module.exports = newEventTab;
