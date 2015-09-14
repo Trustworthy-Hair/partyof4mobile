@@ -125,7 +125,6 @@ var newTab = React.createClass({
     }).then((response) => {
       return response.json();
     }).then((response) => {
-      console.log('@@@@@@@@@@@', response)
       delete response.token;
       this.setState({event: response});
     }).done();
