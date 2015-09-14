@@ -1,13 +1,17 @@
 'use strict';
 
-var React = require('react-native');
-var Header = require('../components/header');
-var config = require('./../config/config.js');
-var SearchBar = require('react-native-search-bar');
-var Dispatcher = require ('../dispatcher/dispatcher');
-var UserStore = require('../stores/UserStore');
-var Back = require('../components/common').BackButton;
-var Button = require('react-native-button');
+var React      = require('react-native'),
+    Header     = require('../components/header'),
+    config     = require('./../config/config.js'),
+    SearchBar  = require('react-native-search-bar'),
+    Dispatcher = require ('../dispatcher/dispatcher'),
+    UserStore  = require('../stores/UserStore'),
+    Back       = require('../components/common').BackButton,
+    Button     = require('react-native-button'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var REQUEST_URL = config.url;
 
@@ -17,10 +21,11 @@ var {
   Text,
   TextInput,
   View,
-  DatePickerIOS
+  DatePickerIOS,
+  TouchableHighlight
 } = React;
 
-var newTab = React.createClass({
+var newEventTab = React.createClass({
 
   getDefaultProps: function () {
      return {
@@ -54,21 +59,28 @@ var newTab = React.createClass({
 
   renderSearch: function (location){
     var price = '';
-    for(var i = 0; i < location.price; i++){
-      price = price + '$'
+    for (var i = 0; i < location.price; i++) {
+      price = price + '$';
     }
+    var distance = (location.distance/1609).toFixed(2) + 'mi';
+
     return (
-      <View style={styles.listContainer}>
-        <View>
-          <Text onPress={() => {
-            this.setState({location: location});
-          }} style={styles.title} >{location.name}</Text>
+      <TouchableHighlight onPress={() => {this.setState({location: location});}}>
+        <View style={styles.innercontainer}>
+          <View style={styles.rightContainer}> 
+            <Text style={styles.location}>{location.name.substring(0, 35)}</Text>
+            <View style={styles.rightBottomContainer}>
+              <View style={styles.words}>
+                <Text style={styles.info}>{location.tags ? location.tags[0] : 'Unknown'}, {distance}</Text>
+              </View>
+              <View style={styles.peopleContainer}>
+                <Text>{price}</Text>
+              </View>
+            </View>
+          </View>
         </View>
-        <View>
-          <Text style={styles.price} >{price}</Text>
-        </View>
-      </View>
-      );
+      </TouchableHighlight>
+    );
   },
 
   throttle: function (){
@@ -81,14 +93,15 @@ var newTab = React.createClass({
       var date = new Date();
       var newTime = date.getTime();
       if(Math.abs(this.state.time - newTime) > 500){
-        this.search(time);
+        this.search(false, time);
       }
     }, 500)
   },
 
-  search: function(time){
+  search: function(reset, time){
+    var queryPart = reset ? '' : '&q='+this.state.searchQ;
     var data = UserStore.getData();
-    fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=7000'+'&q='+this.state.searchQ, {
+    fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=2000'+queryPart, {
     }).then((response) => {
       return response.json();
     }).then((response) => {
@@ -131,7 +144,7 @@ var newTab = React.createClass({
   },
 
   componentDidMount: function(){
-    this.search();
+    this.search(true);
   },
 
   render: function() {
@@ -163,11 +176,11 @@ var newTab = React.createClass({
             <Text style={styles.title} >When?</Text>
             <View>
               <DatePickerIOS
-              date={this.state.date}
-              minimumDate={this.state.today}
-              mode="datetime"
-              timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
-              onDateChange={this.onDateChange} />
+                date={this.state.date}
+                minimumDate={this.state.today}
+                mode="datetime"
+                timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
+                onDateChange={this.onDateChange} />
             </View>
             <Button style={{color: 'green'}} onPress={this.createEvent}>
               Create Event
@@ -192,13 +205,15 @@ var newTab = React.createClass({
         <View style={ styles.container }>
           <Header />
           <SearchBar
-          onChangeText={(text) => {
-            text = text.replace(/ /g, '%20');
-            this.setState({searchQ: text});
-            this.throttle();
-          }}
-          onPress={this.press}
-          placeholder='Search' />
+            onChangeText={(text) => {
+              text = text.replace(/ /g, '%20');
+              this.setState({searchQ: text});
+              this.throttle();
+            }}
+            onCancelButtonPress={() => {
+              this.search(true);
+            }}
+            placeholder='Search' />
           <ListView 
             dataSource={this.createResultsDataSource()}
             renderRow={this.renderSearch}
@@ -225,28 +240,54 @@ var styles = StyleSheet.create({
     borderWidth: 1,
   },
   container: {
-    backgroundColor: '#F5FCFF',
     flex: 1,
   },
   listView: {
-    marginBottom: 50
+    marginBottom: 40
   },
   listContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 10
+    margin: 10
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 8,
+
+  innercontainer: {
+    flex: 1,
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: styleGuide.colors.light,
+    borderStyle: 'solid',
+    justifyContent: 'center',
+    height: 50
+  },
+
+  rightContainer: styleExtend({
+    marginLeft: 20
+  }, 'container'),
+
+  rightBottomContainer: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+
+  peopleContainer: styleExtend({
+  }, 'container', 'center'),
+
+  words: {
+    width: 250,
+  },
+
+  location: styleExtend({
+    fontWeight: 'bold',
+    textAlign: 'left',
+    color: styleGuide.colors.dark
+  }, 'font'),
+
+  info: styleExtend({
+    fontSize: 14,
     textAlign: 'left'
-  },
-  price: {
-    fontSize: 20,
-    marginBottom: 8,
-    textAlign: 'right'
-  }
+  }, 'font'),
 });
 
-module.exports = newTab;
+module.exports = newEventTab;
