@@ -115,19 +115,24 @@ var mapTab = React.createClass({
   onRightAnnotationTapped: function (e) {
     console.log(e);
   },
-  onCancel: function() {
-    console.log('cancel button pressed');
+  onSearch: function(text) {
+    console.log()
+    this.setState({
+      searchQ: text.replace(/ /g, '%20')
+    }, this.getDataFromServer);
   },
-  onUpdateUserLocation: function() {
-    console.log('updated:', this.state.center);
+  onRegionChange: function(location) {
+    this.setState({
+      latitude: location.latitude,
+      longitude: location.longitude
+    });
   },
   render: function() {
     return (
       <View style={ styles.container }>
         <Header />
         <SearchBar
-          onSearchButtonPress={ this.getDataFromServer }
-          onCancelButtonPress={ this.onCancel }
+          onSearchButtonPress={(text) => this.onSearch(text)}
         />
         <MapboxGLMap
           style={styles.map}
@@ -144,6 +149,7 @@ var mapTab = React.createClass({
           zoomLevel={this.state.zoom}
           annotations={this.state.annotations}
           onUpdateUserLocation={this.onUpdateUserLocation}
+          onRegionChange={this.onRegionChange}
         />
       </View>
     );
