@@ -1,13 +1,16 @@
 'use strict';
 
-var React = require('react-native');
-var Header = require('../components/header');
-var config = require('./../config/config.js');
-var SearchBar = require('react-native-search-bar');
-var Dispatcher = require ('../dispatcher/dispatcher');
-var UserStore = require('../stores/UserStore');
-var Back = require('../components/common').BackButton;
-var Button = require('react-native-button');
+var React      = require('react-native'),
+    Header     = require('../components/header'),
+    config     = require('./../config/config.js'),
+    SearchBar  = require('react-native-search-bar'),
+    Dispatcher = require ('../dispatcher/dispatcher'),
+    UserStore  = require('../stores/UserStore'),
+    Back       = require('../components/common').BackButton,
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var REQUEST_URL = config.url;
 
@@ -17,10 +20,11 @@ var {
   Text,
   TextInput,
   View,
-  DatePickerIOS
+  DatePickerIOS,
+  TouchableHighlight
 } = React;
 
-var newTab = React.createClass({
+var newEventTab = React.createClass({
 
   getDefaultProps: function () {
      return {
@@ -54,21 +58,24 @@ var newTab = React.createClass({
 
   renderSearch: function (location){
     var price = '';
-    for(var i = 0; i < location.price; i++){
-      price = price + '$'
+    for (var i = 0; i < location.price; i++) {
+      price = price + '$';
     }
+    var distance = (location.distance/1609).toFixed(2) + 'mi';
+
     return (
-      <View style={styles.listContainer}>
-        <View>
-          <Text onPress={() => {
-            this.setState({location: location});
-          }} style={styles.title} >{location.name}</Text>
+      <TouchableHighlight onPress={() => {this.setState({location: location});}}>
+        <View style={styles.innerContainer}>
+          <Text style={styles.location}>{location.name.substring(0, 35)}</Text>
+          <View style={styles.itemBottomContainer}>
+            <View style={styles.words}>
+              <Text style={styles.info}>{location.tags ? location.tags[0] : 'Unknown'}, {distance}</Text>
+            </View>
+            <Text>{price}</Text>
+          </View>
         </View>
-        <View>
-          <Text style={styles.price} >{price}</Text>
-        </View>
-      </View>
-      );
+      </TouchableHighlight>
+    );
   },
 
   throttle: function (){
@@ -81,14 +88,16 @@ var newTab = React.createClass({
       var date = new Date();
       var newTime = date.getTime();
       if(Math.abs(this.state.time - newTime) > 500){
-        this.search(time);
+        this.search(false, time);
       }
     }, 500)
   },
 
-  search: function(time){
+  search: function(reset, time){
+    var queryPart = reset ? '' : '&q='+this.state.searchQ;
     var data = UserStore.getData();
-    fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=7000'+'&q='+this.state.searchQ, {
+    fetch(REQUEST_URL + '/locations?latitude='+data.location.latitude+'&longitude='+data.location.longitude+'&radius=2000'+queryPart, {
+    // fetch(REQUEST_URL + '/locations?latitude=37.7837209&longitude=-122.4090445&radius=2000'+queryPart, {
     }).then((response) => {
       return response.json();
     }).then((response) => {
@@ -131,51 +140,54 @@ var newTab = React.createClass({
   },
 
   componentDidMount: function(){
-    this.search();
+    this.search(true);
   },
 
   render: function() {
-    if(this.state.location.name && !this.state.event.description){
+    if (this.state.location.name && !this.state.event.description) {
       return (
         <View style={styles.container} >
           <Header />
-          <Back onback={() =>{
-            this.setState({location: {}})
-          }}/>
-          <Text style={styles.title} >{this.state.location.name}</Text>
-          <View>
-            <View style={styles.listContainer}>
-              <Text style={styles.title} >How many people? </Text>
-              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(currentSize) => {
-                this.setState({currentSize : currentSize});
-              }} />
-              <Text> / </Text>
-              <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(capacity) => {
-                this.setState({capacity: capacity});
-              }} />
-            </View>
+          <View style={styles.formContainer}>
+            <Back onback={() =>{this.setState({location: {}})}}/>
+            <Text style={styles.location} >{this.state.location.name}</Text>
             <View>
-              <Text style={styles.title} >Description:  </Text>
-              <TextInput style={styles.desInput} onChangeText={(description) =>{
-                this.setState({description: description});
-              }} />
-            </View>
-            <Text style={styles.title} >When?</Text>
-            <View>
+              <View style={styles.listContainer}>
+                <Text style={styles.title}>How many people are there? </Text>
+                <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(currentSize) => {
+                  this.setState({currentSize : currentSize});
+                }} />
+              </View>
+              <View style={styles.listContainer}>
+                <Text style={styles.title}>How many open seats? </Text>
+                <TextInput keyboardType="numeric" style={styles.numInput} onChangeText={(openSeats) => {
+                  this.setState({capacity: +openSeats+ +this.state.currentSize});
+                }} />
+              </View>
+              <View style={styles.colContainer}>
+                <Text style={styles.title}>Description:  </Text>
+                <TextInput style={styles.desInput} onChangeText={(description) =>{
+                  this.setState({description: description});
+                }} />
+              </View>
               <DatePickerIOS
-              date={this.state.date}
-              minimumDate={this.state.today}
-              mode="datetime"
-              timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
-              onDateChange={this.onDateChange} />
+                date={this.state.date}
+                minimumDate={this.state.today}
+                mode="datetime"
+                timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
+                onDateChange={this.onDateChange} />
+              <View style={styles.colContainer}>
+                <TouchableHighlight onPress={ this.createEvent }>
+                  <View style={styles.login}> 
+                    <Text style={ styles.submit }>Create Event</Text>
+                  </View>
+                </TouchableHighlight>
+              </View>
             </View>
-            <Button style={{color: 'green'}} onPress={this.createEvent}>
-              Create Event
-            </Button>
           </View>
         </View>
-        )
-    }else if(this.state.event.description && this.state.location.name){
+      );
+    } else if (this.state.event.description && this.state.location.name) {
       var des = this.state.event.description;
       return (
         <View style={styles.container} >
@@ -185,24 +197,25 @@ var newTab = React.createClass({
             }}/>
           <Text>{des}</Text>
         </View>
-        );
-    }else{
-
+      );
+    } else {
       return (
-        <View style={ styles.container }>
+        <View style={styles.container}>
           <Header />
           <SearchBar
-          onChangeText={(text) => {
-            text = text.replace(/ /g, '%20');
-            this.setState({searchQ: text});
-            this.throttle();
-          }}
-          onPress={this.press}
-          placeholder='Search' />
+            onChangeText={(text) => {
+              text = text.replace(/ /g, '%20');
+              this.setState({searchQ: text});
+              this.throttle();
+            }}
+            onCancelButtonPress={() => {
+              this.search(true);
+            }}
+            placeholder='Search' />
           <ListView 
             dataSource={this.createResultsDataSource()}
             renderRow={this.renderSearch}
-            style={styles.listView}/>
+            style={{marginBottom: 40}}/>
         </View>
       );
     }
@@ -217,6 +230,7 @@ var styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
   },
+
   numInput: {
     height: 25,
     width: 25,
@@ -224,29 +238,66 @@ var styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
   },
+
   container: {
-    backgroundColor: '#F5FCFF',
     flex: 1,
   },
-  listView: {
-    marginBottom: 50
-  },
+
+  colContainer: styleExtend({
+    alignItems: 'center'
+  }, 'container'),
+
   listContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    marginBottom: 10
+    margin: 10
   },
-  title: {
-    fontSize: 20,
-    marginBottom: 8,
+
+  innerContainer: styleExtend({
+    borderBottomWidth: 1,
+    borderBottomColor: styleGuide.colors.light,
+    borderStyle: 'solid',
+    justifyContent: 'center',
+    height: 55,
+    marginLeft: 20
+  }, 'container'),
+
+  itemBottomContainer: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+
+  words: {
+    width: 300,
+  },
+
+  location: styleExtend({
+    fontWeight: 'bold',
+    textAlign: 'left',
+    color: styleGuide.colors.main
+  }, 'font'),
+
+  formContainer: styleExtend({
+    marginLeft: 20,
+    marginRight: 20
+  }, 'container'),
+
+  info: styleExtend({
+    fontSize: 14,
     textAlign: 'left'
-  },
-  price: {
-    fontSize: 20,
-    marginBottom: 8,
-    textAlign: 'right'
-  }
+  }, 'font'),
+
+  title: styleExtend({
+  }, 'font'),
+
+  submit: styleExtend({
+  }, 'submitfont'),
+
+  login: styleExtend({
+    justifyContent: 'center',
+  }, 'button'),
+
 });
 
-module.exports = newTab;
+module.exports = newEventTab;
