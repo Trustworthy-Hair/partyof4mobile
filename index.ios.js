@@ -6,7 +6,6 @@
 
 var React       = require('react-native'),
     MapTab      = require('./tabs/map'),
-    SearchTab   = require('./tabs/search'),
     ListTab     = require('./tabs/list'),
     NewTab      = require('./tabs/new'),
     MenuTab     = require('./tabs/menu'),
@@ -33,7 +32,6 @@ var {
 
 var icons = {
   map: require('image!map'),
-  search : require('image!search'),
   list : require('image!list'),
   new : require('image!new'),
   menu : require('image!menu')
@@ -41,7 +39,6 @@ var icons = {
 
 var tabs = {
   map: (<MapTab />),
-  search : (<SearchTab />),
   list : (<ListTab />),
   new : (<NewTab />),
   menu : (<MenuTab />),
@@ -52,7 +49,7 @@ var partyof4mobile = React.createClass({
 
   getDefaultProps: function () {
     return {
-      icons: ['map', 'search', 'list', 'new', 'menu']
+      icons: ['map', 'list', 'new', 'menu']
     };
   },
 
