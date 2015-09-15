@@ -143,8 +143,7 @@ var listTab = React.createClass({
   },
 
   setCurrentEvent: function (event) {
-    var payload = {};
-    payload.event = event;
+    var payload = event;
     Dispatcher.dispatch({
       type: ActionTypes.STORE_CURRENT_EVENT,
       payload: payload
