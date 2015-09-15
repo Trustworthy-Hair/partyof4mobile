@@ -23,8 +23,7 @@ var {
   ListView,
   StyleSheet,
   Text,
-  View,
-  TouchableHighlight
+  View
 } = React;
 
 var listTab = React.createClass({
@@ -66,18 +65,7 @@ var listTab = React.createClass({
     if (!this.state.loaded) {
       return this.renderLoadingView();
     }
-    return (
-      <View style={ styles.container }>
-        <Header />
-        <View style={ styles.innercontainer }>
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderEvent}
-            style={styles.listView}
-          />
-        </View>
-      </View>
-    );
+    return this.renderEvents();
    },
 
   renderLoadingView: function() {
@@ -98,10 +86,13 @@ var listTab = React.createClass({
     return (
       <View style={ styles.container }>
         <Header />
-        <ListView
-          dataSource={this.state.events}
-          renderRow={this.renderEvent}
-        />
+        <View style={ styles.innercontainer }>
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderEvent}
+            style={{marginBottom: 40}}
+          />
+        </View>
       </View>
     );
   },

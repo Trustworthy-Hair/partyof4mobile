@@ -1,6 +1,7 @@
 // EventSummary.js 
 
 var React         = require('react-native'),
+    moment        = require('moment'),
     stylingHelper = require('./../../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
@@ -27,6 +28,13 @@ var EventSummary = React.createClass({
     for (var i = 0; i< (event.capacity - event.currentSize); i++) {
       openpeople.push((<Image style={styles.personOpen} source={{uri: 'http://i.imgur.com/C1MqnOr.png'}} />));
     }
+    var subHeading;
+    var timeStamp = moment(event.plannedTime).fromNow();
+    if (this.props.type !== 'history') {
+      subHeading = (<Text style={styles.info}>{(event.distance/1609).toFixed(2) + 'mi'} || {timeStamp}</Text>);
+    } else {
+      subHeading = (<Text style={styles.info}>{timeStamp}</Text>);
+    }
 
     return (
       <TouchableHighlight onPress={this.props.onPressCB}>
@@ -41,7 +49,7 @@ var EventSummary = React.createClass({
             <View style={styles.rightBottomContainer}>
               <View style={styles.words}>
                 <Text style={styles.info}>{event.currentActivity}</Text>
-                <Text style={styles.info}>{(event.distance/1609).toFixed(2) + 'mi'}</Text>
+                {subHeading}
               </View>
               <View style={styles.peopleContainer}>
                 <View style={styles.people}>{openpeople}</View>
