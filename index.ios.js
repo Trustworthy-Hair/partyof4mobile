@@ -14,12 +14,13 @@ var React       = require('react-native'),
     Login       = require('./components/login'),
     Dispatcher  = require('./dispatcher/dispatcher'),
     Constants   = require('./constants/constants'),
-    UserStore   = require('./stores/UserStore');
+    UserStore   = require('./stores/UserStore'),
+    config      = require('./config/config');
 
 var ActionTypes = Constants.ActionTypes;
 
-var LOGIN_REQUEST_URL = 'http://localhost:3000/users/login';
-var GET_USER_REQUEST_URL = 'http://localhost:3000/users/';
+var LOGIN_REQUEST_URL = config.url + '/users/login';
+var GET_USER_REQUEST_URL = config.url + '/users/';
 
 var {
   AppRegistry,
@@ -65,8 +66,10 @@ var partyof4mobile = React.createClass({
   componentWillMount: function () {
     var token;
     AsyncStorage.multiGet(['token', 'userId']).then((data) => {
-      token = data[0][1];
-      return this.getUser(data[1][1]);
+      if (data[0][1]) {
+        token = data[0][1];
+        return this.getUser(data[1][1]);
+      }
     }).then((user) => {
       return user.json();
     }).then((user) => {
