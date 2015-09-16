@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var React       = require('react-native'),
     config      = require('../config/config'),
     Dispatcher  = require ('../dispatcher/dispatcher'),
@@ -10,6 +11,21 @@ var Header    = require('../components/header'),
     HostView  = require('./HostView'),
     Attendees = require('./Attendees'),
     Pending  = require('./Pending');
+=======
+var React = require('react-native');
+var config = require('../config/config');
+var Dispatcher = require ('../dispatcher/dispatcher');
+var EventsStore = require('../stores/EventsStore');
+var UserStore = require('../stores/UserStore');
+var Constants = require('../constants/constants');
+
+var Back = require('../components/common').BackButton;
+var Header = require('../components/header');
+var EventInfo = require('./EventInfo');
+var HostView = require('./HostView');
+var Attendees = require('./Attendees');
+var Pending = require('./Pending');
+>>>>>>> successful communication between client and server regarding reviews. TODO: investigate if everything still works if users have joined an event
 
 var ActionTypes = Constants.ActionTypes;
 
