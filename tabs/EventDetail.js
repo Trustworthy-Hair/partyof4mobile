@@ -51,6 +51,15 @@ var EventDetail = React.createClass({
     });
   },
 
+  goToReview: function () {
+    var payload = {};
+    payload.currentView = 'createReview';
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
+  },
+
   getEvent: function () {
     fetch(GET_EVENT_REQUEST_URL + this.state.event.id)
     .then((response) => {
@@ -138,6 +147,7 @@ var EventDetail = React.createClass({
           attendees={this.getAttendees()} 
           pending={this.getPending()} 
           currentUser={this.state.user}
+          goToReview={this.goToReview} 
           joinEvent={this.joinEvent} 
           updateEvent={this.updateEvent} 
           endEvent={this.endEvent} 

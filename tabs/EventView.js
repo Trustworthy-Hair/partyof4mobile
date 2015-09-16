@@ -26,7 +26,6 @@ var EventView = React.createClass({
 
   isUserPending: function () {
     var isPending = false;
-    console.log('PROPS: ', this.props);
     this.props.pending.forEach((pending) => {
       if (this.props.currentUser.id === pending.id) isPending = true;
     });
@@ -40,6 +39,7 @@ var EventView = React.createClass({
         <Text>Event Description: {this.props.event.description}</Text>
         <Text>Date/Time: {this.props.event.plannedTime}</Text>
         <Text>Status: {this.props.event.status}</Text>
+        {this.renderGoToReviewButton()} 
         {this.renderJoinButton()}
         {this.renderEditButton()}
         {this.renderEndButton()}
@@ -65,6 +65,14 @@ var EventView = React.createClass({
         </TouchableOpacity>
       );
     }
+  },
+
+  renderGoToReviewButton: function () {
+    return (
+      <TouchableOpacity onPress={this.props.goToReview} >
+        <Text>Review Attendees</Text>
+      </TouchableOpacity>
+    );
   },
 
   renderEditButton: function () {
