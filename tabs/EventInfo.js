@@ -1,9 +1,16 @@
 // EventInfo.js
 
-var React = require('react-native');
+var React       = require('react-native'),
+    EventEdit   = require('./EventEdit'),
+    EventView   = require('./EventView'),
+    Dispatcher  = require ('../dispatcher/dispatcher'),
+    Constants   = require('../constants/constants'),
+    ActionTypes = Constants.ActionTypes,
+    Back        = require('../components/common').BackButton;
 
-var EventEdit = require('./EventEdit');
-var EventView = require('./EventView');
+var {
+  View
+} = React;
 
 var EventInfo = React.createClass({
 
@@ -19,6 +26,15 @@ var EventInfo = React.createClass({
     });
   },
 
+  goBack: function() {
+    var payload = {};
+    payload.currentView = 'list';
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
+  },
+
   render: function () {
     if (this.state.editing) {
       return (
@@ -30,17 +46,20 @@ var EventInfo = React.createClass({
       );
     }
     return (
-      <EventView 
-        event={this.props.event} 
-        currentUser={this.props.currentUser}
-        host={this.props.host}
-        attendees={this.props.attendees} 
-        pending={this.props.pending}
-        toggleEdit={this.toggleEdit} 
-        goToReview={this.props.goToReview} 
-        joinEvent={this.props.joinEvent} 
-        endEvent={this.props.endEvent}
-      />
+      <View>
+        <Back onback={this.goBack} />
+        <EventView 
+          event={this.props.event} 
+          currentUser={this.props.currentUser}
+          host={this.props.host}
+          attendees={this.props.attendees} 
+          pending={this.props.pending}
+          toggleEdit={this.toggleEdit} 
+          goToReview={this.props.goToReview} 
+          joinEvent={this.props.joinEvent} 
+          endEvent={this.props.endEvent}
+        />
+      </View>
     );
   }
 });
