@@ -9,6 +9,7 @@
     "events": "^1.0.2",
     "flux": "^2.1.1",
     "keymirror": "^0.1.1",
+    "moment": "^2.10.6",
     "object-assign": "^4.0.1",
     "react-native": "^0.10.1",
     "react-native-button": "^1.2.1",
