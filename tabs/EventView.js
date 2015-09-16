@@ -78,10 +78,10 @@ var EventView = React.createClass({
     } else {
       return (
         <View style={styles.centerbutton}>
-        <TouchableHighlight onPress={this.props.joinEvent} >
-          <View style={styles.button}> 
-            <Text style={styles.buttonText }>Join Event</Text>
-          </View>
+          <TouchableHighlight onPress={this.props.joinEvent} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>Join Event</Text>
+            </View>
         </TouchableHighlight>
         </View>
       );
@@ -99,11 +99,13 @@ var EventView = React.createClass({
   renderEditButton: function () {
     if (this.isUserHost()) {
       return (
-        <TouchableOpacity onPress={this.props.toggleEdit} >
-          <View style={styles.button}> 
-            <Text style={styles.buttonText }>Edit Event</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.centerbutton}>
+          <TouchableOpacity onPress={this.props.toggleEdit} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>Edit Event</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     }
     return null;
@@ -112,11 +114,13 @@ var EventView = React.createClass({
   renderEndButton: function () {
     if (this.isUserHost()) {
       return (
-        <TouchableOpacity onPress={this.props.endEvent} >
-          <View style={styles.button}> 
-            <Text style={styles.buttonText }>End Event</Text>
-          </View>
-        </TouchableOpacity>
+        <View style={styles.centerbutton}>
+          <TouchableOpacity onPress={this.props.endEvent} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>End Event</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     }
     return null;
@@ -126,7 +130,6 @@ var EventView = React.createClass({
 
 var styles = StyleSheet.create({
   container: styleExtend({
-    padding: 5,
   }, 'container'),
 
   heading: styleExtend({

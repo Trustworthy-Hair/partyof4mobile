@@ -136,34 +136,43 @@ var EventDetail = React.createClass({
     });
   },
 
+
   render: function () {
     if (!this.state.event) return this.renderLoadingView();
+
+    var hostView;
+    if (this.state.user.id !== this.state.event.host.id) {
+      hostView = (<HostView
+        host={this.state.event.host} 
+      />);
+    }
+
     return (
       <View>
         <Header />
-        <EventInfo 
-          event={this.state.event}
-          host={this.state.event.host} 
-          attendees={this.getAttendees()} 
-          pending={this.getPending()} 
-          currentUser={this.state.user}
-          goToReview={this.goToReview} 
-          joinEvent={this.joinEvent} 
-          updateEvent={this.updateEvent} 
-          endEvent={this.endEvent} 
-        />
-        <HostView
-          host={this.state.event.host} 
-        />
-        <Attendees 
-          attendeesList={this.getAttendees()} 
-        />
-        <Pending 
-          pendingList={this.getPending()} 
-          host={this.state.event.host}
-          currentUser={this.state.user} 
-          approveOrDenyUser={this.approveOrDenyUser} 
-        />
+          <View style={styles.innercontainer}>
+          <EventInfo 
+            event={this.state.event}
+            host={this.state.event.host} 
+            attendees={this.getAttendees()} 
+            pending={this.getPending()} 
+            currentUser={this.state.user}
+            goToReview={this.goToReview} 
+            joinEvent={this.joinEvent} 
+            updateEvent={this.updateEvent} 
+            endEvent={this.endEvent} 
+          />
+          {hostView}
+          <Attendees 
+            attendeesList={this.getAttendees()} 
+          />
+          <Pending 
+            pendingList={this.getPending()} 
+            host={this.state.event.host}
+            currentUser={this.state.user} 
+            approveOrDenyUser={this.approveOrDenyUser} 
+          />
+          </View>
       </View>
     );
   },
@@ -190,6 +199,10 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column'
+  },
+
+  innercontainer: {
+    padding: 8
   }
 });
 

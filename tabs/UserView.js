@@ -1,6 +1,10 @@
 // UserView.js
 
-var React = require('react-native');
+var React = require('react-native'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   Image,
@@ -13,7 +17,7 @@ var UserView = React.createClass({
 
   render: function () {
     return (
-      <View>
+      <View style={styles.user}>
         <Text style={styles.username} >{this.props.user.username}</Text>
         <Image 
           source={{uri: this.props.user.profileImageUrl}} 
@@ -26,9 +30,15 @@ var UserView = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  username: {
+  user: styleExtend({
+    width: 80,
+    margin: 5,
+    alignItems: 'center'
+  }, 'container'),
 
-  },
+  username: styleExtend({
+    fontSize: 15
+  },'font'),
 
   avatar: {
     width: 70,

@@ -2,7 +2,11 @@
 
 var React = require('react-native');
 
-var UserView = require('./UserView');
+var UserView = require('./UserView'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   StyleSheet,
@@ -25,9 +29,8 @@ var HostView = React.createClass({
 });
 
 var styles = StyleSheet.create({
-  title: {
-
-  }
+  title: styleExtend({
+  }, 'font')
 });
 
 module.exports = HostView;
