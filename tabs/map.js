@@ -116,7 +116,6 @@ var mapTab = React.createClass({
     console.log(e);
   },
   onSearch: function(text) {
-    console.log()
     this.setState({
       searchQ: text.replace(/ /g, '%20')
     }, this.getDataFromServer);
