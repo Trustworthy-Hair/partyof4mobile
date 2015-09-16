@@ -1,8 +1,7 @@
 // PendingList.js
 
-var React = require('react-native');
-
-var UserView = require('./UserView');
+var React = require('react-native'),
+    UserView = require('./UserView');
 
 var {
   StyleSheet,
@@ -24,8 +23,7 @@ var PendingList = React.createClass({
       );
     });
     return (
-      <View>
-        <Text>Pending Requests to Join Event</Text>
+      <View style={{flex:1, flexDirection:'row'}}>
         {pending}
       </View>
     );

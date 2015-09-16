@@ -1,22 +1,22 @@
-var React = require('react-native');
-var config = require('../config/config');
-var Dispatcher = require ('../dispatcher/dispatcher');
-var EventsStore = require('../stores/EventsStore');
-var UserStore = require('../stores/UserStore');
-var Constants = require('../constants/constants');
+var React       = require('react-native'),
+    config      = require('../config/config'),
+    Dispatcher  = require ('../dispatcher/dispatcher'),
+    EventsStore = require('../stores/EventsStore'),
+    UserStore   = require('../stores/UserStore'),
+    Constants   = require('../constants/constants');
 
-var Header = require('../components/header');
-var EventInfo = require('./EventInfo');
-var HostView = require('./HostView');
-var Attendees = require('./Attendees');
-var Pending = require('./Pending');
+var Header    = require('../components/header'),
+    EventInfo = require('./EventInfo'),
+    HostView  = require('./HostView'),
+    Attendees = require('./Attendees'),
+    Pending  = require('./Pending');
 
 var ActionTypes = Constants.ActionTypes;
 
-var JOIN_EVENT_REQUEST_URL = config.url + '/events/:eventId/join';
-var GET_EVENT_REQUEST_URL = config.url + '/events/';
-var UPDATE_EVENT_REQUEST_URL = config.url + '/events/';
-var APPROVE_USER_REQUEST_URL = config.url + '/events/:eventId/approve';
+var JOIN_EVENT_REQUEST_URL   = config.url + '/events/:eventId/join',
+    GET_EVENT_REQUEST_URL    = config.url + '/events/',
+    UPDATE_EVENT_REQUEST_URL = config.url + '/events/',
+    APPROVE_USER_REQUEST_URL = config.url + '/events/:eventId/approve';
 
 var {
   StyleSheet,
@@ -138,32 +138,40 @@ var EventDetail = React.createClass({
 
   render: function () {
     if (!this.state.event) return this.renderLoadingView();
+
+    var hostView;
+    if (this.state.user.id !== this.state.event.host.id) {
+      hostView = (<HostView
+        host={this.state.event.host} 
+      />);
+    }
+
     return (
       <View>
         <Header />
-        <EventInfo 
-          event={this.state.event}
-          host={this.state.event.host} 
-          attendees={this.getAttendees()} 
-          pending={this.getPending()} 
-          currentUser={this.state.user}
-          goToReview={this.goToReview} 
-          joinEvent={this.joinEvent} 
-          updateEvent={this.updateEvent} 
-          endEvent={this.endEvent} 
-        />
-        <HostView
-          host={this.state.event.host} 
-        />
-        <Attendees 
-          attendeesList={this.getAttendees()} 
-        />
-        <Pending 
-          pendingList={this.getPending()} 
-          host={this.state.event.host}
-          currentUser={this.state.user} 
-          approveOrDenyUser={this.approveOrDenyUser} 
-        />
+        <View style={styles.innercontainer}>
+          <EventInfo 
+            event={this.state.event}
+            host={this.state.event.host} 
+            attendees={this.getAttendees()} 
+            pending={this.getPending()} 
+            currentUser={this.state.user}
+            goToReview={this.goToReview} 
+            joinEvent={this.joinEvent} 
+            updateEvent={this.updateEvent} 
+            endEvent={this.endEvent} 
+          />
+          {hostView}
+          <Attendees 
+            attendeesList={this.getAttendees()} 
+          />
+          <Pending 
+            pendingList={this.getPending()} 
+            host={this.state.event.host}
+            currentUser={this.state.user} 
+            approveOrDenyUser={this.approveOrDenyUser} 
+          />
+        </View>
       </View>
     );
   },
@@ -190,6 +198,10 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column'
+  },
+
+  innercontainer: {
+    padding: 8
   }
 });
 

@@ -1,8 +1,11 @@
 // ApproveUser.js
 
-var React = require('react-native');
+var React = require('react-native'),
+    UserView = require('./UserView'),
+    stylingHelper = require('./../config/style.js');
 
-var UserView = require('./UserView');
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   StyleSheet,
@@ -25,14 +28,16 @@ var ApproveUser = React.createClass({
 
   render: function () {
     return (
-      <View>
+      <View style={styles.container}>
         <UserView user={this.props.userForApproval} />
-        <TouchableOpacity onPress={this.approveUser} >
-          <Text>Approve</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.denyUser} >
-          <Text>Decline</Text>
-        </TouchableOpacity>
+        <View style={styles.center}>
+          <TouchableOpacity onPress={this.approveUser} >
+            <Text style={styles.font}>Approve</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.denyUser} >
+            <Text style={styles.font}>Decline</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -40,6 +45,17 @@ var ApproveUser = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  container: styleExtend({
+    flex: 1,
+    flexDirection: 'row'
+  }, 'center'),
+
+  center: {
+    justifyContent: 'center',
+    width: 200
+  },
+
+  font: styleExtend({},'font')
 });
 
 module.exports = ApproveUser;

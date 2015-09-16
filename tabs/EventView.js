@@ -1,11 +1,17 @@
 // EventView.js
 
-var React = require('react-native');
+var React  = require('react-native'),
+    moment = require('moment'),
+    stylingHelper = require('./../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableHighlight,
   View
 } = React;
 
@@ -33,12 +39,23 @@ var EventView = React.createClass({
   },
 
   render: function () {
+    var plannedTime = moment(this.props.event.plannedTime).calendar();
+    var createdTime = moment(this.props.event.createdAt).fromNow();
+    var description = (this.props.event.description) ? this.props.event.description : 'No description';
+
     return (
-      <View>
-        <Text>Restaurant Name: {this.props.event.Location.name}</Text>
-        <Text>Event Description: {this.props.event.description}</Text>
-        <Text>Date/Time: {this.props.event.plannedTime}</Text>
-        <Text>Status: {this.props.event.status}</Text>
+      <View style={styles.container}>
+        <Text style={styles.heading}>{this.props.event.Location.name}</Text>
+        <Text style={styles.subheading}> Created {createdTime}</Text>
+        <View style={styles.horizontal}> 
+          <Text style={styles.label}>Planned for: </Text>
+          <Text style={styles.text}>{plannedTime}</Text>
+        </View>
+        <View style={styles.horizontal}> 
+          <Text style={styles.label}>Status: </Text>
+          <Text style={styles.text}>{this.props.event.currentActivity}</Text>
+        </View>
+        <Text style={styles.text}>{description}</Text>
         {this.renderGoToReviewButton()} 
         {this.renderJoinButton()}
         {this.renderEditButton()}
@@ -52,17 +69,21 @@ var EventView = React.createClass({
       return null;
     } else if (this.isUserAttendee()) {
       return (
-        <Text>You are attending this event!</Text>
+        <Text style={styles.text}>You are attending this event!</Text>
       );
     } else if (this.isUserPending()) {
       return (
-        <Text>You have requested to join this event!</Text>
+        <Text style={styles.text}>You have requested to join this event!</Text>
       );
     } else {
       return (
-        <TouchableOpacity onPress={this.props.joinEvent} >
-          <Text>Join Event</Text>
-        </TouchableOpacity>
+        <View style={styles.centerbutton}>
+          <TouchableHighlight onPress={this.props.joinEvent} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>Join Event</Text>
+            </View>
+        </TouchableHighlight>
+        </View>
       );
     }
   },
@@ -78,9 +99,13 @@ var EventView = React.createClass({
   renderEditButton: function () {
     if (this.isUserHost()) {
       return (
-        <TouchableOpacity onPress={this.props.toggleEdit} >
-          <Text>Edit Event</Text>
-        </TouchableOpacity>
+        <View style={styles.centerbutton}>
+          <TouchableOpacity onPress={this.props.toggleEdit} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>Edit Event</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     }
     return null;
@@ -89,14 +114,54 @@ var EventView = React.createClass({
   renderEndButton: function () {
     if (this.isUserHost()) {
       return (
-        <TouchableOpacity onPress={this.props.endEvent} >
-          <Text>End Event</Text>
-        </TouchableOpacity>
+        <View style={styles.centerbutton}>
+          <TouchableOpacity onPress={this.props.endEvent} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>End Event</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     }
     return null;
   }
 
+});
+
+var styles = StyleSheet.create({
+  container: styleExtend({
+  }, 'container'),
+
+  heading: styleExtend({
+    color: 'black'
+  }, 'submitfont'),
+
+  subheading: styleExtend({
+    color: styleGuide.colors.highlight,
+    textAlign: 'right'
+  }, 'font'),
+
+  text: styleExtend({
+  }, 'font'),
+
+  label: styleExtend({
+    fontWeight: 'bold'
+  }, 'font'),
+
+  horizontal: styleExtend({
+    flexDirection: 'row',
+  }, 'container'),
+
+  buttonText: styleExtend({
+  }, 'submitfont'),
+
+  button: styleExtend({
+    flex: 1,
+  }, 'button', 'center'),
+
+  centerbutton: {
+    alignItems: 'center'
+  }
 });
 
 module.exports = EventView;
