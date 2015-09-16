@@ -10,6 +10,7 @@ var React       = require('react-native'),
     NewTab      = require('./tabs/new'),
     MenuTab     = require('./tabs/menu'),
     EventDetail = require('./tabs/EventDetail'),
+    CreateReview = require('./tabs/CreateReview/CreateReview'),
     Login       = require('./components/login'),
     Dispatcher  = require('./dispatcher/dispatcher'),
     Constants   = require('./constants/constants'),
@@ -42,7 +43,8 @@ var tabs = {
   list : (<ListTab />),
   new : (<NewTab />),
   menu : (<MenuTab />),
-  eventDetail: (<EventDetail />)
+  eventDetail: (<EventDetail />),
+  createReview: (<CreateReview />)
 };
 
 var partyof4mobile = React.createClass({

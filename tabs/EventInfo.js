@@ -37,6 +37,7 @@ var EventInfo = React.createClass({
         attendees={this.props.attendees} 
         pending={this.props.pending}
         toggleEdit={this.toggleEdit} 
+        goToReview={this.props.goToReview} 
         joinEvent={this.props.joinEvent} 
         endEvent={this.props.endEvent}
       />
