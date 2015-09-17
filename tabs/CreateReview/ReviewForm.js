@@ -22,7 +22,7 @@ var ReviewForm = React.createClass({
 
   createReview: function () {
     // TODO: write the the function to pass the data to the CreateReview component
-    this.props.createReview()
+    this.props.createReview(this.state.subjects)
   },
 
   addHostToAttendees: function () {
@@ -51,10 +51,12 @@ var ReviewForm = React.createClass({
 
   renderSubject: function (subject) {
     return (
-      <ReviewSubjectRow 
-        subject={subject} 
-        setUserReview={this.setUserReview} 
-      />
+      <View>
+        <ReviewSubjectRow 
+          subject={subject} 
+          setUserReview={this.setUserReview} 
+        />
+      </View>
     );
   },
 

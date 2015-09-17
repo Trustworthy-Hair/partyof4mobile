@@ -9,7 +9,8 @@ var Header    = require('../components/header'),
     EventInfo = require('./EventInfo'),
     HostView  = require('./HostView'),
     Attendees = require('./Attendees'),
-    Pending  = require('./Pending');
+    Pending  = require('./Pending'),
+    Back = require('../components/common').BackButton;
 
 var ActionTypes = Constants.ActionTypes;
 

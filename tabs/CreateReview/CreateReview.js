@@ -7,16 +7,22 @@ var Dispatcher = require ('../../dispatcher/dispatcher');
 var EventsStore = require('../../stores/EventsStore');
 var UserStore = require('../../stores/UserStore');
 var Constants = require('../../constants/constants');
+var config     = require('../../config/config');
 
+var Back = require('../../components/common').BackButton;
 var Header = require('../../components/header');
 var ReviewHeader = require('./ReviewHeader');
 var ReviewForm = require('./ReviewForm');
+
+var ActionTypes = Constants.ActionTypes;
 
 var {
   StyleSheet,
   Text,
   View
 } = React;
+
+var REVIEW_URL = config.url+'/users/'
 
 var CreateReview = React.createClass({
   getInitialState: function () {
@@ -28,9 +34,43 @@ var CreateReview = React.createClass({
     };
   },
 
-  createReview: function (data) {
+  goBack: function() {
+    var payload = {};
+    payload.currentView = 'eventDetail';
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
+  },
+
+  createReview: function (subjects) {
     // TODO: write the HTTP request to send the review to the server
-    console.log(data);
+    var userData = UserStore.getData();
+    var currentEvent = EventsStore.getCurrentEvent();
+    var data = {
+      accessToken: userData.token,
+      subjects: []
+    }
+    for(var i = 0; i < subjects.length; i++){
+      data.subjects.push({
+        starRating: subjects[i].rating, 
+        text: subjects[i].text,
+        subjectId: subjects[i].id,
+        EventId: currentEvent.id
+      })
+    }
+    fetch(REVIEW_URL + userData.user.id + '/reviews' , {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then((response) => {
+      return response.json();
+    }).then((response) => {
+      console.log('@@@@@@@@@', response);
+    }).done();
   },
 
   getAttendees: function () {
@@ -43,6 +83,7 @@ var CreateReview = React.createClass({
     return (
       <View>
         <Header />
+        <Back onback={this.goBack}/>
         <ReviewHeader 
           event={this.state.event} 
         />
