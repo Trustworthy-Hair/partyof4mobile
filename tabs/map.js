@@ -26,10 +26,7 @@ var mapTab = React.createClass({
   mixins: [MapboxGLMap.Mixin],
   getInitialState: function () {
     return {
-      center: {
-        latitude: 38.8833,
-        longitude: -77.0167
-      },
+      center: UserStore.getData().location,
       zoom: 13,
       annotations: [],
       searchQ: ''
@@ -37,31 +34,8 @@ var mapTab = React.createClass({
   },
 
   componentDidMount: function() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          center: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          }
-        }, this.getDataFromServer);
-
-        var location = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude
-        };
-        var payload = {
-          location: location
-        };
-        Dispatcher.dispatch({
-          type: ActionTypes.STORE_USER,
-          payload: payload
-        });
-      },
-      (error) => alert(error.message),
-      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-    );
     EventsStore.addChangeListener(this._onEventsChange);
+    this.getDataFromServer();
   },
 
   componentWillUnmount: function () {
