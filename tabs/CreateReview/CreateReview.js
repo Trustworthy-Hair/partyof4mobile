@@ -14,6 +14,8 @@ var Header = require('../../components/header');
 var ReviewHeader = require('./ReviewHeader');
 var ReviewForm = require('./ReviewForm');
 
+var ActionTypes = Constants.ActionTypes;
+
 var {
   StyleSheet,
   Text,
@@ -30,6 +32,16 @@ var CreateReview = React.createClass({
       currentUser: userData.user,
       token: userData.token
     };
+  },
+
+  goBack: function() {
+    console.log('asdfasdfasdfasdfasdf');
+    var payload = {};
+    payload.currentView = 'eventDetail';
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
   },
 
   createReview: function (subjects) {
@@ -72,7 +84,7 @@ var CreateReview = React.createClass({
     return (
       <View>
         <Header />
-        <Back onback={() => {}}/>
+        <Back onback={this.goBack}/>
         <ReviewHeader 
           event={this.state.event} 
         />
