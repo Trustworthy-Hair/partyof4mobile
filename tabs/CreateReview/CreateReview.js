@@ -35,7 +35,6 @@ var CreateReview = React.createClass({
   },
 
   goBack: function() {
-    console.log('asdfasdfasdfasdfasdf');
     var payload = {};
     payload.currentView = 'eventDetail';
     Dispatcher.dispatch({
