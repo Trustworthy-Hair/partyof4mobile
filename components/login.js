@@ -1,4 +1,4 @@
-'use strict';
+// login.js
 
 var config = require('./../config/config.js'),
     Header = require('./header'),
@@ -66,6 +66,10 @@ var Login = React.createClass({
       }
     }, 200);
   },
+
+  returnToLogin: function() {
+    this.setState({view: 'login'});
+  },
   
   render() {
     if (this.state.view === 'login') {
@@ -115,7 +119,7 @@ var Login = React.createClass({
       );
     } else if (this.state.view === 'signup') {
       var inner = (
-        <Signup onSubmit={this.changeView}/>
+        <Signup onSubmit={this.changeView} onLogin={this.props.onLogin} returnToLogin={this.returnToLogin}/>
       );
     } 
 
