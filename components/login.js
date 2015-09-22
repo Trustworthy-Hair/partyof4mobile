@@ -115,7 +115,7 @@ var Login = React.createClass({
       );
     } else if (this.state.view === 'signup') {
       var inner = (
-        <Signup onSubmit={this.changeView}/>
+        <Signup onSubmit={this.changeView} onLogin={this.props.onLogin}/>
       );
     } 
 

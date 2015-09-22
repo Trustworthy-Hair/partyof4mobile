@@ -149,7 +149,7 @@ var partyof4mobile = React.createClass({
         var payload = {
           user: response.user,
           token: response.token,
-          currentView: 'loading'
+          currentView: 'map'
         };
         Dispatcher.dispatch({
           type: ActionTypes.STORE_USER,

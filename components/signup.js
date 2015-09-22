@@ -91,22 +91,12 @@ var Signup = React.createClass({
     }).then((response) => {
       return response.json();
     }).then((response) => {
-      if (response.token && response.user) {
-        AsyncStorage.multiSet([
-          ['token', response.token],
-          ['userId', response.user.id.toString()]
-        ]);
-        var payload = {
-          user: response.user,
-          token: response.token,
-          currentView: 'map'
-        };
-        Dispatcher.dispatch({
-          type: ActionTypes.STORE_USER,
-          payload: payload
-        });
-      }
-      this.changeTab('map');
+      this.props.onLogin({
+        username: this.state.username,
+        password: this.state.password
+      }, () => {
+        this.setState({ badLogin: true });
+      });
     }).done();
   },
   changeTab: function (tabName) {
