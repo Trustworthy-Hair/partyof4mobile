@@ -54,11 +54,16 @@ var historyTab = React.createClass({
   },
 
   render: function() {
+    var noEventsLabel;
+    if (this.state.events.length === 0) {
+      noEventsLabel = (<Text style={styles.heading}>There's nothing here! Join some events.</Text>);
+    }
+
     if (!this.state.loaded) {
       return (
         <View> 
           <Back onback={this.props.onback}/>
-          <Text style={styles.heading}> History</Text>
+          <Text style={styles.heading}> Your current/past events</Text>
         </View>
       );
     } else {
@@ -67,6 +72,7 @@ var historyTab = React.createClass({
           <Back onback={this.props.onback}/>
           <Text style={styles.heading}> History</Text>
           <View style={ styles.innercontainer }>
+            {noEventsLabel}
             <ListView
               dataSource={this.state.dataSource}
               renderRow={this.renderEvent}

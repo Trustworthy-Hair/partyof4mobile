@@ -4,7 +4,6 @@ var React = require('react-native'),
     Header = require('../components/header'),
     Profile = require('./menu/profile'),
     History = require('./menu/history'),
-    About = require('./menu/about'),
     Dispatcher = require('../dispatcher/dispatcher'),
     Constants = require('../constants/constants'),
     stylingHelper = require('./../config/style.js');
@@ -57,13 +56,10 @@ var menuTab = React.createClass({
       displayTab = (
         <View style={styles.innercontainer}>
           <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('profile'); }}>
-                <Text style={styles.text}>View Your Profile</Text>
+                <Text style={styles.text}>Profile</Text>
           </TouchableHighlight>
           <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('history'); }}>
-                <Text style={styles.text}>View Your History</Text>
-          </TouchableHighlight>
-          <TouchableHighlight style={styles.link} onPress={ () => { this.changePage('about'); }}>
-                <Text style={styles.text}>About Us</Text>
+                <Text style={styles.text}>Events</Text>
           </TouchableHighlight>
           <TouchableHighlight style={styles.link} onPress={ () => { this.logout(); }}>
                 <Text style={styles.text}>Logout</Text>
@@ -78,11 +74,7 @@ var menuTab = React.createClass({
       displayTab = (
         <History onback={this.changePage}/>
       );
-    } else if (this.state.currentPage === 'about') {
-      displayTab = (
-        <About onback={this.changePage}/>
-      );
-    }
+    } 
 
     return (
       <View style={ styles.container }>
