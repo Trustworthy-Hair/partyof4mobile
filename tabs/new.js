@@ -87,7 +87,7 @@ var newEventTab = React.createClass({
     setTimeout(() => {
       var date = new Date();
       var newTime = date.getTime();
-      if(Math.abs(this.state.time - newTime) > 500){
+      if(Math.abs(this.state.time - newTime) > 450){
         this.search(false, time);
       }
     }, 500)

@@ -9,6 +9,7 @@ var ActionTypes = Constants.ActionTypes;
 var CHANGE_EVENT = 'change';
 
 var _events = [];
+var _annotations = [];
 var _currentEvent = {};
 
 var _storeEvents = function (events) {
@@ -17,6 +18,10 @@ var _storeEvents = function (events) {
 
 var _storeCurrentEvent = function (event) {
   _currentEvent = event;
+};
+
+var _storeAnnotations = function(annotations){
+  _annotations = annotations;
 };
 
 var EventsStore = assign({}, EventEmitter.prototype, {
@@ -37,6 +42,10 @@ var EventsStore = assign({}, EventEmitter.prototype, {
     return _events;
   },
 
+  getAnnotations: function(){
+    return _annotations;
+  },
+
   getCurrentEvent: function () {
     return _currentEvent;
   }
@@ -49,6 +58,11 @@ EventsStore.dispatchToken = Dispatcher.register(function (action) {
 
     case ActionTypes.STORE_EVENTS:
       _storeEvents(action.events);
+      EventsStore.emitChange();
+      break;
+
+    case ActionTypes.STORE_ANNOTATIONS:
+      _storeAnnotations(action.annotations);
       EventsStore.emitChange();
       break;
 
