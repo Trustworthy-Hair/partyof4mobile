@@ -50,28 +50,35 @@ var mapTab = React.createClass({
       '&q=' + this.state.searchQ
     )
     .then((response) => response.json())
-    .then((events) => events.map(function(event) {
-      return {
-        latitude: event.Location.latitude,
-        longitude: event.Location.longitude,
-        title: event.Location.name,
-        subtitle: event.currentActivity,
-        rightCalloutAccessory: {
-          url: 'image!restaurant',
-          height: 24,
-          width: 24
-        },
-        annotationImage: {
-          url: 'image!restaurant',
-          height: 24,
-          width: 24
-        }
-      };
-    }))
-    .then((annotations) => {
+    .then((events) => {
       Dispatcher.dispatch({
         type: ActionTypes.STORE_EVENTS,
-        events: annotations
+        events: events
+      });
+      return events.map(function(event) {
+        return {
+          id: event.id.toString(),
+          latitude: event.Location.latitude,
+          longitude: event.Location.longitude,
+          title: event.Location.name,
+          subtitle: event.currentActivity,
+          rightCalloutAccessory: {
+            url: 'image!restaurant',
+            height: 24,
+            width: 24
+          },
+          annotationImage: {
+            url: 'image!restaurant',
+            height: 24,
+            width: 24
+          }
+        };
+      })
+    })
+    .then((annotations) => {
+      Dispatcher.dispatch({
+        type: ActionTypes.STORE_ANNOTATIONS,
+        annotations: annotations
       });
     })
     .done();
@@ -79,15 +86,26 @@ var mapTab = React.createClass({
 
   _onEventsChange: function () {
     this.setState({
-      annotations: EventsStore.getEvents()
+      annotations: EventsStore.getAnnotations()
     });
   },
-
-  onOpenAnnotation: function (annotation) {
-    console.log(annotation);
-  },
-  onRightAnnotationTapped: function (e) {
-    console.log(e);
+  openEventDetail: function(annotation){
+    var id = parseInt(annotation.id);
+    var events = EventsStore.getEvents();
+    var payload;
+    for(var i = 0; i < events.length; i++){
+      if(events[i].id === id) payload = events[i];
+    }
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_CURRENT_EVENT,
+      payload: payload
+    });
+    payload = {};
+    payload.currentView = 'eventDetail';
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
   },
   onSearch: function(text) {
     this.setState({
@@ -123,6 +141,7 @@ var mapTab = React.createClass({
           annotations={this.state.annotations}
           onUpdateUserLocation={this.onUpdateUserLocation}
           onRegionChange={this.onRegionChange}
+          onRightAnnotationTapped={this.openEventDetail}
         />
       </View>
     );
