@@ -1,17 +1,18 @@
-'use strict';
+// signup.js
 
-var Back = require('./common').BackButton,
-    stylingHelper = require('./../config/style.js');
+var Back          = require('./common').BackButton,
+    stylingHelper = require('./../config/style.js'),
+    React         = require('react-native'),
+    UserStore     = require('../stores/UserStore'),
+    Dispatcher    = require('../dispatcher/dispatcher'),
+    Constants     = require('../constants/constants'),
+    config        = require('../config/config');
 
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;
 
-var React  = require('react-native');
-var UserStore   = require('../stores/UserStore');
-var Dispatcher  = require('../dispatcher/dispatcher');
-var Constants   = require('../constants/constants');
-var config = require('../config/config')
 var ActionTypes = Constants.ActionTypes;
+
 var SIGNUP_REQUEST_URL = config.url + '/users/signup';
 
 var {
@@ -25,61 +26,61 @@ var {
   View
 } = React;
 
-
+/* CONSTANTS */
 var usernameMinLength = 4;
 var usernameMaxLength = 12;
 var passwordMinLength = 6;
 
+
 var Signup = React.createClass({
   getInitialState() {
     return {
-      username: '',
-      email: '',
-      password: '',
-      password2: '',
-      validUsername: false,
-      validEmail: false,
-      validPassword: false,
-      validPassword2: true,
-      showLabels: [false,false,false,false]
+      fields: { username: ['', false],
+                email: ['', false],
+                password: ['', false],
+                password2: ['', true]},
+      badSignup: false
     };
   },
-  showLabel: function(num, valid) {
-    var showLabels = this.state.showLabels;
-    showLabels[num] = valid;
-    this.setState({showLabels: showLabels});
+
+  setFields: function(key, text, valid) {
+    var oldFields = this.state.fields;
+    oldFields[key] = [text, valid];
+    this.setState({oldFields});
   },
+
   checkUsername: function(text) {
     var valid = (text.length >= usernameMinLength);
-    this.setState({validUsername: valid, username: text});
-    this.showLabel(0, valid);
+    this.setFields('username', text, valid);
   },
+
   checkEmail: function(text) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     var valid = re.test(text)
-    this.setState({validEmail: valid, email: text});
-    this.showLabel(1, valid);
+    this.setFields('email', text, valid);
   },
+
   checkPassword: function(text) {
     var valid = (text.length >= passwordMinLength);
     if (!/.*(?=.*[a-z])(?=.*[A-Z]).*/.test(text)) valid = false;
-    this.setState({validPassword: valid, password: text, validPassword2: (text === this.state.password2)});
-    this.showLabel(2, valid);
-    this.showLabel(3, valid);
+    this.setFields('password', text, valid);
+    this.setFields('password2', this.state.fields.password2[0], text === this.state.fields.password2[0]);
   },
+
   checkPassword2: function(text) {
-    var valid = (text === this.state.password);
-    this.setState({validPassword2: valid, password2: text});
-    this.showLabel(3, valid);
+    var valid = (text === this.state.fields.password[0]);
+    this.setFields('password2', text, valid);
   },
+
   isValid() {
-    return (this.state.validUsername && this.state.validEmail && this.state.validPassword && this.state.validPassword2);
+    return this.state.fields.username[1] && this.state.fields.email[1] && this.state.fields.password[1] && this.state.fields.password2[1];
   },
+
   signUp: function(){
     var user = {
-      username: this.state.username,
-      password: this.state.password,
-      email: this.state.email
+      username: this.state.fields.username[0],
+      password: this.state.fields.password[0],
+      email: this.state.fields.email[0]
     }
     fetch(SIGNUP_REQUEST_URL, {
       method: 'POST',
@@ -92,22 +93,14 @@ var Signup = React.createClass({
       return response.json();
     }).then((response) => {
       this.props.onLogin({
-        username: this.state.username,
-        password: this.state.password
+        username: this.state.fields.username[0],
+        password: this.state.fields.password[0]
       }, () => {
-        this.setState({ badLogin: true });
+        this.setState({ badSignup: true });
       });
     }).done();
   },
-  changeTab: function (tabName) {
-    StatusBarIOS.setStyle(tabName === 'map' ? 1 : 0);
-    var payload = {};
-    payload.currentView = tabName;
-    Dispatcher.dispatch({
-      type: ActionTypes.STORE_USER,
-      payload: payload
-    });
-  },
+
   scrollUp: function(field) {
     var fieldname = field + 'input'; 
     this.refs[fieldname].focus();
@@ -125,6 +118,7 @@ var Signup = React.createClass({
 
     this.refs['scrollview'].scrollTo(scrollDistance);
   },
+
   scrollDown: function() {
     setTimeout(() => {
       if (!(this.refs['usernameinput'].isFocused() || this.refs['emailinput'].isFocused() ||
@@ -133,8 +127,11 @@ var Signup = React.createClass({
       }
     }, 200);
   },
+
   render: function() {
     var usernameWarning, passwordWarning, password2Warning, emailWarning, submitButton;
+
+    // creates the warnings for invalid inputs
     var warningGenerator = (num) => {
       var text = (num === undefined) ? 'Required' : `Must be at least ${num} characters`;
       return (<Text style={styles.warning}>{text}</Text>);
@@ -144,58 +141,62 @@ var Signup = React.createClass({
       submitButton = (<TouchableHighlight onPress={this.signUp} style={styles.submit}>
                       <Text style={styles.submitText}>SIGN UP</Text></TouchableHighlight>);
     } else {
-      if (!this.state.validUsername) {
-        usernameWarning = this.state.username === '' ? warningGenerator() : warningGenerator(usernameMinLength);
+      if (!this.state.fields.username[1]) {
+        usernameWarning = this.state.fields.username[0] === '' ? warningGenerator() : warningGenerator(usernameMinLength);
       }
-      if (!this.state.validEmail) {
-        emailWarning = this.state.email === '' ? warningGenerator() : (<Text style={styles.warning}>Please enter a valid email</Text>);
+      if (!this.state.fields.email[1]) {
+        emailWarning = this.state.fields.email[0] === '' ? warningGenerator() : (<Text style={styles.warning}>Please enter a valid email</Text>);
       }
-      if (!this.state.validPassword) {
-        if (this.state.password === '') { 
+      if (!this.state.fields.password[1]) {
+        if (this.state.fields.password[0] === '') { 
           passwordWarning = warningGenerator();
-        } else if (this.state.password.length < passwordMinLength) {
+        } else if (this.state.fields.password[0].length < passwordMinLength) {
           passwordWarning = warningGenerator(passwordMinLength);
         } else {
           passwordWarning = (<Text style={styles.warning}>Must contain uppercase/lowercase characters</Text>);
         }
       }
-      if (!this.state.validPassword2) {
+      if (!this.state.fields.password2[1]) {
         password2Warning = (<Text style={styles.warning}>Must match password</Text>); 
       }
     }
 
-    var fields = ['username','email','password','retype password'];
-    var labels = [];
-    this.state.showLabels.forEach(function(showLabel, index) {
-      if (showLabel) labels[index] = (<SignupLabel text={fields[index]}/>);
-    });
+    // creates the label above fields
+    var labels = {};
+    for (key in this.state.fields) {
+      if (this.state.fields[key][0].length > 0) {
+        var labelTitle = (key === 'password2') ? 'retype password' : key;
+        labels[key] = (<SignupLabel text={labelTitle}/>);
+      }
+    }
 
+    // renders the screen
     return (
       <ScrollView ref='scrollview' contentContainerStyle={styles.container} style={styles.scroll} scrollEnabled={false}>
         <Back onback={this.returnToLogin} />
         <Text style={styles.headingText}>Get started with PartyOf4</Text>
-        {labels[0]}
+        {labels.username}
         <View style={styles.textInputContainer}>
           <TextInput ref='usernameinput' style={styles.textInput} placeholder='username' maxLength={usernameMaxLength} 
           onChangeText={this.checkUsername} onFocus={() => this.scrollUp('username')} onBlur={this.scrollDown}/>
         </View>
         {usernameWarning}
 
-        {labels[1]}
+        {labels.email}
         <View style={styles.textInputContainer}>
           <TextInput ref='emailinput' style={styles.textInput} placeholder='email' 
           onChangeText={this.checkEmail} onFocus={() => this.scrollUp('email')} onBlur={this.scrollDown}/>
         </View>
         {emailWarning}
 
-        {labels[2]}
+        {labels.password}
         <View style={styles.textInputContainer}>
           <TextInput ref='passwordinput' style={styles.textInput} secureTextEntry={true} placeholder='password' 
           onChangeText={this.checkPassword} onFocus={() => this.scrollUp('password')} onBlur={this.scrollDown}/>
         </View>
         {passwordWarning}
 
-        {labels[3]}
+        {labels.password2}
         <View style={styles.textInputContainer}>
           <TextInput ref='password2input' style={styles.textInput} secureTextEntry={true} placeholder='retype password' 
           onChangeText={this.checkPassword2} onFocus={() => this.scrollUp('password2')} onBlur={this.scrollDown}/>

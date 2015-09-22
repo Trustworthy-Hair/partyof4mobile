@@ -1,4 +1,4 @@
-'use strict';
+// login.js
 
 var config = require('./../config/config.js'),
     Header = require('./header'),
