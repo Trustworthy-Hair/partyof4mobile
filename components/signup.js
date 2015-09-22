@@ -182,7 +182,7 @@ var Signup = React.createClass({
     // renders the screen
     return (
       <ScrollView ref='scrollview' contentContainerStyle={styles.container} style={styles.scroll} scrollEnabled={false}>
-        <Back onback={this.returnToLogin} />
+        <Back onback={this.props.returnToLogin} />
         <Text style={styles.headingText}>Get started with PartyOf4</Text>
         {labels.username}
         <View style={styles.textInputContainer}>
