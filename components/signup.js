@@ -96,7 +96,11 @@ var Signup = React.createClass({
         username: this.state.fields.username[0],
         password: this.state.fields.password[0]
       }, () => {
-        this.setState({ badSignup: true });
+        var fields = '';
+        for (var key in response.fields) {
+          fields += key
+        }
+        this.setState({ badSignup: response.message + ' on: ' + fields});
       });
     }).done();
   },
@@ -129,7 +133,7 @@ var Signup = React.createClass({
   },
 
   render: function() {
-    var usernameWarning, passwordWarning, password2Warning, emailWarning, submitButton;
+    var usernameWarning, passwordWarning, password2Warning, emailWarning, signupWarning, submitButton;
 
     // creates the warnings for invalid inputs
     var warningGenerator = (num) => {
@@ -170,6 +174,11 @@ var Signup = React.createClass({
       }
     }
 
+    // adds warning for why signup failed 
+    if (this.state.badSignup) {
+      signupWarning = (<Text style={styles.warning}>{this.state.badSignup}</Text>);
+    }
+
     // renders the screen
     return (
       <ScrollView ref='scrollview' contentContainerStyle={styles.container} style={styles.scroll} scrollEnabled={false}>
@@ -203,6 +212,7 @@ var Signup = React.createClass({
         </View>
         {password2Warning}
 
+        {signupWarning}
         {submitButton}
       </ScrollView>
     );
