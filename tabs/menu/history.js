@@ -54,41 +54,34 @@ var historyTab = React.createClass({
   },
 
   render: function() {
-    if (!this.state.loaded) {
-      return this.renderLoadingView();
-    } 
-    return this.renderEvents();
-  },
-
-  renderLoadingView: function() {
-    return (
-      <View> 
-        <Back onback={this.props.onback}/>
-        <Text style={styles.heading}> History</Text>
-      </View>
-    );
-  },
-
-  renderEvents: function() {
     var noEventsLabel;
     if (this.state.events.length === 0) {
       noEventsLabel = (<Text style={styles.heading}>There's nothing here! Join some events.</Text>);
     }
-    
-    return (
-      <View style={styles.container}> 
-        <Back onback={this.props.onback}/>
-        <Text style={styles.heading}> Your current/past events</Text>
-        <View style={ styles.innercontainer }>
-          {noEventsLabel}
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={this.renderEvent}
-            style={{marginBottom: 40}}
-          />
+
+    if (!this.state.loaded) {
+      return (
+        <View> 
+          <Back onback={this.props.onback}/>
+          <Text style={styles.heading}> Your current/past events</Text>
         </View>
-      </View>
-    );
+      );
+    } else {
+      return (
+        <View style={styles.container}> 
+          <Back onback={this.props.onback}/>
+          <Text style={styles.heading}> History</Text>
+          <View style={ styles.innercontainer }>
+            {noEventsLabel}
+            <ListView
+              dataSource={this.state.dataSource}
+              renderRow={this.renderEvent}
+              style={{marginBottom: 40}}
+            />
+          </View>
+        </View>
+      );
+    }
   },
 
   renderEvent: function(event) {
