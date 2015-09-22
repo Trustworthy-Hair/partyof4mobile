@@ -55,27 +55,34 @@ var historyTab = React.createClass({
 
   render: function() {
     if (!this.state.loaded) {
-      return (
-        <View> 
-          <Back onback={this.props.onback}/>
-          <Text style={styles.heading}> History</Text>
+      return this.renderLoadingView();
+    } 
+    return this.renderEvents();
+  },
+
+  renderLoadingView: function() {
+    return (
+      <View> 
+        <Back onback={this.props.onback}/>
+        <Text style={styles.heading}> History</Text>
+      </View>
+    );
+  },
+
+  renderEvents: function() {
+    return (
+      <View style={styles.container}> 
+        <Back onback={this.props.onback}/>
+        <Text style={styles.heading}> History</Text>
+        <View style={ styles.innercontainer }>
+          <ListView
+            dataSource={this.state.dataSource}
+            renderRow={this.renderEvent}
+            style={{marginBottom: 40}}
+          />
         </View>
-      );
-    } else {
-      return (
-        <View style={styles.container}> 
-          <Back onback={this.props.onback}/>
-          <Text style={styles.heading}> History</Text>
-          <View style={ styles.innercontainer }>
-            <ListView
-              dataSource={this.state.dataSource}
-              renderRow={this.renderEvent}
-              style={{marginBottom: 40}}
-            />
-          </View>
-        </View>
-      );
-    }
+      </View>
+    );
   },
 
   renderEvent: function(event) {
