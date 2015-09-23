@@ -2,7 +2,6 @@
 
 var React = require('react-native'),
     ApproveUser = require('./ApproveUser'),
-    PendingList = require('./PendingList'),
     stylingHelper = require('./../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
@@ -18,6 +17,7 @@ var Pending = React.createClass({
 
   getInitialState: function () {
     return {
+      list: this.props.pendingList,
       userForApproval: null
     };
   },
@@ -26,8 +26,25 @@ var Pending = React.createClass({
     return this.props.currentUser.id === this.props.host.id;
   },
 
-  setUserForApproval: function (user) {
+  setUserForApproval: function (user, deleteBool) {
+    if (deleteBool) {
+      var previousUsers = this.state.userForApproval;
+      previousUsers.shift();
+    } else {
+      var previousUsers = this.state.userForApproval;
+      previousUsers.push(user);
+    }
     this.setState({
+      userForApproval: previousUsers
+    });
+  },
+
+  removeFromPending: function() {
+    var previousUsers = this.state.list;
+    var user = previousUsers.shift();
+
+    this.setState({
+      userForApproval: previousUsers,
       userForApproval: user
     });
   },
@@ -35,21 +52,23 @@ var Pending = React.createClass({
   render: function () {
     if (!this.isUserHost()) return null;
 
+    if (this.state.userForApproval === null && this.state.list.length > 0) {
+      this.removeFromPending();
+    }
+
     var middleSection;
     if (this.state.userForApproval) {
       middleSection = (
         <ApproveUser 
           approveOrDenyUser={this.props.approveOrDenyUser} 
-          setUserForApproval={this.setUserForApproval}
+          removeFromPending={this.removeFromPending}
           userForApproval={this.state.userForApproval} 
+          renderProfile ={this.props.renderProfile} 
         />
       );
     } else {
       middleSection = (
-        <PendingList 
-          pendingList={this.props.pendingList} 
-          setUserForApproval={this.setUserForApproval} 
-        />
+        <Text style={styles.font}>No pending users!</Text>
       );
     }
     return (
@@ -62,8 +81,12 @@ var Pending = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  font: styleExtend({
+  }, 'font'),
+
   title: styleExtend({
-  }, 'font')
+    fontWeight: 'bold'
+  }, 'font'),
 });
 
 module.exports = Pending;

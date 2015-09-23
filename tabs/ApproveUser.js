@@ -18,18 +18,20 @@ var ApproveUser = React.createClass({
 
   approveUser: function () {
     this.props.approveOrDenyUser(this.props.userForApproval.id, true);
-    this.props.setUserForApproval(null);
+    this.props.removeFromPending();
   },
 
   denyUser: function () {
     this.props.approveOrDenyUser(this.props.userForApproval.id, false);
-    this.props.setUserForApproval(null);
+    this.props.removeFromPending();
   },
 
   render: function () {
     return (
       <View style={styles.container}>
-        <UserView user={this.props.userForApproval} />
+        <UserView user={this.props.userForApproval} 
+                  renderProfile={this.props.renderProfile} 
+        />
         <View style={styles.center}>
           <TouchableOpacity onPress={this.approveUser} >
             <Text style={styles.font}>Approve</Text>

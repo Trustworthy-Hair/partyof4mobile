@@ -18,7 +18,7 @@ var HostView = React.createClass({
 
   render: function () {
     return (
-      <View>
+      <View style={{alignItems: 'center'}}>
         <Text style={styles.title} >Host</Text>
         <UserView
           renderProfile={this.props.renderProfile}
@@ -31,6 +31,7 @@ var HostView = React.createClass({
 
 var styles = StyleSheet.create({
   title: styleExtend({
+    fontWeight: 'bold'
   }, 'font')
 });
 
