@@ -29,7 +29,9 @@ var ApproveUser = React.createClass({
   render: function () {
     return (
       <View style={styles.container}>
-        <UserView user={this.props.userForApproval} />
+        <UserView user={this.props.userForApproval} 
+                  renderProfile={this.props.renderProfile} 
+        />
         <View style={styles.center}>
           <TouchableOpacity onPress={this.approveUser} >
             <Text style={styles.font}>Approve</Text>

@@ -2,7 +2,6 @@
 
 var React = require('react-native'),
     ApproveUser = require('./ApproveUser'),
-    PendingList = require('./PendingList'),
     stylingHelper = require('./../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
@@ -64,14 +63,12 @@ var Pending = React.createClass({
           approveOrDenyUser={this.props.approveOrDenyUser} 
           removeFromPending={this.removeFromPending}
           userForApproval={this.state.userForApproval} 
+          renderProfile ={this.props.renderProfile} 
         />
       );
     } else {
       middleSection = (
-        <PendingList 
-          pendingList={this.props.pendingList} 
-          renderProfile={this.props.renderProfile} 
-        />
+        <Text style={styles.title}>No pending users!</Text>
       );
     }
     return (
