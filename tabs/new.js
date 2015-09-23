@@ -7,10 +7,13 @@ var React      = require('react-native'),
     Dispatcher = require ('../dispatcher/dispatcher'),
     UserStore  = require('../stores/UserStore'),
     Back       = require('../components/common').BackButton,
+    Constants   = require('../constants/constants'),
     stylingHelper = require('./../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;
+
+var ActionTypes = Constants.ActionTypes;
 
 var REQUEST_URL = config.url;
 
@@ -47,6 +50,14 @@ var newEventTab = React.createClass({
       description: '',
       event: {}
     };
+  },
+  goToMap: function(){
+    var payload = {};
+    payload.currentView = 'map';
+    Dispatcher.dispatch({
+      type: ActionTypes.STORE_USER,
+      payload: payload
+    });
   },
 
   createResultsDataSource: function () {
@@ -137,6 +148,8 @@ var newEventTab = React.createClass({
       delete response.token;
       this.setState({event: response});
     }).done();
+    console.log(this.props);
+    this.goToMap();
   },
 
   componentDidMount: function(){
