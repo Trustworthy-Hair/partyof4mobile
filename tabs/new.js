@@ -148,7 +148,6 @@ var newEventTab = React.createClass({
       delete response.token;
       this.setState({event: response});
     }).done();
-    console.log(this.props);
     this.goToMap();
   },
 
