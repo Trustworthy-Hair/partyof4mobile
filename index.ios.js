@@ -200,7 +200,7 @@ var partyof4mobile = React.createClass({
 
     if (icons[selectedTab]) {
       return (
-        <TabBarIOS tintColor='#2e6a8b' barTintColor='white' translucent={false}>
+        <TabBarIOS style={styles.tabBar} tintColor='#2e6a8b' barTintColor='white' translucent={false}>
           {tabBarItems}
         </TabBarIOS>
       );
@@ -222,6 +222,9 @@ var styles = StyleSheet.create({
     flexDirection: 'column',
     flex: 1
   },
+  tabBar: {
+    paddingTop: 20,
+  }
 });
 
 AppRegistry.registerComponent('partyof4mobile', () => partyof4mobile);
