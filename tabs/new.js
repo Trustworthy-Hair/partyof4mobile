@@ -149,6 +149,7 @@ var newEventTab = React.createClass({
       this.setState({event: response});
     }).done();
     this.goToMap();
+    this.setState({event: {}})
   },
 
   componentDidMount: function(){
@@ -197,17 +198,6 @@ var newEventTab = React.createClass({
               </View>
             </View>
           </View>
-        </View>
-      );
-    } else if (this.state.event.description && this.state.location.name) {
-      var des = this.state.event.description;
-      return (
-        <View style={styles.container} >
-          <Header />
-          <Back onback={() =>{
-              this.setState({event: {}})
-            }}/>
-          <Text>{des}</Text>
         </View>
       );
     } else {
