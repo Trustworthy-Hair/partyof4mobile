@@ -53,7 +53,7 @@ var UserProfile = React.createClass({
     var requestUrl = UPDATE_PROFILE_REQUEST_URL.replace(':userId', this.props.subject.id);
     requestUrl += '?accessToken=' + token;
     fetch(requestUrl, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
