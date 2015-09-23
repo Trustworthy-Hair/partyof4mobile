@@ -68,7 +68,6 @@ var UserProfile = React.createClass({
     }).then((response) => {
       return response.json();
     }).then((subject) => {
-      console.log(subject);
       this.setState({
         subject: subject
       });
