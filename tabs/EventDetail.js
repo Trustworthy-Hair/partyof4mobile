@@ -10,6 +10,7 @@ var Header    = require('../components/header'),
     HostView  = require('./HostView'),
     Attendees = require('./Attendees'),
     Pending  = require('./Pending'),
+    Profile = require('./UserProfile'),
     Back = require('../components/common').BackButton;
 
 var ActionTypes = Constants.ActionTypes;
@@ -33,7 +34,9 @@ var EventDetail = React.createClass({
     return {
       event: event,
       user: userData.user,
-      token: userData.token
+      token: userData.token,
+      renderProfile: false,
+      subject: {}
     };
   },
 
@@ -136,6 +139,16 @@ var EventDetail = React.createClass({
       return !user.UserEvents.userConfirmed && user.UserEvents.arrivalStatus !== 'Declined';
     });
   },
+  onback: function(){
+    this.setState({renderProfile: false})
+  },
+
+  renderProfile: function(user){
+    this.setState({
+      subject: user,
+      renderProfile: true
+    })
+  },
 
   render: function () {
     if (!this.state.event) return this.renderLoadingView();
@@ -143,38 +156,50 @@ var EventDetail = React.createClass({
     var hostView;
     if (this.state.user.id !== this.state.event.host.id) {
       hostView = (<HostView
+        renderProfile={this.renderProfile}
         host={this.state.event.host} 
       />);
     }
-
-    return (
-      <View>
-        <Header />
-        <View style={styles.innercontainer}>
-          <EventInfo 
-            event={this.state.event}
-            host={this.state.event.host} 
-            attendees={this.getAttendees()} 
-            pending={this.getPending()} 
-            currentUser={this.state.user}
-            goToReview={this.goToReview} 
-            joinEvent={this.joinEvent} 
-            updateEvent={this.updateEvent} 
-            endEvent={this.endEvent} 
-          />
-          {hostView}
-          <Attendees 
-            attendeesList={this.getAttendees()} 
-          />
-          <Pending 
-            pendingList={this.getPending()} 
-            host={this.state.event.host}
-            currentUser={this.state.user} 
-            approveOrDenyUser={this.approveOrDenyUser} 
-          />
+    if(!this.state.renderProfile){
+      return (
+        <View>
+          <Header />
+          <View style={styles.innercontainer}>
+            <EventInfo 
+              event={this.state.event}
+              host={this.state.event.host} 
+              attendees={this.getAttendees()} 
+              pending={this.getPending()} 
+              currentUser={this.state.user}
+              goToReview={this.goToReview} 
+              joinEvent={this.joinEvent} 
+              updateEvent={this.updateEvent} 
+              endEvent={this.endEvent} 
+            />
+            {hostView}
+            <Attendees
+              onback={this.onback} 
+              attendeesList={this.getAttendees()}
+              renderProfile={this.renderProfile} 
+            />
+            <Pending 
+              pendingList={this.getPending()} 
+              host={this.state.event.host}
+              currentUser={this.state.user} 
+              approveOrDenyUser={this.approveOrDenyUser} 
+            />
+          </View>
         </View>
-      </View>
-    );
+      );
+    }else{
+      return (
+        <Profile 
+          onback={this.onback}
+          currentUser={this.state.user}
+          subject={this.state.subject}
+        />
+      );
+    }
   },
 
   renderLoadingView: function() {
