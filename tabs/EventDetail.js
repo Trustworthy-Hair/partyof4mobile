@@ -147,10 +147,15 @@ var EventDetail = React.createClass({
   },
 
   getPending: function () {
-    return this.state.event.Users.filter(function (user) {
-      return !user.UserEvents.userConfirmed && user.UserEvents.arrivalStatus !== 'Declined';
+    return this.state.event.Users.filter((user) => {
+      if (user.id === this.state.user.id) {
+        return false;
+      } else {
+        return !user.UserEvents.userConfirmed && user.UserEvents.arrivalStatus !== 'Declined';
+      }
     });
   },
+
   onback: function(){
     this.setState({renderProfile: false})
   },
