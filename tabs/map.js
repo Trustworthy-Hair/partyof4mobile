@@ -112,6 +112,11 @@ var mapTab = React.createClass({
       searchQ: text.replace(/ /g, '%20')
     }, this.getDataFromServer);
   },
+  onCancel: function() {
+    this.setState({
+      searchQ: ''
+    }, this.getDataFromServer);
+  },
   onRegionChange: function(location) {
     this.setState({
       latitude: location.latitude,
@@ -124,6 +129,7 @@ var mapTab = React.createClass({
         <Header />
         <SearchBar
           onSearchButtonPress={(text) => this.onSearch(text)}
+          onCancelButtonPress={this.onCancel}
         />
         <MapboxGLMap
           style={styles.map}
