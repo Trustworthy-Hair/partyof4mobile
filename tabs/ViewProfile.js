@@ -36,6 +36,13 @@ var UserProfile = React.createClass({
     return 'Star Rating: ' + averageStars;
   },
 
+  renderEditButton: function () {
+    if (this.props.subject.id === this.props.currentUser.id) {
+      return (<Text onPress={this.props.toggleEdit}>Edit</Text>);
+    }
+    return null;
+  },
+
   renderInterests: function (interest) {
     return (
       <Text style={styles.listItem}>{interest}</Text>
@@ -58,7 +65,7 @@ var UserProfile = React.createClass({
           <Image style={styles.backgroundImg} source={{uri: subject.profileImageUrl}}>
             <View style={styles.transparency} />
             <Back onback={this.props.goBack} color='white' />
-            <Text onPress={this.props.toggleEdit}>Edit</Text>
+            {this.renderEditButton()}
             <Image style={styles.profileImg} source={{uri: subject.profileImageUrl}} />
             <Text style={styles.username}>{subject.username}</Text>
           </Image>

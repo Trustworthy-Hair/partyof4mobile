@@ -52,8 +52,6 @@ var UserProfile = React.createClass({
   updateProfile: function (updatedUser) {
     var requestUrl = UPDATE_PROFILE_REQUEST_URL.replace(':userId', this.props.subject.id);
     requestUrl += '?accessToken=' + token;
-    console.log(updatedUser);
-    console.log(requestUrl);
     fetch(requestUrl, {
       method: 'PUT',
       headers: {
@@ -99,7 +97,7 @@ var UserProfile = React.createClass({
     if (this.state.editing) {
       return (
         <EditProfile 
-          subject={this.props.subject} 
+          subject={this.state.subject} 
           toggleEdit={this.toggleEdit} 
           updateProfile={this.updateProfile} 
         />
@@ -107,7 +105,7 @@ var UserProfile = React.createClass({
     }
     return (
       <ViewProfile 
-        subject={this.props.subject} 
+        subject={this.state.subject} 
         currentUser={this.props.currentUser} 
         reviews={this.state.reviews} 
         toggleEdit={this.toggleEdit} 
