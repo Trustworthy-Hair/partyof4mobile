@@ -33,8 +33,12 @@ var historyTab = React.createClass({
     };
   },
 
+  goBack: function () {
+    this.props.onback(this.props.lastPage);
+  },
+
   getDataFromServer: function() {
-    var GET_HISTORY_REQUEST_URL = config.url + '/users/'+UserStore.getData().user.id+'/history';
+    var GET_HISTORY_REQUEST_URL = config.url + '/users/'+this.props.currentUser.id+'/history';
 
     fetch(GET_HISTORY_REQUEST_URL)
     .then((response) => response.json())
@@ -62,14 +66,14 @@ var historyTab = React.createClass({
     if (!this.state.loaded) {
       return (
         <View> 
-          <Back onback={this.props.onback}/>
+          <Back onback={this.goBack}/>
           <Text style={styles.heading}> Your current/past events</Text>
         </View>
       );
     } else {
       return (
         <View style={styles.container}> 
-          <Back onback={this.props.onback}/>
+          <Back onback={this.goBack}/>
           <Text style={styles.heading}> History</Text>
           <View style={ styles.innercontainer }>
             {noEventsLabel}
