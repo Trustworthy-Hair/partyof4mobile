@@ -148,7 +148,7 @@ var EventDetail = React.createClass({
 
   getPending: function () {
     return this.state.event.Users.filter((user) => {
-      if (user.id === this.state.user.id) {
+      if (user.id === this.state.user.id && user.id === this.state.event.host.id) {
         return false;
       } else {
         return !user.UserEvents.userConfirmed && user.UserEvents.arrivalStatus !== 'Declined';

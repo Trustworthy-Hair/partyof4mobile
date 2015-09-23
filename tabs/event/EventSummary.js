@@ -33,7 +33,11 @@ var EventSummary = React.createClass({
     if (this.props.type !== 'history') {
       subHeading = (<Text style={styles.info}>{(event.distance/1609).toFixed(2) + 'mi'} || {timeStamp}</Text>);
     } else {
-      subHeading = (<Text style={styles.info}>{timeStamp}</Text>);
+      if (event.completedStatus) {
+        subHeading = (<Text style={styles.info}>Completed</Text>);
+      } else {
+        subHeading = (<Text style={styles.info}>{timeStamp}</Text>);
+      }
     }
 
     return (
