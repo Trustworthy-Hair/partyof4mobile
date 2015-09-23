@@ -65,9 +65,13 @@ var EventView = React.createClass({
   renderButtons: function() {
     if (this.props.event.completedStatus) {
       return (
-        <TouchableOpacity onPress={this.props.goToReview} >
-          <Text>Review Attendees</Text>
-        </TouchableOpacity>
+        <View style={styles.centerbutton}>
+          <TouchableOpacity onPress={this.props.goToReview} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>Review Attendees</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       );
     }
 
@@ -102,14 +106,6 @@ var EventView = React.createClass({
         </View>
       );
     }
-  },
-
-  renderGoToReviewButton: function () {
-    return (
-      <TouchableOpacity onPress={this.props.goToReview} >
-        <Text>Review Attendees</Text>
-      </TouchableOpacity>
-    );
   },
 
   renderEditButton: function () {
