@@ -68,7 +68,7 @@ var Pending = React.createClass({
       );
     } else {
       middleSection = (
-        <Text style={styles.title}>No pending users!</Text>
+        <Text style={styles.font}>No pending users!</Text>
       );
     }
     return (
@@ -81,8 +81,12 @@ var Pending = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  font: styleExtend({
+  }, 'font'),
+
   title: styleExtend({
-  }, 'font')
+    fontWeight: 'bold'
+  }, 'font'),
 });
 
 module.exports = Pending;

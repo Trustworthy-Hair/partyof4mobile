@@ -25,8 +25,15 @@ var Attendees = React.createClass({
         />
       );
     });
+
+    if (this.props.attendeesList.length === 0) {
+      var attendees = (
+        <Text style={styles.font}>No current attendees</Text>
+      );
+    }
+
     return (
-      <View >
+      <View style={{alignItems: 'center'}}>
         <Text style={styles.title}>Attendees</Text>
           <View style={styles.container}>
             {attendees}
@@ -43,7 +50,11 @@ var styles = StyleSheet.create({
   },
 
   title: styleExtend({
-  }, 'font')
+    fontWeight: 'bold'
+  }, 'font'),
+
+  font: styleExtend({
+  }, 'font'),
 });
 
 module.exports = Attendees;
