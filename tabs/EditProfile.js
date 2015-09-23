@@ -26,7 +26,7 @@ var EditProfile = React.createClass({
     // These props just initialize the state. Props and state don't need to stay in sync.
     var subject = this.props.subject;
     return {
-      profileImgUrl: subject.profileImageUrl,
+      profileImageUrl: subject.profileImageUrl,
       email: subject.email,
       status: subject.status
     };
@@ -38,7 +38,6 @@ var EditProfile = React.createClass({
   },
 
   render: function() {
-    var subject = this.props.subject;
     return (
       <View style={styles.container}>
         <Back onback={this.props.toggleEdit} />
