@@ -7,6 +7,7 @@ var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;
 
 var {
+  TouchableHighlight,
   Image,
   StyleSheet,
   Text,
@@ -18,11 +19,17 @@ var UserView = React.createClass({
   render: function () {
     return (
       <View style={styles.user}>
-        <Text style={styles.username} >{this.props.user.username}</Text>
-        <Image 
-          source={{uri: this.props.user.profileImageUrl}} 
-          style={styles.avatar} 
-        />
+      <TouchableHighlight onPress={() => {
+        this.props.renderProfile(this.props.user)
+      }}>
+        <View>
+          <Text style={styles.username} >{this.props.user.username}</Text>
+          <Image 
+            source={{uri: this.props.user.profileImageUrl}} 
+            style={styles.avatar} 
+          />
+        </View>
+      </TouchableHighlight>
       </View>
     );
   }

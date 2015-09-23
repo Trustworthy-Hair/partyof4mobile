@@ -21,6 +21,7 @@ var HostView = React.createClass({
       <View>
         <Text style={styles.title} >Host</Text>
         <UserView
+          renderProfile={this.props.renderProfile}
           user={this.props.host}
         />
       </View>

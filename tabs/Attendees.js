@@ -19,8 +19,9 @@ var Attendees = React.createClass({
   render: function () {
     var attendees = this.props.attendeesList.map(function (attendee) {
       return (
-        <UserView 
+        <UserView
           user={attendee} 
+          renderProfile={this.props.renderProfile}
         />
       );
     });
