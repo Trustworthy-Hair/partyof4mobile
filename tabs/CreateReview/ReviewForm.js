@@ -1,8 +1,11 @@
 // ReviewForm.js
 
-var React = require('react-native');
+var React            = require('react-native'),
+    ReviewSubjectRow = require('./ReviewSubjectRow'),
+    stylingHelper    = require('./../../config/style.js');
 
-var ReviewSubjectRow = require('./ReviewSubjectRow');
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   ListView,
@@ -61,15 +64,25 @@ var ReviewForm = React.createClass({
   },
 
   render: function () {
+    if (this.state.subjects.length === 0) {
+      return (
+        <Text style={styles.text}>No one to review!</Text>
+      );
+    }
+
     return (
-      <View>
+      <View style={styles.container}>
         <ListView 
           dataSource={this.createSubjectsDataSource()} 
           renderRow={this.renderSubject} 
         />
-        <TouchableOpacity onPress={this.createReview} >
-          <Text>Submit Reviews</Text>
-        </TouchableOpacity>
+        <View style={styles.centerbutton}>
+          <TouchableOpacity onPress={this.createReview} >
+            <View style={styles.button}> 
+              <Text style={styles.buttonText }>Submit Reviews</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -77,7 +90,22 @@ var ReviewForm = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  container: styleExtend({
+  }, 'container'),
 
+  buttonText: styleExtend({
+  }, 'submitfont'),
+
+  button: styleExtend({
+    flex: 1,
+  }, 'button', 'center'),
+
+  centerbutton: {
+    alignItems: 'center'
+  },
+
+  text: styleExtend({
+  }, 'font')
 });
 
 module.exports = ReviewForm;

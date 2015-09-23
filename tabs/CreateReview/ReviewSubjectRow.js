@@ -14,7 +14,7 @@ var ReviewSubjectRow = React.createClass({
 
   render: function () {
     return (
-      <View>
+      <View style={styles.container}>
         <UserView 
           user={this.props.subject} 
         />
@@ -29,6 +29,10 @@ var ReviewSubjectRow = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row'
+  }
 
 });
 

@@ -1,6 +1,10 @@
 // ReviewStars.js
 
-var React = require('react-native');
+var React = require('react-native'),
+    stylingHelper = require('./../../config/style.js');
+
+var styleGuide = stylingHelper.styleGuide,
+    styleExtend = stylingHelper.styleExtend;
 
 var {
   StyleSheet,
@@ -11,8 +15,12 @@ var {
 var MaxRating = 5;
 
 var ReviewStars = React.createClass({
+  getInitialState: function() { 
+    return { selectedStar: false };
+  },
 
   setUserReview: function (rating) {
+    this.setState({selectedStar: rating-1});
     this.props.setUserReview(this.props.subject, rating);
   },
 
@@ -22,7 +30,7 @@ var ReviewStars = React.createClass({
 
   render: function () {
     return (
-      <View>
+      <View style={styles.container}>
         {this.renderStars()}
       </View>
     );
@@ -31,11 +39,19 @@ var ReviewStars = React.createClass({
   renderStars: function () {
     var stars = [];
     for (var i = 0; i < MaxRating; i++) {
-      stars.push(
-        <Text onPress={this.createOnPressCallback(i + 1)}>
-          * 
-        </Text>
-      );
+      if (i === this.state.selectedStar) {
+        stars.push(
+          <Text style={styles.star} onPress={this.createOnPressCallback(i + 1)}>
+            * 
+          </Text>
+        );
+      } else {
+        stars.push(
+          <Text style={styles.selectedStar} onPress={this.createOnPressCallback(i + 1)}>
+            * 
+          </Text>
+        );
+      }
     }
     return stars;
   }
@@ -43,7 +59,20 @@ var ReviewStars = React.createClass({
 });
 
 var styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row'
+  },
 
+  star: styleExtend({
+    color: styleGuide.colors.main,
+    fontSize: styleGuide.sizes.heading
+  }, 'submitfont'),
+
+  selectedStar: styleExtend({
+    color: 'black',
+    fontSize: styleGuide.sizes.heading
+  }, 'submitfont'),
 });
 
 module.exports = ReviewStars;
