@@ -106,7 +106,19 @@ var EventDetail = React.createClass({
   },
 
   endEvent: function () {
-
+    var requestUrl = UPDATE_EVENT_REQUEST_URL + this.state.event.id;
+    var queryString = '?accessToken=' + this.state.token;
+    fetch(requestUrl + queryString, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({completedStatus: true})
+    })
+    .then(() => {
+      this.getEvent();
+    });
   },
 
   approveOrDenyUser: function (userId, approved) {

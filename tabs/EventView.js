@@ -56,7 +56,23 @@ var EventView = React.createClass({
           <Text style={styles.text}>{this.props.event.currentActivity}</Text>
         </View>
         <Text style={styles.text}>{description}</Text>
-        {this.renderGoToReviewButton()} 
+        {this.renderButtons()}
+        
+      </View>
+    );
+  },
+
+  renderButtons: function() {
+    if (this.props.event.completedStatus) {
+      return (
+        <TouchableOpacity onPress={this.props.goToReview} >
+          <Text>Review Attendees</Text>
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <View>
         {this.renderJoinButton()}
         {this.renderEditButton()}
         {this.renderEndButton()}
