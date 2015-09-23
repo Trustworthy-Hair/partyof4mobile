@@ -117,7 +117,7 @@ var newEventTab = React.createClass({
   createEvent: function(){
     var data = {
       hostId: UserStore.getData().user.id,
-      location: this.state.location,
+      locationId: this.state.location.locationId,
       description: this.state.description,
       capacity: this.state.capacity,
       currentSize: this.state.currentSize,
