@@ -1,18 +1,16 @@
 // CreateReview.js
 
-var React = require('react-native');
-
-var config = require('../../config/config');
-var Dispatcher = require ('../../dispatcher/dispatcher');
-var EventsStore = require('../../stores/EventsStore');
-var UserStore = require('../../stores/UserStore');
-var Constants = require('../../constants/constants');
-var config     = require('../../config/config');
-
-var Back = require('../../components/common').BackButton;
-var Header = require('../../components/header');
-var ReviewHeader = require('./ReviewHeader');
-var ReviewForm = require('./ReviewForm');
+var React        = require('react-native'),
+    config       = require('../../config/config'),
+    Dispatcher   = require ('../../dispatcher/dispatcher'),
+    EventsStore  = require('../../stores/EventsStore'),
+    UserStore    = require('../../stores/UserStore'),
+    Constants    = require('../../constants/constants'),
+    config       = require('../../config/config'),
+    Back         = require('../../components/common').BackButton,
+    Header       = require('../../components/header'),
+    ReviewHeader = require('./ReviewHeader'),
+    ReviewForm   = require('./ReviewForm');
 
 var ActionTypes = Constants.ActionTypes;
 
@@ -22,7 +20,7 @@ var {
   View
 } = React;
 
-var REVIEW_URL = config.url+'/users/'
+var REVIEW_URL = config.url+'/users/';
 
 var CreateReview = React.createClass({
   getInitialState: function () {
@@ -44,7 +42,6 @@ var CreateReview = React.createClass({
   },
 
   createReview: function (subjects) {
-    // TODO: write the HTTP request to send the review to the server
     var userData = UserStore.getData();
     var currentEvent = EventsStore.getCurrentEvent();
     var data = {
