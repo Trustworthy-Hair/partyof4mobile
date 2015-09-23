@@ -61,7 +61,7 @@ var mapTab = React.createClass({
           latitude: event.Location.latitude,
           longitude: event.Location.longitude,
           title: event.Location.name,
-          subtitle: event.currentActivity,
+          subtitle: event.currentActivity || 'Ordering',
           rightCalloutAccessory: {
             url: 'image!restaurant',
             height: 24,
@@ -89,6 +89,7 @@ var mapTab = React.createClass({
       annotations: EventsStore.getAnnotations()
     });
   },
+
   openEventDetail: function(annotation){
     var id = parseInt(annotation.id);
     var events = EventsStore.getEvents();
@@ -107,6 +108,7 @@ var mapTab = React.createClass({
       payload: payload
     });
   },
+
   onSearch: function(text) {
     this.setState({
       searchQ: text.replace(/ /g, '%20')
