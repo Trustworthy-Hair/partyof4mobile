@@ -18,12 +18,12 @@ var ApproveUser = React.createClass({
 
   approveUser: function () {
     this.props.approveOrDenyUser(this.props.userForApproval.id, true);
-    this.props.setUserForApproval(null);
+    this.props.removeFromPending();
   },
 
   denyUser: function () {
     this.props.approveOrDenyUser(this.props.userForApproval.id, false);
-    this.props.setUserForApproval(null);
+    this.props.removeFromPending();
   },
 
   render: function () {

@@ -11,15 +11,13 @@ var {
 } = React;
 
 var PendingList = React.createClass({
-
   render: function () {
     var pending = this.props.pendingList.map((pendingUser) => {
-      return (
-        <TouchableOpacity onPress={() => this.props.setUserForApproval(pendingUser)} >
-          <UserView 
-            user={pendingUser} 
-          />
-        </TouchableOpacity>
+      return ( 
+        <UserView 
+          user={pendingUser} 
+          renderProfile={this.props.renderProfile} 
+        />
       );
     });
     return (

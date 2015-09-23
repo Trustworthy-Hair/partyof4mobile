@@ -199,6 +199,7 @@ var EventDetail = React.createClass({
               host={this.state.event.host}
               currentUser={this.state.user} 
               approveOrDenyUser={this.approveOrDenyUser} 
+              renderProfile={this.renderProfile} 
             />
           </View>
         </View>
