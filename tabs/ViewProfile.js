@@ -96,6 +96,7 @@ var styles = StyleSheet.create({
 
   top: styleExtend({
     backgroundColor: styleGuide.colors.light,
+    top: -20
   }, 'center'),
 
   bottom: styleExtend({

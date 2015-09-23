@@ -121,7 +121,7 @@ var styles = StyleSheet.create({
     borderBottomColor: styleGuide.colors.light,
     borderStyle: 'solid',
     justifyContent: 'center',
-    height: 74
+    height: 600
   },
 
   heading: styleExtend({
