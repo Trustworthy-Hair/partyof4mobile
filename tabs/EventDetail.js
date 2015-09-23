@@ -144,7 +144,6 @@ var EventDetail = React.createClass({
   },
 
   renderProfile: function(user){
-    console.log('asdfasdf', user);
     this.setState({
       subject: user,
       renderProfile: true
