@@ -2,7 +2,7 @@
 
 var React  = require('react-native'),
     moment = require('moment'),
-    stylingHelper = require('./../config/style.js');
+    stylingHelper = require('./../../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;

@@ -2,7 +2,7 @@
 
 var React = require('react-native');
 
-var UserView = require('../UserView');
+var UserView = require('../user/UserView');
 var ReviewStars = require('./ReviewStars');
 
 var {

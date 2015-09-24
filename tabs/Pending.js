@@ -1,7 +1,7 @@
 // Pending.js
 
 var React = require('react-native'),
-    ApproveUser = require('./ApproveUser'),
+    ApproveUser = require('./event/ApproveUser'),
     stylingHelper = require('./../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,

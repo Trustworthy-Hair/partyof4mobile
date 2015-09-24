@@ -4,9 +4,9 @@
 
 var React = require('react-native');
 
-var Back = require('../components/common').BackButton,
-    UserStore = require('../stores/UserStore'),
-    stylingHelper = require('../config/style.js');
+var Back = require('../../components/common').BackButton,
+    UserStore = require('../../stores/UserStore'),
+    stylingHelper = require('../../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;

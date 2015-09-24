@@ -14,7 +14,7 @@ var styleExtend = stylingHelper.styleExtend;
 
 var Header = require('../components/header');
 var MainMenu = require('./menu/MainMenu');
-var Profile = require('./UserProfile');
+var Profile = require('./user/UserProfile');
 var History = require('./menu/history');
 var About = require('./menu/about');
 
