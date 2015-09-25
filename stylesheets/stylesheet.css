@@ -107,7 +107,7 @@ a {
 .main-content :first-child {
   margin-top: 0; }
 .main-content img {
-  max-width: 100%; }
+  /*max-width: 100%;*/ }
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
   margin-top: 2rem;
   margin-bottom: 1rem;
@@ -243,3 +243,31 @@ a {
 @media screen and (max-width: 42em) {
   .site-footer {
     font-size: 0.9rem; } }
+
+/* Custom CSS */
+.screenshots {
+  height: 450px;
+}
+.screenshot-container {
+  height: 350px;
+  position: absolute;
+  clear: both;
+}
+.screenshot-image {
+  float: left;
+  width: 200px;
+  height: 350px;
+}
+.screenshot-description {
+  float: right;
+  width: 632px;
+  height: 350px;
+}
+.who-we-are-container {
+  height: 208px;
+}
+.who-we-are-profile {
+  float: left;
+  width: 208px;
+  height: 208px;
+}
