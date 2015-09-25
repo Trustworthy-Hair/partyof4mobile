@@ -1,8 +1,8 @@
 // EventEdit.js
 
 var React = require('react-native'),
-    Back = require('../components/common').BackButton,
-    stylingHelper = require('./../config/style.js');
+    Back = require('../../components/common').BackButton,
+    stylingHelper = require('./../../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;

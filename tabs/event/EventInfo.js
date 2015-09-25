@@ -3,10 +3,10 @@
 var React       = require('react-native'),
     EventEdit   = require('./EventEdit'),
     EventView   = require('./EventView'),
-    Dispatcher  = require ('../dispatcher/dispatcher'),
-    Constants   = require('../constants/constants'),
+    Dispatcher  = require ('../../dispatcher/dispatcher'),
+    Constants   = require('../../constants/constants'),
     ActionTypes = Constants.ActionTypes,
-    Back        = require('../components/common').BackButton;
+    Back        = require('../../components/common').BackButton;
 
 var {
   View

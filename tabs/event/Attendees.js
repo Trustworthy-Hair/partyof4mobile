@@ -2,8 +2,8 @@
 
 var React = require('react-native');
 
-var UserView = require('./UserView'),
-    stylingHelper = require('./../config/style.js');
+var UserView = require('../user/UserView'),
+    stylingHelper = require('./../../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;

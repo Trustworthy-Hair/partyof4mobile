@@ -1,8 +1,8 @@
 // ApproveUser.js
 
 var React = require('react-native'),
-    UserView = require('./UserView'),
-    stylingHelper = require('./../config/style.js');
+    UserView = require('../user/UserView'),
+    stylingHelper = require('./../../config/style.js');
 
 var styleGuide = stylingHelper.styleGuide,
     styleExtend = stylingHelper.styleExtend;

@@ -1,17 +1,17 @@
 var React       = require('react-native'),
-    config      = require('../config/config'),
-    Dispatcher  = require ('../dispatcher/dispatcher'),
-    EventsStore = require('../stores/EventsStore'),
-    UserStore   = require('../stores/UserStore'),
-    Constants   = require('../constants/constants');
+    config      = require('../../config/config'),
+    Dispatcher  = require ('../../dispatcher/dispatcher'),
+    EventsStore = require('../../stores/EventsStore'),
+    UserStore   = require('../../stores/UserStore'),
+    Constants   = require('../../constants/constants');
 
-var Header    = require('../components/header'),
+var Header    = require('../../components/header'),
     EventInfo = require('./EventInfo'),
     HostView  = require('./HostView'),
     Attendees = require('./Attendees'),
-    Pending  = require('./Pending'),
-    Profile = require('./UserProfile'),
-    Back = require('../components/common').BackButton;
+    Pending  = require('../Pending'),
+    Profile = require('../user/UserProfile'),
+    Back = require('../../components/common').BackButton;
 
 var ActionTypes = Constants.ActionTypes;
 

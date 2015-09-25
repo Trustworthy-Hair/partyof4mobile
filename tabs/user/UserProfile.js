@@ -2,13 +2,13 @@
 
 var React = require('react-native');
 
-var config = require('../config/config');
-var UserStore = require('../stores/UserStore');
-var stylingHelper = require('../config/style.js');
+var config = require('../../config/config');
+var UserStore = require('../../stores/UserStore');
+var stylingHelper = require('../../config/style.js');
 
 var ViewProfile = require('./ViewProfile');
 var EditProfile = require('./EditProfile');
-var Loading = require('./Loading');
+var Loading = require('../Loading');
 
 var styleGuide = stylingHelper.styleGuide;
 var styleExtend = stylingHelper.styleExtend;
