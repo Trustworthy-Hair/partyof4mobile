@@ -247,42 +247,14 @@ a {
     font-size: 0.9rem; } }
 
 /* Custom CSS */
-/*.screenshots {
-  max-width: 100%;
-  height: 450px;
-}
-.screenshot-container {
-  display: block;
-  max-width: 100%;
-  height: 350px;
-}
-.screenshot-image {
-  width: 200px;
-  height: 350px;
-  display: inline-block;
-}
-.screenshot-description {
-  width: calc(100% - 205px);
-  display: inline-block;
-}*/
-/*.who-we-are-container {
-  height: 208px;
-}
-.who-we-are-profile {
-  float: left;
-  width: 208px;
-  height: 208px;
-}
-*/
-
-
-
-
 .screenshots {    
   display: -webkit-flex;    
   display: -ms-flexbox;   
   display: flex;
   overflow: hidden;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
 }
 .screenshots .col {
   flex: 1;
@@ -298,7 +270,6 @@ a {
       -ms-flex-order: 1;
           order: 1;
   text-align: center;
-  justify-content: center;
 }
 
 .people {    
