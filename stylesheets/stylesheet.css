@@ -18,8 +18,8 @@ a {
 .btn {
   display: inline-block;
   margin-bottom: 1rem;
-  color: rgba(255, 255, 255, 0.7);
-  background-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.2);
   border-style: solid;
   border-width: 1px;
@@ -56,8 +56,10 @@ a {
 .page-header {
   color: #fff;
   text-align: center;
-  background-color: #159957;
-  background-image: linear-gradient(120deg, #155799, #159957); }
+  background-color: #2e6a8b;
+  background-image: url('../images/table.jpg'); 
+  background-size: 100%;
+}
 
 @media screen and (min-width: 64em) {
   .page-header {
@@ -90,7 +92,7 @@ a {
 .project-tagline {
   margin-bottom: 2rem;
   font-weight: normal;
-  opacity: 0.7; }
+  opacity: 1; }
 
 @media screen and (min-width: 64em) {
   .project-tagline {
@@ -107,12 +109,12 @@ a {
 .main-content :first-child {
   margin-top: 0; }
 .main-content img {
-  /*max-width: 100%;*/ }
+  max-width: 100%; }
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
   margin-top: 2rem;
   margin-bottom: 1rem;
   font-weight: normal;
-  color: #159957; }
+  color: #2e6a8b; }
 .main-content p {
   margin-bottom: 1em; }
 .main-content code {
@@ -245,29 +247,72 @@ a {
     font-size: 0.9rem; } }
 
 /* Custom CSS */
-.screenshots {
+/*.screenshots {
+  max-width: 100%;
   height: 450px;
 }
 .screenshot-container {
+  display: block;
+  max-width: 100%;
   height: 350px;
-  position: absolute;
-  clear: both;
 }
 .screenshot-image {
-  float: left;
   width: 200px;
   height: 350px;
+  display: inline-block;
 }
 .screenshot-description {
-  float: right;
-  width: 632px;
-  height: 350px;
-}
-.who-we-are-container {
+  width: calc(100% - 205px);
+  display: inline-block;
+}*/
+/*.who-we-are-container {
   height: 208px;
 }
 .who-we-are-profile {
   float: left;
   width: 208px;
   height: 208px;
+}
+*/
+
+
+
+
+.screenshots {    
+  display: -webkit-flex;    
+  display: -ms-flexbox;   
+  display: flex;
+  overflow: hidden;
+}
+.screenshots .col {
+  flex: 1;
+}
+.screenshots .col:nth-child(1) { 
+  -webkit-order: 0; 
+      -ms-flex-order: 0; 
+          order: 0;
+  text-align: center;
+}
+.screenshots .col:nth-child(2) { 
+  -webkit-order: 1;
+      -ms-flex-order: 1;
+          order: 1;
+  text-align: center;
+  justify-content: center;
+}
+
+.people {    
+  display: -webkit-flex;    
+  display: -ms-flexbox;   
+  display: flex;
+  overflow: hidden;
+  margin-bottom:50px;
+}
+.people .col {
+  flex: 1;
+  text-align: center;
+}
+.team-member {
+  width:80%;
+  border-radius:50%;
 }
