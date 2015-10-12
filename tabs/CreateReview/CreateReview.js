@@ -67,6 +67,12 @@ var CreateReview = React.createClass({
       return response.json();
     }).then((response) => {
       console.log('@@@@@@@@@', response);
+      var payload = {};
+      payload.currentView = 'map';
+      Dispatcher.dispatch({
+        type: ActionTypes.STORE_USER,
+        payload: payload
+      });
     }).done();
   },
 

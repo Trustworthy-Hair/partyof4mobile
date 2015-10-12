@@ -1,6 +1,10 @@
 # Party Of 4 Mobile
 A social app where you can find open seats at nearby restaurants. Meet new people & eat great food!
 
+![screenshots-of-app](http://i.imgur.com/n2hB1Pz.png)
+
+Check out our server code [here](https://github.com/Trustworthy-Hair/partyof4) (uses Node.js & PostgreSQL)
+
 ## Team
 
   - Warren Wong ([@wrrnwng](https://github.com/wrrnwng)) 
